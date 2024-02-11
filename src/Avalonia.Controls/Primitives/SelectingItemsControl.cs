@@ -592,7 +592,7 @@ namespace Avalonia.Controls.Primitives
 
             if (_selection is object)
             {
-                _selection.Source = ItemsView.Source;
+                _selection.Source = ItemsView;
             }
         }
 
@@ -916,7 +916,7 @@ namespace Avalonia.Controls.Primitives
         private void OnItemsViewSourceChanged(object? sender, EventArgs e)
         {
             if (_selection is not null && _updateState is null)
-                _selection.Source = ItemsView.Source;
+                _selection.Source = ItemsView;
         }
 
         /// <summary>
@@ -1204,7 +1204,7 @@ namespace Avalonia.Controls.Primitives
         {
             if (_updateState is null)
             {
-                model.Source = ItemsView.Source;
+                model.Source = ItemsView;
             }
 
             model.PropertyChanged += OnSelectionModelPropertyChanged;
@@ -1268,7 +1268,7 @@ namespace Avalonia.Controls.Primitives
 
                 if (_selection is InternalSelectionModel s)
                 {
-                    s.Update(ItemsView.Source, state.SelectedItems);
+                    s.Update(ItemsView, state.SelectedItems);
                 }
                 else
                 {
@@ -1277,7 +1277,7 @@ namespace Avalonia.Controls.Primitives
                         SelectedItems = state.SelectedItems.Value;
                     }
 
-                    Selection.Source = ItemsView.Source;
+                    Selection.Source = ItemsView;
                 }
 
                 if (state.SelectedValue.HasValue)
