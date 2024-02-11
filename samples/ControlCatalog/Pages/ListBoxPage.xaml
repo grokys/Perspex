@@ -24,13 +24,15 @@
       <CheckBox IsChecked="{Binding AlwaysSelected}">AlwaysSelected</CheckBox>
       <CheckBox IsChecked="{Binding AutoScrollToSelectedItem}">AutoScrollToSelectedItem</CheckBox>
       <CheckBox IsChecked="{Binding WrapSelection}">WrapSelection</CheckBox>
+      <TextBox Name="SearchBox" Watermark="Search"/>
     </StackPanel>
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="4">
       <Button Command="{Binding AddItemCommand}">Add</Button>
       <Button Command="{Binding RemoveItemCommand}">Remove</Button>
       <Button Command="{Binding SelectRandomItemCommand}">Select Random Item</Button>
     </StackPanel>
-    <ListBox ItemsSource="{Binding Items}"
+    <ListBox Name="ListBox"
+             ItemsSource="{Binding Items}"
              Selection="{Binding Selection}"
              DisplayMemberBinding="{Binding (viewModels:ItemModel).ID, StringFormat='{}Item {0:N0}'}"
              AutoScrollToSelectedItem="{Binding AutoScrollToSelectedItem}"

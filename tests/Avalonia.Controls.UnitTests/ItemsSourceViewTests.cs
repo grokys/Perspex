@@ -67,6 +67,98 @@ namespace Avalonia.Controls.UnitTests
             Assert.Equal(1, debug.GetCollectionChangedSubscribers().Length);
         }
 
+        [Fact]
+        public void Filtered_View_Adds_New_Items()
+        {            
+            var source = new AvaloniaList<string>() { "foo", "bar" };
+            var target = ItemsSourceView.GetOrCreate(source);
+
+            var collectionChangeEvents = new List<NotifyCollectionChangedEventArgs>();
+
+            target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
+
+            target.Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item);
+            
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            collectionChangeEvents.Clear();
+
+            source.Add(bool.FalseString);
+
+            Assert.Empty(collectionChangeEvents);
+
+            source.InsertRange(1, new[] { bool.TrueString, bool.TrueString });
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Add, collectionChangeEvents[0].Action);
+            Assert.Equal(1, collectionChangeEvents[0].NewStartingIndex);
+            Assert.Equal(2, collectionChangeEvents[0].NewItems.Count);
+            Assert.Equal(bool.TrueString, collectionChangeEvents[0].NewItems[0]);
+
+            Assert.Equal(4, target.Count);
+            Assert.Equal(bool.TrueString, target[1]);
+            Assert.Equal(bool.TrueString, target[2]);
+
+            source.Add(bool.TrueString);
+
+            Assert.Equal(5, target.Count);
+            Assert.Equal(bool.TrueString, target[^1]);
+        }
+
+        [Fact]
+        public void Filtered_View_Removes_Old_Items()
+        {            
+            var source = new AvaloniaList<string>() { "foo", "bar", bool.TrueString, bool.FalseString, bool.TrueString, "end" };
+            var target = ItemsSourceView.GetOrCreate(source);
+
+            var collectionChangeEvents = new List<NotifyCollectionChangedEventArgs>();
+
+            target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
+
+            target.Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item);
+            
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            collectionChangeEvents.Clear();
+
+            source.RemoveAt(4);
+
+            Assert.Equal(4, target.Count);
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Remove, collectionChangeEvents[0].Action);
+            Assert.Equal(3, collectionChangeEvents[0].OldStartingIndex);
+            Assert.Equal(1, collectionChangeEvents[0].OldItems.Count);
+            Assert.Equal(bool.TrueString, collectionChangeEvents[0].OldItems[0]);
+            collectionChangeEvents.Clear();
+
+            source.RemoveAt(3);
+            Assert.Empty(collectionChangeEvents);
+            Assert.Equal(4, target.Count);
+        }
+
+        [Fact]
+        public void Filtered_View_Resets_When_Source_Cleared()
+        {            
+            var source = new AvaloniaList<string>() { "foo", "bar" };
+            var target = ItemsSourceView.GetOrCreate(source);
+
+            var collectionChangeEvents = new List<NotifyCollectionChangedEventArgs>();
+
+            target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
+
+            target.Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item);
+            
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            collectionChangeEvents.Clear();
+
+            source.Clear();
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+        }
+
         private class InvalidCollection : INotifyCollectionChanged, IEnumerable<string>
         {
             public event NotifyCollectionChangedEventHandler CollectionChanged { add { } remove { } }
