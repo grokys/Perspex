@@ -6,18 +6,14 @@ namespace ControlCatalog.Pages
 {
     public class ListBoxPage : UserControl
     {
-        private readonly ListBox _listBox;
         private readonly TextBox _searchBox;
 
         public ListBoxPage()
         {
             InitializeComponent();
-            DataContext = new ListBoxPageViewModel();
-
-            _listBox = this.Get<ListBox>("ListBox");
-
             _searchBox = this.Get<TextBox>("SearchBox");
-            _searchBox.TextChanged += OnSearchTextChanged;
+
+            DataContext = new ListBoxPageViewModel();
         }
 
         private void InitializeComponent()
@@ -25,14 +21,17 @@ namespace ControlCatalog.Pages
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void OnSearchTextChanged(object? sender, TextChangedEventArgs e)
+        private void FilterItem(object? sender, FunctionItemFilter.FilterEventArgs e)
         {
-            _listBox.Items.Filter = string.IsNullOrEmpty(_searchBox.Text) ? null : FilterItem;
-        }
-
-        private void FilterItem(object? sender, ItemSourceViewFilterEventArgs e)
-        {
-            e.Accept = ((ItemModel)e.Item!).ToString().Contains(_searchBox.Text!);
+            if (string.IsNullOrEmpty(_searchBox.Text))
+            {
+                e.Accept = true;
+            }
+            else
+            {
+                var item = (ItemModel)e.Item!;
+                e.Accept = item.IsFavorite || item.ID.ToString().Contains(_searchBox.Text!);
+            }
         }
     }
 }

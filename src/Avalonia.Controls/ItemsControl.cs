@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Avalonia.Automation.Peers;
+using Avalonia.Collections;
 using Avalonia.Controls.Generators;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Presenters;
@@ -81,7 +82,11 @@ namespace Avalonia.Controls
             set => SetValue(DisplayMemberBindingProperty, value);
         }
 
-        private readonly ItemCollection _items = new();
+        public AvaloniaList<ItemFilter> Filters => ItemsView.Filters;
+
+        public AvaloniaList<ItemSorter> Sorters => ItemsView.Sorters;
+
+        private readonly ItemCollection _items;
         private int _itemCount;
         private ItemContainerGenerator? _itemContainerGenerator;
         private EventHandler<ChildIndexChangedEventArgs>? _childIndexChanged;
@@ -93,6 +98,7 @@ namespace Avalonia.Controls
         /// </summary>
         public ItemsControl()
         {
+            _items = new(this);
             UpdatePseudoClasses();
             _items.CollectionChanged += OnItemsViewCollectionChanged;
         }

@@ -69,7 +69,7 @@ namespace Avalonia.Controls.UnitTests
 
         [Fact]
         public void Filtered_View_Adds_New_Items()
-        {            
+        {
             var source = new AvaloniaList<string>() { "foo", "bar" };
             var target = ItemsSourceView.GetOrCreate(source);
 
@@ -77,7 +77,7 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            target.Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item);
+            target.Filters.Add(new FunctionItemFilter { Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item) });
             
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
@@ -87,7 +87,11 @@ namespace Avalonia.Controls.UnitTests
 
             Assert.Empty(collectionChangeEvents);
 
+            Assert.Equal(new int[] { 0, 1, -1 }, ItemsSourceView.GetDiagnosticItemMap(target));
+
             source.InsertRange(1, new[] { bool.TrueString, bool.TrueString });
+
+            Assert.Equal(new int[] { 0, 1, 2, 3, -1 }, ItemsSourceView.GetDiagnosticItemMap(target));
 
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Add, collectionChangeEvents[0].Action);
@@ -100,6 +104,8 @@ namespace Avalonia.Controls.UnitTests
             Assert.Equal(bool.TrueString, target[2]);
 
             source.Add(bool.TrueString);
+
+            Assert.Equal(new int[] { 0, 1, 2, 3, -1, 4 }, ItemsSourceView.GetDiagnosticItemMap(target));
 
             Assert.Equal(5, target.Count);
             Assert.Equal(bool.TrueString, target[^1]);
@@ -115,15 +121,18 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            target.Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item);
-            
+            target.Filters.Add(new FunctionItemFilter { Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item) });
+
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
             collectionChangeEvents.Clear();
 
+            Assert.Equal(new int[] { 0, 1, 2, -1, 3, 4 }, ItemsSourceView.GetDiagnosticItemMap(target));
+
             source.RemoveAt(4);
 
             Assert.Equal(4, target.Count);
+            Assert.Equal(new int[] { 0, 1, 2, -1, 3 }, ItemsSourceView.GetDiagnosticItemMap(target));
 
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Remove, collectionChangeEvents[0].Action);
@@ -135,6 +144,8 @@ namespace Avalonia.Controls.UnitTests
             source.RemoveAt(3);
             Assert.Empty(collectionChangeEvents);
             Assert.Equal(4, target.Count);
+
+            Assert.Equal(new int[] { 0, 1, 2, 3 }, ItemsSourceView.GetDiagnosticItemMap(target));
         }
 
         [Fact]
@@ -147,7 +158,7 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            target.Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item);
+            target.Filters.Add(new FunctionItemFilter { Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item) });
             
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
@@ -155,6 +166,8 @@ namespace Avalonia.Controls.UnitTests
 
             source.Clear();
 
+            Assert.Equal(0, target.Count);
+            Assert.Equal(Array.Empty<int>(), ItemsSourceView.GetDiagnosticItemMap(target));
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
         }
@@ -177,7 +190,7 @@ namespace Avalonia.Controls.UnitTests
         private class ReassignableItemsSourceView : ItemsSourceView
         {
             public ReassignableItemsSourceView(IEnumerable source)
-                : base(source)
+                : base(null, source)
             {
             }
 

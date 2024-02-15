@@ -34,9 +34,22 @@
     <ListBox Name="ListBox"
              ItemsSource="{Binding Items}"
              Selection="{Binding Selection}"
-             DisplayMemberBinding="{Binding (viewModels:ItemModel).ID, StringFormat='{}Item {0:N0}'}"
              AutoScrollToSelectedItem="{Binding AutoScrollToSelectedItem}"
              SelectionMode="{Binding SelectionMode^}"
-             WrapSelection="{Binding WrapSelection}"/>
+             WrapSelection="{Binding WrapSelection}">
+      <ListBox.Filters>
+        <FunctionItemFilter Filter="FilterItem" State="{Binding Text, ElementName=SearchBox}" InvalidationPropertyNames="IsFavorite"/>
+      </ListBox.Filters>
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="viewModels:ItemModel">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock>
+              Item <Run Text="{Binding ID}"/>
+            </TextBlock>
+            <ToggleButton Grid.Column="1" IsChecked="{Binding IsFavorite}" Content="Favorite"/>
+          </Grid>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
   </DockPanel>
 </UserControl>

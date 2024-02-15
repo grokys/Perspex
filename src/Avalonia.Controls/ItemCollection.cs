@@ -18,8 +18,8 @@ namespace Avalonia.Controls
 
         private Mode _mode;
 
-        internal ItemCollection()
-            : base(s_uninitialized)
+        internal ItemCollection(AvaloniaObject? owner)
+            : base(owner, s_uninitialized)
         {
         }
 

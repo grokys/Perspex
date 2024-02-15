@@ -382,7 +382,7 @@ namespace Avalonia.Markup.Xaml.XamlIl.CompilerExtensions
                         }
                     }
 
-                    items = text.Split(separators, splitOptions ^ trimOption);
+                    items = text.Split(separators, splitOptions & ~trimOption);
                     // Compiler targets netstandard, so we need to emulate StringSplitOptions.TrimEntries, if it was requested.
                     if (splitOptions.HasFlag(trimOption))
                     {

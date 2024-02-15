@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Selection;
@@ -108,8 +109,10 @@ namespace ControlCatalog.ViewModels
     /// <summary>
     /// An Item model for the <see cref="ListBoxPage"/>
     /// </summary>
-    public class ItemModel
+    public class ItemModel : INotifyPropertyChanged
     {
+        private bool _isFavorite;
+
         /// <summary>
         /// Creates a new ItemModel with the given ID
         /// </summary>
@@ -123,6 +126,18 @@ namespace ControlCatalog.ViewModels
         /// The ID of this Item
         /// </summary>
         public int ID { get; }
+
+        public bool IsFavorite
+        {
+            get => _isFavorite;
+            set
+            {
+                _isFavorite = value;
+                PropertyChanged?.Invoke(this, new(nameof(IsFavorite)));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public override string ToString()
         {
