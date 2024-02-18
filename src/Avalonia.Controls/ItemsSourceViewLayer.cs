@@ -11,6 +11,7 @@ public abstract class ItemsSourceViewLayer : AvaloniaObject, INamed
 {
     private InvalidationPropertiesCollection? _invalidationPropertyNames;
     private object? _state;
+    private bool _isActive = true;
 
     public string? Name { get; init; }
 
@@ -19,6 +20,19 @@ public abstract class ItemsSourceViewLayer : AvaloniaObject, INamed
     /// has been added.
     /// </summary>
     public AvaloniaObject? Owner => InheritanceParent;
+
+    /// <summary>
+    /// Gets or sets whether this layer is currently contributing to the final view of the items.
+    /// </summary>
+    public bool IsActive
+    {
+        get => _isActive;
+        set => SetAndRaise(IsActiveProperty, ref _isActive, value);
+    }
+
+    /// <seealso cref="IsActive"/>
+    public static readonly DirectProperty<ItemsSourceViewLayer, bool> IsActiveProperty =
+        AvaloniaProperty.RegisterDirect<ItemsSourceViewLayer, bool>(nameof(IsActive), o => o.IsActive, (o, v) => o.IsActive = v, unsetValue: true);
 
     /// <summary>
     /// Gets or sets a collection of strings which will trigger re-evaluation of an item, if:
@@ -75,6 +89,10 @@ public abstract class ItemsSourceViewLayer : AvaloniaObject, INamed
         base.OnPropertyChanged(change);
 
         if (change.Property == StateProperty)
+        {
+            OnInvalidated();
+        }
+        else if (change.Property == IsActiveProperty)
         {
             OnInvalidated();
         }

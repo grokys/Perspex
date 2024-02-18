@@ -10,7 +10,7 @@
         <Setter Property="FontWeight" Value="Bold" />
       </Style>
       <Style Selector="ListBox ListBoxItem:nth-last-child(5n+4)">
-        <Setter Property="Background" Value="Blue" />
+        <Setter Property="Background" Value="Beige" />
         <Setter Property="FontWeight" Value="Bold" />
       </Style>
     </DockPanel.Styles>
@@ -24,7 +24,10 @@
       <CheckBox IsChecked="{Binding AlwaysSelected}">AlwaysSelected</CheckBox>
       <CheckBox IsChecked="{Binding AutoScrollToSelectedItem}">AutoScrollToSelectedItem</CheckBox>
       <CheckBox IsChecked="{Binding WrapSelection}">WrapSelection</CheckBox>
-      <TextBox Name="SearchBox" Watermark="Search"/>
+      <Separator/>
+      <TextBox Name="SearchBox" Watermark="Search for a number"/>
+      <CheckBox Name="InvertSort">Sort Descending</CheckBox>
+      <CheckBox Name="FavToTop">Sort Favorites to top</CheckBox>
     </StackPanel>
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="4">
       <Button Command="{Binding AddItemCommand}">Add</Button>
@@ -40,11 +43,15 @@
       <ListBox.Filters>
         <FunctionItemFilter Filter="FilterItem" State="{Binding Text, ElementName=SearchBox}" InvalidationPropertyNames="IsFavorite"/>
       </ListBox.Filters>
+      <ListBox.Sorters>
+        <ComparableSorter ComparableSelector="SelectItemIsFavorite" SortDirection="Descending" IsActive="{Binding IsChecked, ElementName=FavToTop}" InvalidationPropertyNames="IsFavorite" />
+        <ComparableSorter ComparableSelector="SelectItemId" SortDirection="{Binding IsChecked, ElementName=InvertSort, Converter={x:Static ItemSorter.BooleanToDescendingSortConverter}}" />
+      </ListBox.Sorters>
       <ListBox.ItemTemplate>
         <DataTemplate x:DataType="viewModels:ItemModel">
           <Grid ColumnDefinitions="*,Auto">
-            <TextBlock>
-              Item <Run Text="{Binding ID}"/>
+            <TextBlock VerticalAlignment="Center">
+              Item <Run Text="{Binding ID, StringFormat=n0, Mode=OneWay}"/>
             </TextBlock>
             <ToggleButton Grid.Column="1" IsChecked="{Binding IsFavorite}" Content="Favorite"/>
           </Grid>

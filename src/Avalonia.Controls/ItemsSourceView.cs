@@ -261,7 +261,7 @@ namespace Avalonia.Controls
 
         void ICollectionChangedListener.PreChanged(INotifyCollectionChanged sender, NotifyCollectionChangedEventArgs e)
         {
-            if (HasLayers)
+            if (HasActiveLayers)
             {
                 UpdateLayersForCollectionChangedEvent(e);
             }
