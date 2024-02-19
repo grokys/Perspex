@@ -7,6 +7,9 @@ using Avalonia.Data.Converters;
 
 namespace Avalonia.Controls;
 
+/// <summary>
+/// An <see cref="ItemsSourceView"/> layer which can re-order items of the source collection within the transformed view.
+/// </summary>
 public abstract class ItemSorter : ItemsSourceViewLayer, IComparer<object?>, IComparer
 {
     private ListSortDirection _sortDirection;
@@ -24,7 +27,16 @@ public abstract class ItemSorter : ItemsSourceViewLayer, IComparer<object?>, ICo
     public static readonly DirectProperty<ItemSorter, ListSortDirection> SortDirectionProperty =
         AvaloniaProperty.RegisterDirect<ItemSorter, ListSortDirection>(nameof(SortDirection), o => o.SortDirection, (o, v) => o.SortDirection = v);
 
-    /// <inheritdoc cref="IComparer.Compare(object, object)"/>
+    /// <summary>
+    /// Compares two objects to determine their sort order.
+    /// </summary>
+    /// <returns>
+    /// <list type="table">
+    /// <item><term>A negative value</term> <description>If <paramref name="x"/> should come before <paramref name="y"/></description></item>
+    /// <item><term>0</term> <description>If <paramref name="x"/> and <paramref name="y"/> have the same precedence</description></item>
+    /// <item><term>A positive value</term> <description>If <paramref name="x"/> should come after <paramref name="y"/></description></item>
+    /// </list>
+    /// </returns>
     public abstract int Compare(object? x, object? y);
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -44,14 +56,14 @@ public abstract class ItemSorter : ItemsSourceViewLayer, IComparer<object?>, ICo
 
     private class BooleanToDescendingSortConverter_ : IValueConverter
     {
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
         {
             true => ListSortDirection.Descending,
             false => ListSortDirection.Ascending,
             _ => AvaloniaProperty.UnsetValue,
         };
 
-        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
         {
             ListSortDirection.Descending => true,
             ListSortDirection.Ascending => false,
@@ -60,6 +72,14 @@ public abstract class ItemSorter : ItemsSourceViewLayer, IComparer<object?>, ICo
     }
 }
 
+/// <summary>
+/// Sorts items in an <see cref="ItemsSourceView"/> according to the order provided by passing an <see cref="IComparable"/> 
+/// object selected for each item to an <see cref="IComparer"/> object.
+/// </summary>
+/// <remarks>
+/// If any item passed to <see cref="Compare(object?, object?)"/> is not an <see cref="IComparable"/>, and no 
+/// <see cref="ComparableSelector"/> value has been provided, an <see cref="InvalidCastException"/> will be thrown.
+/// </remarks>
 public class ComparableSorter : ItemSorter
 {
     private EventHandler<ComparableSelectEventArgs>? _comparableSelector;
@@ -98,6 +118,7 @@ public class ComparableSorter : ItemSorter
     public static readonly DirectProperty<ComparableSorter, IComparer?> ComparerProperty =
         AvaloniaProperty.RegisterDirect<ComparableSorter, IComparer?>(nameof(Comparer), o => o.Comparer, (o, v) => o.Comparer = v);
 
+    /// <inheritdoc cref="ItemSorter.Compare(object?, object?)"/>
     /// <exception cref="InvalidCastException">Thrown if <paramref name="x"/> or <paramref name="y"/> cannot be converted to <see cref="IComparable"/>.</exception>
     public override int Compare(object? x, object? y)
     {

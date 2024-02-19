@@ -2,6 +2,9 @@
 
 namespace Avalonia.Controls;
 
+/// <summary>
+/// An <see cref="ItemsSourceView"/> layer which can exclude items of the source collection from the transformed view.
+/// </summary>
 public abstract class ItemFilter : ItemsSourceViewLayer
 {
     /// <summary>
@@ -11,6 +14,9 @@ public abstract class ItemFilter : ItemsSourceViewLayer
     public abstract bool FilterItem(object? item);
 }
 
+/// <summary>
+/// Excludes items from an <see cref="ItemsSourceView"/> as determined by the delegate currently assigned to its <see cref="Filter"/> property.
+/// </summary>
 public class FunctionItemFilter : ItemFilter
 {
     private EventHandler<FilterEventArgs>? _filter;

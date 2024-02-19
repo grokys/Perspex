@@ -7,6 +7,13 @@ using Avalonia.Metadata;
 
 namespace Avalonia.Controls;
 
+/// <summary>
+/// Provides base functionality for an object which can be used by <see cref="ItemsSourceView"/> to generate a transformed view of its source collection.
+/// </summary>
+/// <remarks>
+/// This type inherits from <see cref="AvaloniaObject"/>. Bindings applied to it will inherit values from the <see cref="Owner"/> object. The layer can 
+/// be activated and deactivated at any time, and can be configured to automatically refresh its owner when a dependent value changes.
+/// </remarks>
 public abstract class ItemsSourceViewLayer : AvaloniaObject, INamed
 {
     private InvalidationPropertiesCollection? _invalidationPropertyNames;

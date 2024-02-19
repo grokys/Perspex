@@ -31,8 +31,14 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
     internal static int[]? GetDiagnosticItemMap(ItemsSourceView itemsSourceView) => itemsSourceView._layersState?.indexMap.ToArray();
 
+    /// <summary>
+    /// Gets a list of the <see cref="ItemFilter"/> objects owned by this <see cref="ItemsSourceView"/>.
+    /// </summary>
     public AvaloniaList<ItemFilter> Filters { get; }
 
+    /// <summary>
+    /// Gets whether any <see cref="ItemFilter"/> in the <see cref="Filters"/> collection is currently active.
+    /// </summary>
     protected bool HasActiveFilters
     {
         get
@@ -46,8 +52,14 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
         }
     }
 
+    /// <summary>
+    /// Gets a list of the <see cref="ItemSorter"/> objects owned by this <see cref="ItemsSourceView"/>.
+    /// </summary>
     public AvaloniaList<ItemSorter> Sorters { get; }
 
+    /// <summary>
+    /// Gets whether any <see cref="ItemSorter"/> in the <see cref="Sorters"/> collection is currently active.
+    /// </summary>
     protected bool HasActiveSorters
     {
         get
@@ -109,6 +121,14 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
         Refresh();
     }
 
+    /// <summary>
+    /// Re-evaluates the current view of the <see cref="Source"/> collection. This method performs a full re-evaluation of 
+    /// each active <see cref="ItemsSourceViewLayer"/> object found in <see cref="Filters"/> and <see cref="Sorters"/>.
+    /// </summary>
+    /// <remarks>
+    /// Calling this method is often not necessary, if appropriate values have been provided to <see cref="ItemsSourceViewLayer.State"/> 
+    /// and/or <see cref="ItemsSourceViewLayer.InvalidationPropertyNames"/> on each layer.
+    /// </remarks>
     public void Refresh()
     {
         if (!HasActiveLayers)
@@ -131,8 +151,11 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
     }
 
     /// <summary>
-    /// Re-evaluates <see cref="Filters"/> and <see cref="Sorters"/> asynchronously, and applies results in one operation after processing completes.
+    /// Asynchronously re-evaluates the current view of the <see cref="Source"/> collection. This method performs a full re-evaluation of 
+    /// each active <see cref="ItemsSourceViewLayer"/> object found in <see cref="Filters"/> and <see cref="Sorters"/>. Results are applied
+    /// in one operation after all processing has completed.
     /// </summary>
+    /// <inheritdoc cref="Refresh"/>
     public async Task RefreshAsync(CancellationToken cancellationToken = default)
     {
         if (!HasActiveLayers)

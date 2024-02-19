@@ -82,8 +82,20 @@ namespace Avalonia.Controls
             set => SetValue(DisplayMemberBindingProperty, value);
         }
 
+        /// <summary>
+        /// Gets a list of the <see cref="ItemFilter"/> objects owned by the <see cref="ItemsSourceView"/> of this <see cref="ItemsControl"/>.
+        /// </summary>
+        /// <remarks>
+        /// This property is provided as a XAML shortcut to <c>ItemsView.Filters</c>.
+        /// </remarks>
         public AvaloniaList<ItemFilter> Filters => ItemsView.Filters;
 
+        /// <summary>
+        /// Gets a list of the <see cref="ItemSorter"/> objects owned by the <see cref="ItemsSourceView"/> of this <see cref="ItemsControl"/>.
+        /// </summary>
+        /// <remarks>
+        /// This property is provided as a XAML shortcut to <c>ItemsView.Sorters</c>.
+        /// </remarks>
         public AvaloniaList<ItemSorter> Sorters => ItemsView.Sorters;
 
         private readonly ItemCollection _items;
