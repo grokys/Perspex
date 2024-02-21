@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text;
+using System.ComponentModel;
+using System.Linq;
 using Avalonia.Collections;
 using Avalonia.Diagnostics;
 using Xunit;
@@ -170,6 +171,146 @@ namespace Avalonia.Controls.UnitTests
             Assert.Equal(Array.Empty<int>(), ItemsSourceView.GetDiagnosticItemMap(target));
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+        }
+
+        [Fact]
+        public void ComparableSorter_Sorts_Integers()
+        {
+            var random = new Random();
+            var source = new AvaloniaList<int>(Enumerable.Repeat(0, 100).Select(i => random.Next(int.MinValue + 1, int.MaxValue)));
+            var target = ItemsSourceView.GetOrCreate(source);
+
+            var collectionChangeEvents = new List<NotifyCollectionChangedEventArgs>();
+
+            target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
+
+            target.Sorters.Add(new ComparableSorter());
+            
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            collectionChangeEvents.Clear();
+
+            Assert.Equal(target.Cast<int>().OrderBy(i => i), target);
+
+            source.Add(int.MinValue);
+
+            Assert.Equal(target[0], int.MinValue);
+
+            source.Insert(0, int.MaxValue);
+
+            Assert.Equal(target[target.Count - 1], int.MaxValue);
+        }
+
+        [Fact]
+        public void Disabled_Layers_Update_View_When_Activated()
+        {
+            var random = new Random();
+            var source = new AvaloniaList<int>(Enumerable.Repeat(0, 100));
+            var target = ItemsSourceView.GetOrCreate(source);
+
+            var collectionChangeEvents = new List<NotifyCollectionChangedEventArgs>();
+
+            target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
+
+            var filter = new FunctionItemFilter { IsActive = false, Filter = (s, e) => e.Accept = (int)e.Item % 2 == 0 };
+            target.Filters.Add(filter);
+
+            var sorter = new ComparableSorter() { IsActive = false, SortDirection = ListSortDirection.Descending };
+            target.Sorters.Add(sorter);
+            
+            Assert.Equal(0, collectionChangeEvents.Count);
+            
+            Assert.Equal(source, target);
+
+            sorter.IsActive = true;
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            collectionChangeEvents.Clear();
+
+            Assert.Equal(source.Reverse(), target);
+
+            filter.IsActive = true;
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            collectionChangeEvents.Clear();
+
+            Assert.Equal(source.Reverse().Where((i, _) => i % 2 == 0), target);
+
+            sorter.IsActive = false;
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            collectionChangeEvents.Clear();
+
+            Assert.Equal(source.Where((i, _) => i % 2 == 0), target);
+        }
+
+        [Fact]
+        public void Layers_Refreshed_When_InvalidationProperty_Changes()
+        {
+            var source = new AvaloniaList<ViewModel>(Enumerable.Repeat(0, 5).Select(i => new ViewModel()));
+            var target = ItemsSourceView.GetOrCreate(source);
+            var collectionChangeEvents = new List<NotifyCollectionChangedEventArgs>();
+
+            target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
+
+            target.Filters.Add(new FunctionItemFilter
+            {
+                Filter = (s, e) => e.Accept = ((ViewModel)e.Item).PassesFilter,
+                InvalidationPropertyNames = new() { nameof(ViewModel.PassesFilter) },
+            });
+
+            target.Sorters.Add(new ComparableSorter
+            {
+                ComparableSelector = (s, e) => e.Comparable = ((ViewModel)e.Item).LastModified,
+                InvalidationPropertyNames = new() { nameof(ViewModel.LastModified) },
+            });
+
+            foreach (var vm in source)
+                Assert.Equal(1, vm.PropertyChangedSubscriberCount); // One event subscription should be shared between all layers
+
+            Assert.Equal(2, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[1].Action);
+            collectionChangeEvents.Clear();
+
+            source[3].PassesFilter = true;
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Add, collectionChangeEvents[0].Action);
+            Assert.Equal(0, collectionChangeEvents[0].NewStartingIndex);
+            Assert.Equal(new[] { source[3] }, collectionChangeEvents[0].NewItems);
+            Assert.Equal(source[3], target[0]);
+            collectionChangeEvents.Clear();
+
+            source[0].PassesFilter = true;
+
+            Assert.Equal(new[] { source[3], source[0] }, target); // source[0] comes last because it was modified more recently
+        }
+
+        private class ViewModel : INotifyPropertyChanged
+        {
+            private bool _passesFilter;
+            public bool PassesFilter
+            {
+                get => _passesFilter;
+                set
+                {
+                    _passesFilter = value;
+                    PropertyChanged?.Invoke(this, new(nameof(PassesFilter)));
+
+                    LastModified = DateTimeOffset.Now;
+                    PropertyChanged?.Invoke(this, new(nameof(LastModified)));
+                }
+            }
+
+            public DateTimeOffset? LastModified { get; private set; }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public int PropertyChangedSubscriberCount => PropertyChanged?.GetInvocationList().Length ?? 0;
         }
 
         private class InvalidCollection : INotifyCollectionChanged, IEnumerable<string>

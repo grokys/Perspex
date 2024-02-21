@@ -129,4 +129,10 @@ public abstract class ItemsSourceViewLayer : AvaloniaObject, INamed
 public class InvalidationPropertiesCollection : AvaloniaList<string>
 {
     // Don't validate items: the PropertyChanged event can be raised with any "PropertyName" string.
+
+    public InvalidationPropertiesCollection() { }
+
+    public InvalidationPropertiesCollection(IEnumerable<string> names) : base(names) { }
+
+    public InvalidationPropertiesCollection(int capacity) : base(capacity) { }
 }
