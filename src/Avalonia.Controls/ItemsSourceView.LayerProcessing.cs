@@ -5,9 +5,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.Utils;
+using Avalonia.Threading;
 using Avalonia.Utilities;
 
 namespace Avalonia.Controls;
@@ -28,6 +28,9 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
     }
 
     private (List<object?> items, List<int> indexMap, HashSet<string> invalidationProperties)? _layersState;
+
+    private readonly Lazy<Dictionary<INotifyPropertyChanged, int>> _propertyChangedSubscriptions = new();
+    private Dictionary<INotifyPropertyChanged, int> PropertyChangedSubscriptions => _propertyChangedSubscriptions.Value;
 
     internal static int[]? GetDiagnosticItemMap(ItemsSourceView itemsSourceView) => itemsSourceView._layersState?.indexMap.ToArray();
 
@@ -77,6 +80,8 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
     private static void ValidateLayer(ItemsSourceViewLayer layer)
     {
+        Dispatcher.UIThread.VerifyAccess();
+
         if (layer == null)
         {
             throw new InvalidOperationException($"Cannot add null to this collection.");
@@ -131,6 +136,8 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
     /// </remarks>
     public void Refresh()
     {
+        Dispatcher.UIThread.VerifyAccess();
+
         if (!HasActiveLayers)
         {
             if (_layersState == null)
@@ -144,44 +151,13 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
         else
         {
             AddListenerIfNecessary();
-            _layersState = EvaluateLayers(Filters, Sorters, CancellationToken.None);
+            _layersState = EvaluateLayers();
         }
 
         RaiseCollectionChanged(CollectionUtils.ResetEventArgs);
     }
 
-    /// <summary>
-    /// Asynchronously re-evaluates the current view of the <see cref="Source"/> collection. This method performs a full re-evaluation of 
-    /// each active <see cref="ItemsSourceViewLayer"/> object found in <see cref="Filters"/> and <see cref="Sorters"/>. Results are applied
-    /// in one operation after all processing has completed.
-    /// </summary>
-    /// <inheritdoc cref="Refresh"/>
-    public async Task RefreshAsync(CancellationToken cancellationToken = default)
-    {
-        if (!HasActiveLayers)
-        {
-            if (_layersState == null)
-            {
-                return;
-            }
-
-            RemoveListenerIfNecessary();
-            _layersState = null;
-        }
-        else
-        {
-            AddListenerIfNecessary();
-            var filtersCopy = new ItemFilter[Filters.Count];
-            Filters.CopyTo(filtersCopy, 0);
-            var sortersCopy = new ItemSorter[Sorters.Count];
-            Sorters.CopyTo(sortersCopy, 0);
-            _layersState = await Task.Run(() => EvaluateLayers(filtersCopy, sortersCopy, cancellationToken), cancellationToken);
-        }
-
-        RaiseCollectionChanged(CollectionUtils.ResetEventArgs);
-    }
-
-    private (List<object?> items, List<int> indexMap, HashSet<string> invalidationProperties) EvaluateLayers(IList<ItemFilter> filters, IList<ItemSorter> sorters, CancellationToken cancellationToken)
+    private (List<object?> items, List<int> indexMap, HashSet<string> invalidationProperties) EvaluateLayers()
     {
         var result = new List<object?>(_source.Count);
         var map = new List<int>(_source.Count);
@@ -189,60 +165,76 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
         var invalidationProperties = new HashSet<string>();
 
-        for (int i = 0; i < filters.Count; i++)
+        for (int i = 0; i < Filters.Count; i++)
         {
-            if (filters[i].IsActive)
-                invalidationProperties.UnionWith(filters[i].GetInvalidationPropertyNamesEnumerator());
+            if (Filters[i].IsActive)
+                invalidationProperties.UnionWith(Filters[i].GetInvalidationPropertyNamesEnumerator());
         }
-        for (int i = 0; i < sorters.Count; i++)
+        for (int i = 0; i < Sorters.Count; i++)
         {
-            if (sorters[i].IsActive)
-                invalidationProperties.UnionWith(sorters[i].GetInvalidationPropertyNamesEnumerator());
+            if (Sorters[i].IsActive)
+                invalidationProperties.UnionWith(Sorters[i].GetInvalidationPropertyNamesEnumerator());
+        }
+
+        Dictionary<INotifyPropertyChanged, int>? newPropertyChangedSubscriptions = null;
+        if (invalidationProperties.Count > 0)
+        {
+            newPropertyChangedSubscriptions = new();
         }
 
         CompoundSorter? comparer = null;
         if (HasActiveSorters)
         {
             comparer = s_compoundSorter.Value ??= new();
-            comparer.Sorters = sorters;
+            comparer.Sorters = Sorters;
         }
 
         try
         {
-            for (int i = 0; i < _source.Count; i++)
+            int i = 0;
+            // use an enumerator so that the IList implementation can manage the iteration, e.g. by throwing
+            // an exception should the collection change during enumeration, or by enumerating over a local
+            // copy of the collection.
+            foreach (var item in _source)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (invalidationProperties.Count > 0 && _source[i] is INotifyPropertyChanged inpc)
+                if (newPropertyChangedSubscriptions != null && item is INotifyPropertyChanged inpc)
                 {
-                    WeakEvents.ThreadSafePropertyChanged.Unsubscribe(inpc, this);
-                    WeakEvents.ThreadSafePropertyChanged.Subscribe(inpc, this);
+                    if (newPropertyChangedSubscriptions.ContainsKey(inpc))
+                    {
+                        newPropertyChangedSubscriptions[inpc] += 1;
+                    }
+                    else
+                    {
+                        newPropertyChangedSubscriptions[inpc] = 1;
+                    }
                 }
 
-                if (ItemPassesFilters(filters, _source[i]))
+                if (ItemPassesFilters(Filters, item))
                 {
                     if (comparer != null)
                     {
-                        var index = result.BinarySearch(_source[i], comparer);
+                        var index = result.BinarySearch(item, comparer);
                         if (index < 0)
                         {
                             index = ~index;
                         }
 
                         viewIndexToSourceIndex.Insert(index, i);
-                        result.Insert(index, _source[i]);
+                        result.Insert(index, item);
                     }
                     else
                     {
                         viewIndexToSourceIndex.Add(i);
-                        result.Add(_source[i]);
+                        result.Add(item);
                     }
                 }
+
+                i++;
             }
 
             map.InsertMany(0, -1, _source.Count);
 
-            for (int i = 0; i < viewIndexToSourceIndex.Count; i++)
+            for (i = 0; i < viewIndexToSourceIndex.Count; i++)
             {
                 map[viewIndexToSourceIndex[i]] = i;
             }
@@ -254,6 +246,37 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
             if (comparer != null)
             {
                 comparer.Sorters = null;
+            }
+
+            if (newPropertyChangedSubscriptions != null)
+            {
+                foreach (var kvp in newPropertyChangedSubscriptions)
+                {
+                    if (!PropertyChangedSubscriptions.ContainsKey(kvp.Key))
+                    {
+                        WeakEvents.ThreadSafePropertyChanged.Subscribe(kvp.Key, this);
+                    }
+
+                    PropertyChangedSubscriptions[kvp.Key] = kvp.Value;
+                }
+
+                List<INotifyPropertyChanged>? toRemove = null;
+                foreach (var inpc in PropertyChangedSubscriptions.Keys)
+                {
+                    if (!newPropertyChangedSubscriptions.ContainsKey(inpc))
+                    {
+                        WeakEvents.ThreadSafePropertyChanged.Unsubscribe(inpc, this);
+                        (toRemove ??= new()).Add(inpc);
+                    }
+                }
+
+                if (toRemove != null)
+                {
+                    for (int i = 0; i < toRemove.Count; i++)
+                    {
+                        PropertyChangedSubscriptions.Remove(toRemove[i]);
+                    }
+                }
             }
         }
     }
@@ -272,6 +295,8 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
     void IWeakEventSubscriber<PropertyChangedEventArgs>.OnEvent(object? sender, WeakEvent ev, PropertyChangedEventArgs e)
     {
+        Dispatcher.UIThread.VerifyAccess();
+
         if (sender is not INotifyPropertyChanged inpc
             || _layersState is not { } layersState
             || e.PropertyName is not { } propertyName
@@ -289,9 +314,9 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                 continue;
             }
 
-            // If a collection is reset, we aren't able to unsubscribe from stale items. So we can sometimes receive
-            // this event from items which are no longer in the collection. Don't execute the filter until we are sure
-            // that the item is still present.
+            // If a collection doesn't raise CollectionChanged events, we aren't able to unsubscribe from stale items.
+            // So we can sometimes receive this event from items which are no longer in the collection. Don't execute
+            // the filter until we are sure that the item is still present.
             passes ??= ItemPassesFilters(Filters, sender);
 
             switch ((layersState.indexMap[sourceIndex], passes))
@@ -301,7 +326,7 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                         var viewIndex = ViewIndex(sourceIndex, sender);
 
                         layersState.indexMap[sourceIndex] = viewIndex;
-                        ShiftIndexMap(sourceIndex + 1, 1);
+                        ShiftIndexMapOnViewChanged(sourceIndex + 1, 1);
 
                         layersState.items.Insert(viewIndex, sender);
                         RaiseCollectionChanged(new(NotifyCollectionChangedAction.Add, sender, viewIndex));
@@ -335,7 +360,7 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                     break;
                 case (int viewIndex, false):
                     layersState.indexMap[sourceIndex] = -1;
-                    ShiftIndexMap(sourceIndex + 1, -1);
+                    ShiftIndexMapOnViewChanged(sourceIndex + 1, -1);
                     layersState.items.RemoveAt(viewIndex);
                     RaiseCollectionChanged(new(NotifyCollectionChangedAction.Remove, sender, viewIndex));
                     break;
@@ -344,12 +369,16 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
         if (passes == null) // item is no longer in the collection, we can unsubscribe
         {
+            Debug.Assert(PropertyChangedSubscriptions.ContainsKey(inpc));
             WeakEvents.ThreadSafePropertyChanged.Unsubscribe(inpc, this);
+            PropertyChangedSubscriptions.Remove(inpc);
         }
     }
 
     private void UpdateLayersForCollectionChangedEvent(NotifyCollectionChangedEventArgs e)
     {
+        Dispatcher.UIThread.VerifyAccess();
+
         if (_layersState is not { } layersState)
         {
             throw new InvalidOperationException("Layers not initialised.");
@@ -384,7 +413,7 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
                         // during add operations this has to be done incrementally, so that ViewIndex can find the right result
                         // for the next item.
-                        ShiftIndexMap(sourceIndex, 1);
+                        ShiftIndexMapOnSourceChanged(sourceIndex, 1);
 
                         layersState.items.Insert(viewIndex, e.NewItems[i]);
                         layersState.indexMap.Insert(sourceIndex, viewIndex);
@@ -396,7 +425,17 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                     }
 
                     if (layersState.invalidationProperties.Count > 0 && e.NewItems[i] is INotifyPropertyChanged inpc)
-                        WeakEvents.ThreadSafePropertyChanged.Subscribe(inpc, this);
+                    {
+                        if (PropertyChangedSubscriptions.ContainsKey(inpc))
+                        {
+                            PropertyChangedSubscriptions[inpc] += 1;
+                        }
+                        else
+                        {
+                            PropertyChangedSubscriptions[inpc] = 1;
+                            WeakEvents.ThreadSafePropertyChanged.Subscribe(inpc, this);
+                        }
+                    }
                 }
 
                 if (viewItems != null)
@@ -416,7 +455,7 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                     var sourceIndex = e.OldStartingIndex + i;
                     var viewIndex = layersState.indexMap[sourceIndex];
 
-                    if (layersState.indexMap[sourceIndex] != -1)
+                    if (viewIndex != -1)
                     {
                         if (viewItems == null)
                         {
@@ -429,7 +468,8 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                             viewStartIndex = null;
                         }
 
-                        layersState.items.RemoveAt(layersState.indexMap[sourceIndex]);
+                        layersState.items.RemoveAt(viewIndex);
+                        ShiftIndexMapOnSourceChanged(viewIndex, -1);
 
                         viewItems.Add(e.OldItems[i]);
                     }
@@ -437,12 +477,25 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                     layersState.indexMap.RemoveAt(sourceIndex);
 
                     if (layersState.invalidationProperties.Count > 0 && e.OldItems[i] is INotifyPropertyChanged inpc)
-                        WeakEvents.ThreadSafePropertyChanged.Unsubscribe(inpc, this);
-                }
-
-                if (viewItems != null)
-                {
-                    ShiftIndexMap(e.OldStartingIndex - e.OldItems.Count, -viewItems.Count);
+                    {
+                        if (PropertyChangedSubscriptions.TryGetValue(inpc, out var subscribeCount))
+                        {
+                            if (subscribeCount <= 1)
+                            {
+                                Debug.Assert(subscribeCount == 1);
+                                WeakEvents.ThreadSafePropertyChanged.Unsubscribe(inpc, this);
+                                PropertyChangedSubscriptions.Remove(inpc);
+                            }
+                            else
+                            {
+                                PropertyChangedSubscriptions[inpc] -= 1;
+                            }
+                        }
+                        else
+                        {
+                            Debug.Fail("An INotifyPropertyChanged object was removed, but there is no record of a PropertyChanged subscribtion for it.");
+                        }
+                    }
                 }
 
                 if (viewItems != null)
@@ -469,12 +522,24 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
         s_rewrittenCollectionChangedEvents.Value.Add(e, rewrittenArgs);
     }
 
-    private void ShiftIndexMap(int inclusiveSourceStartIndex, int delta)
+    private void ShiftIndexMapOnViewChanged(int inclusiveSourceStartIndex, int delta)
     {
         var map = _layersState!.Value.indexMap;
         for (var i = inclusiveSourceStartIndex; i < map.Count; i++)
         {
             if (map[i] != -1)
+            {
+                map[i] += delta;
+            }
+        }
+    }
+
+    private void ShiftIndexMapOnSourceChanged(int inclusiveViewStartIndex, int delta)
+    {
+        var map = _layersState!.Value.indexMap;
+        for (var i = 0; i < map.Count; i++)
+        {
+            if (map[i] >= inclusiveViewStartIndex)
             {
                 map[i] += delta;
             }
