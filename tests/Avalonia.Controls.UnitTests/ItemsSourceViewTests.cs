@@ -5,7 +5,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Avalonia.Collections;
+using Avalonia.Controls.Platform;
 using Avalonia.Diagnostics;
+using Avalonia.Threading;
+using Avalonia.UnitTests;
 using Xunit;
 
 namespace Avalonia.Controls.UnitTests
@@ -78,8 +81,8 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            target.Filters.Add(new FunctionItemFilter { Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item) });
-            
+            target.Filters.Add(new FunctionItemFilter(ob => !Equals(bool.FalseString, ob)));
+
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
             collectionChangeEvents.Clear();
@@ -114,7 +117,7 @@ namespace Avalonia.Controls.UnitTests
 
         [Fact]
         public void Filtered_View_Removes_Old_Items()
-        {            
+        {
             var source = new AvaloniaList<string>() { "foo", "bar", bool.TrueString, bool.FalseString, bool.TrueString, "end" };
             var target = ItemsSourceView.GetOrCreate(source);
 
@@ -122,7 +125,7 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            target.Filters.Add(new FunctionItemFilter { Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item) });
+            target.Filters.Add(new FunctionItemFilter(ob => !Equals(bool.FalseString, ob)));
 
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
@@ -151,7 +154,7 @@ namespace Avalonia.Controls.UnitTests
 
         [Fact]
         public void Filtered_View_Resets_When_Source_Cleared()
-        {            
+        {
             var source = new AvaloniaList<string>() { "foo", "bar" };
             var target = ItemsSourceView.GetOrCreate(source);
 
@@ -159,8 +162,8 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            target.Filters.Add(new FunctionItemFilter { Filter = (s, e) => e.Accept = !Equals(bool.FalseString, e.Item) });
-            
+            target.Filters.Add(new FunctionItemFilter(ob => !Equals(bool.FalseString, ob)));
+
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
             collectionChangeEvents.Clear();
@@ -185,7 +188,7 @@ namespace Avalonia.Controls.UnitTests
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
             target.Sorters.Add(new ComparableSorter());
-            
+
             Assert.Equal(1, collectionChangeEvents.Count);
             Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
             collectionChangeEvents.Clear();
@@ -212,14 +215,14 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            var filter = new FunctionItemFilter { IsActive = false, Filter = (s, e) => e.Accept = (int)e.Item % 2 == 0 };
+            var filter = new FunctionItemFilter(ob => (int)ob % 2 == 0) { IsActive = false };
             target.Filters.Add(filter);
 
             var sorter = new ComparableSorter() { IsActive = false, SortDirection = ListSortDirection.Descending };
             target.Sorters.Add(sorter);
-            
+
             Assert.Equal(0, collectionChangeEvents.Count);
-            
+
             Assert.Equal(source, target);
 
             sorter.IsActive = true;
@@ -256,15 +259,13 @@ namespace Avalonia.Controls.UnitTests
 
             target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
 
-            target.Filters.Add(new FunctionItemFilter
+            target.Filters.Add(new FunctionItemFilter(ob => ((ViewModel)ob).PassesFilter)
             {
-                Filter = (s, e) => e.Accept = ((ViewModel)e.Item).PassesFilter,
                 InvalidationPropertyNames = new() { nameof(ViewModel.PassesFilter) },
             });
 
-            target.Sorters.Add(new ComparableSorter
+            target.Sorters.Add(new ComparableSorter(ob => ((ViewModel)ob).LastModified)
             {
-                ComparableSelector = (s, e) => e.Comparable = ((ViewModel)e.Item).LastModified,
                 InvalidationPropertyNames = new() { nameof(ViewModel.LastModified) },
             });
 
@@ -288,6 +289,69 @@ namespace Avalonia.Controls.UnitTests
             source[0].PassesFilter = true;
 
             Assert.Equal(new[] { source[3], source[0] }, target); // source[0] comes last because it was modified more recently
+        }
+
+        [Fact]
+        public void Off_Thread_Collection_Changes_Throw_Exception_When_Layers_Active_And_No_DeferredRefreshScope()
+        {
+            var dispatcherImpl = new ConfigurableIsLoopThreadDispatcherImpl();
+            using var app = UnitTestApplication.Start(new TestServices(dispatcherImpl: dispatcherImpl));
+
+            var source = new AvaloniaList<int>(Enumerable.Repeat(0, 5));
+            var target = ItemsSourceView.GetOrCreate(source);
+
+            target.CollectionChanged += delegate { }; // ensure that source.CollectionChanged is subscribed to
+
+            dispatcherImpl.CurrentThreadIsLoopThread = false;
+
+            // Should not throw. If no layers are involved, ItemsSourceView can process the event on any thread.
+            // What happens when others try to handle the resulting CollectionChanged event is not its problem!
+            source.Add(-1);
+
+            dispatcherImpl.CurrentThreadIsLoopThread = true;
+            target.Sorters.Add(new ComparableSorter());
+
+            dispatcherImpl.CurrentThreadIsLoopThread = false;
+
+            Assert.Throws<ItemsSourceView.InvalidThreadException>(() => source.Add(-1));
+
+            using (target.EnterDeferredRefreshScope())
+            {
+                source.Add(-2);
+            }
+
+            Assert.Equal(8, target.Count);
+            Assert.Equal(-2, target[0]);
+        }
+
+        [Fact]
+        public void DeferredUpdateScope_Batches_Changes_Together()
+        {
+            var dispatcher = new ManagedDispatcherImpl(null);
+            using var app = UnitTestApplication.Start(new TestServices(dispatcherImpl: dispatcher));
+
+            var source = new AvaloniaList<int>();
+            var target = ItemsSourceView.GetOrCreate(source);
+
+            var collectionChangeEvents = new List<NotifyCollectionChangedEventArgs>();
+
+            target.CollectionChanged += (s, e) => collectionChangeEvents.Add(e);
+
+            using (target.EnterDeferredRefreshScope())
+            {
+                source.Add(0);
+                source.Add(1);
+                source.Add(2);
+                source.Remove(1);
+
+                target.Filters.Add(new FunctionItemFilter(ob => (int)ob % 2 == 0));
+
+                source.Add(4);
+            }
+
+            Assert.Equal(1, collectionChangeEvents.Count);
+            Assert.Equal(NotifyCollectionChangedAction.Reset, collectionChangeEvents[0].Action);
+            Assert.Equal(new[] { 0, 2, 4 }, target);
         }
 
         private class ViewModel : INotifyPropertyChanged
@@ -336,6 +400,38 @@ namespace Avalonia.Controls.UnitTests
             }
 
             public new void SetSource(IEnumerable source) => base.SetSource(source);
+        }
+
+        private class ConfigurableIsLoopThreadDispatcherImpl : IDispatcherImpl
+        {
+            private bool _signalling;
+
+            bool IDispatcherImpl.CurrentThreadIsLoopThread => _signalling || CurrentThreadIsLoopThread;
+
+            public bool CurrentThreadIsLoopThread { get; set; } = true;
+            public long Now => DateTime.Now.Ticks;
+
+            public event Action Signaled;
+            public event Action Timer;
+
+            public void Signal()
+            {
+                _signalling = true;
+
+                try
+                {
+                    Signaled?.Invoke();
+                }
+                finally
+                {
+                    _signalling = false;
+                }
+            }
+
+            public void UpdateTimer(long? dueTimeInMs)
+            {
+                Timer?.Invoke();
+            }
         }
     }
 }

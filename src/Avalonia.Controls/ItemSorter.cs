@@ -118,6 +118,13 @@ public class ComparableSorter : ItemSorter
     public static readonly DirectProperty<ComparableSorter, IComparer?> ComparerProperty =
         AvaloniaProperty.RegisterDirect<ComparableSorter, IComparer?>(nameof(Comparer), o => o.Comparer, (o, v) => o.Comparer = v);
 
+    public ComparableSorter() { }
+
+    public ComparableSorter(Func<object?, IComparable> comparableSelector)
+    {
+        ComparableSelector = (s, e) => e.Comparable = comparableSelector(e.Item);
+    }
+
     /// <inheritdoc cref="ItemSorter.Compare(object?, object?)"/>
     /// <exception cref="InvalidCastException">Thrown if <paramref name="x"/> or <paramref name="y"/> cannot be converted to <see cref="IComparable"/>.</exception>
     public override int Compare(object? x, object? y)

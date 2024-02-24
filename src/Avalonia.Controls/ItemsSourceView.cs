@@ -261,6 +261,11 @@ namespace Avalonia.Controls
 
         void ICollectionChangedListener.PreChanged(INotifyCollectionChanged sender, NotifyCollectionChangedEventArgs e)
         {
+            if (DeferredRefreshActive)
+            {
+                return;
+            }
+
             if (HasActiveLayers)
             {
                 UpdateLayersForCollectionChangedEvent(e);
@@ -276,6 +281,11 @@ namespace Avalonia.Controls
 
         void ICollectionChangedListener.Changed(INotifyCollectionChanged sender, NotifyCollectionChangedEventArgs e)
         {
+            if (DeferredRefreshActive)
+            {
+                return;
+            }
+
             if (GetRewrittenEvent(e) is not { } rewritten)
             {
                 return;
@@ -289,6 +299,11 @@ namespace Avalonia.Controls
 
         void ICollectionChangedListener.PostChanged(INotifyCollectionChanged sender, NotifyCollectionChangedEventArgs e)
         {
+            if (DeferredRefreshActive)
+            {
+                return;
+            }
+
             if (GetRewrittenEvent(e) is not { } rewritten)
             {
                 return;

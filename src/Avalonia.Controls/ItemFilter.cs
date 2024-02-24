@@ -37,6 +37,13 @@ public class FunctionItemFilter : ItemFilter
     public static readonly DirectProperty<FunctionItemFilter, EventHandler<FilterEventArgs>?> FilterProperty =
         AvaloniaProperty.RegisterDirect<FunctionItemFilter, EventHandler<FilterEventArgs>?>(nameof(Filter), o => o.Filter, (o, v) => o.Filter = v);
 
+    public FunctionItemFilter() { }
+
+    public FunctionItemFilter(Func<object?, bool> filterFunc)
+    {
+        Filter = (s, e) => e.Accept = filterFunc(e.Item);
+    }
+
     public override bool FilterItem(object? item)
     {
         if (Filter == null)

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.Utils;
 using Avalonia.Threading;
@@ -31,6 +32,12 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
     private readonly Lazy<Dictionary<INotifyPropertyChanged, int>> _propertyChangedSubscriptions = new();
     private Dictionary<INotifyPropertyChanged, int> PropertyChangedSubscriptions => _propertyChangedSubscriptions.Value;
+
+    private int _deferredRefreshDepth;
+    /// <summary>
+    /// Gets whether there are any undisposed <see cref="DeferredRefreshScope"/> objects for this <see cref="ItemsSourceView"/>.
+    /// </summary>
+    private bool DeferredRefreshActive => _deferredRefreshDepth != 0;
 
     internal static int[]? GetDiagnosticItemMap(ItemsSourceView itemsSourceView) => itemsSourceView._layersState?.indexMap.ToArray();
 
@@ -77,6 +84,14 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
     }
 
     protected bool HasActiveLayers => HasActiveFilters || HasActiveSorters;
+
+    private static void BlockUpdateFromBackgroundThreads()
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            throw new InvalidThreadException();
+        }
+    }
 
     private static void ValidateLayer(ItemsSourceViewLayer layer)
     {
@@ -127,21 +142,49 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
     }
 
     /// <summary>
-    /// Re-evaluates the current view of the <see cref="Source"/> collection. This method performs a full re-evaluation of 
-    /// each active <see cref="ItemsSourceViewLayer"/> object found in <see cref="Filters"/> and <see cref="Sorters"/>.
+    /// While any <see cref="DeferredRefreshScope"/> returned from this method is active, the <see cref="ItemsSourceView"/> will not raise <see cref="INotifyCollectionChanged"/>
+    /// events, nor will it evaluate any <see cref="Filters"/> or <see cref="Sorters"/>. When all scopes for a given <see cref="ItemsSourceView"/> have exited, <see cref="Refresh()"/>
+    /// will automatically be called on the UI thread.
     /// </summary>
     /// <remarks>
-    /// Calling this method is often not necessary, if appropriate values have been provided to <see cref="ItemsSourceViewLayer.State"/> 
-    /// and/or <see cref="ItemsSourceViewLayer.InvalidationPropertyNames"/> on each layer.
+    /// Scopes may be entered or exited from any thread. The <see cref="Source"/> collection can be safely modified from a background thread while a
+    /// <see cref="DeferredRefreshScope"/> is active.
     /// </remarks>
+    /// <returns>
+    /// A disposable object (both <see cref="IDisposable"/> and <see cref="IAsyncDisposable"/>) which represents a deferred refresh scope. When this object is disposed, the scope will exit.
+    /// </returns>
+    public DeferredRefreshScope EnterDeferredRefreshScope() => new(this);
+
+    /// <summary>
+    /// Re-evaluates the current view of the <see cref="Source"/> collection and if necessary raises a <see cref="NotifyCollectionChangedAction.Reset"/> event.
+    /// This method executes a full re-evaluation of each active <see cref="ItemsSourceViewLayer"/> object found in <see cref="Filters"/> and <see cref="Sorters"/>.
+    /// </summary>
+    /// <remarks>
+    /// <para>If a <see cref="DeferredRefreshScope"/> is active, calling this method has no effect.</para>
+    /// <para>Calling this method is often not necessary, if appropriate values have been provided to <see cref="ItemsSourceViewLayer.State"/>
+    /// and/or <see cref="ItemsSourceViewLayer.InvalidationPropertyNames"/> on each layer.</para>
+    /// </remarks>
+    /// <exception cref="InvalidThreadException">Thrown if the method is called from any thread except <see cref="Dispatcher.UIThread"/>.</exception>
     public void Refresh()
     {
-        Dispatcher.UIThread.VerifyAccess();
+        if (DeferredRefreshActive)
+        {
+            return;
+        }
+
+        Refresh(applyingDeferredUpdates: false);
+    }
+
+    private void Refresh(bool applyingDeferredUpdates)
+    {
+        BlockUpdateFromBackgroundThreads();
 
         if (!HasActiveLayers)
         {
             if (_layersState == null)
             {
+                if (_source is not INotifyCollectionChanged || applyingDeferredUpdates)
+                    RaiseCollectionChanged(CollectionUtils.ResetEventArgs);
                 return;
             }
 
@@ -295,7 +338,12 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
     void IWeakEventSubscriber<PropertyChangedEventArgs>.OnEvent(object? sender, WeakEvent ev, PropertyChangedEventArgs e)
     {
-        Dispatcher.UIThread.VerifyAccess();
+        if (DeferredRefreshActive)
+        {
+            return;
+        }
+
+        BlockUpdateFromBackgroundThreads();
 
         if (sender is not INotifyPropertyChanged inpc
             || _layersState is not { } layersState
@@ -377,7 +425,7 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
     private void UpdateLayersForCollectionChangedEvent(NotifyCollectionChangedEventArgs e)
     {
-        Dispatcher.UIThread.VerifyAccess();
+        BlockUpdateFromBackgroundThreads();
 
         if (_layersState is not { } layersState)
         {
@@ -619,5 +667,88 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
 
             return -1; // this default result will give us the source collection's order
         }
+    }
+
+    /// <seealso cref="EnterDeferredRefreshScope"/>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Shared dispose method")]
+    public sealed class DeferredRefreshScope : IDisposable, IAsyncDisposable
+    {
+        private readonly object _disposeLock = new();
+
+        private ItemsSourceView? _owner;
+        private Task? _disposeTask;
+
+        public DeferredRefreshScope(ItemsSourceView owner)
+        {
+            _owner = owner;
+            Interlocked.Increment(ref _owner._deferredRefreshDepth);
+        }
+
+        public void Dispose() => DisposeInternal().GetAwaiter().GetResult();
+
+        public ValueTask DisposeAsync() => new(DisposeInternal());
+
+        private Task DisposeInternal()
+        {
+            GC.SuppressFinalize(this);
+            lock (_disposeLock)
+            {
+                if (_owner is { } owner)
+                {
+                    _owner = null;
+                    if (Interlocked.Decrement(ref owner._deferredRefreshDepth) == 0)
+                    {
+                        if (Dispatcher.UIThread.CheckAccess())
+                        {
+                            ApplyDeferredUpdates(owner);
+                            _disposeTask = Task.CompletedTask;
+                        }
+                        else
+                        {
+                            _disposeTask = Dispatcher.UIThread.InvokeAsync(() => ApplyDeferredUpdates(owner)).GetTask();
+                        }
+                    }
+                    else
+                    {
+                        _disposeTask = Task.CompletedTask;
+                    }
+                }
+            }
+
+            Debug.Assert(_owner == null);
+            Debug.Assert(_disposeTask != null);
+
+            return _disposeTask;
+        }
+
+        ~DeferredRefreshScope()
+        {
+            lock (_disposeLock)
+            {
+                if (_owner is { } owner)
+                {
+                    _owner = null;
+                    if (Interlocked.Decrement(ref owner._deferredRefreshDepth) == 0)
+                    {
+                        Dispatcher.UIThread.Post(() => ApplyDeferredUpdates(owner));
+                    }
+                    Logging.Logger.TryGet(Logging.LogEventLevel.Warning, nameof(ItemsSourceView))?.Log(owner, $"A {nameof(DeferredRefreshScope)} was finalized without having been disposed.");
+                }
+            }
+        }
+
+        private static void ApplyDeferredUpdates(ItemsSourceView owner) => owner.Refresh(applyingDeferredUpdates: true);
+    }
+
+    /// <summary>
+    /// Thrown when an <see cref="ItemsSourceView"/> with an active <see cref="ItemsSourceViewLayer"/> is asked to process a change to its source data on a background thread.
+    /// </summary>
+    public class InvalidThreadException : InvalidOperationException
+    {
+        public InvalidThreadException() : base($"{nameof(ItemsSourceView)} does not support data changes on background threads " +
+            $"while any {nameof(ItemsSourceViewLayer)} is active. Either make these changes on the UI thread, or call " +
+            $"{nameof(ItemsSourceView)}.{nameof(EnterDeferredRefreshScope)} to defer processing of data changes until they can be " +
+            $"executed on the UI thread.")
+        { }
     }
 }
