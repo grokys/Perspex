@@ -31,8 +31,6 @@ namespace Avalonia.Controls
 
         public bool IsReadOnly => _mode == Mode.ItemsSource;
 
-        internal event EventHandler? SourceChanged;
-
         /// <summary>
         /// Adds an item to the <see cref="ItemsControl"/>.
         /// </summary>
@@ -114,19 +112,6 @@ namespace Avalonia.Controls
 
             _mode = value is not null ? Mode.ItemsSource : Mode.Items;
             SetSource(value ?? CreateDefaultCollection());
-        }
-
-        private new void SetSource(IEnumerable source)
-        {
-            var oldSource = Source;
-
-            base.SetSource(source);
-
-            if (oldSource.Count > 0)
-                RaiseCollectionChanged(new(NotifyCollectionChangedAction.Remove, oldSource, 0));
-            if (Source.Count > 0)
-                RaiseCollectionChanged(new(NotifyCollectionChangedAction.Add, Source, 0));
-            SourceChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private static AvaloniaList<object?> CreateDefaultCollection()

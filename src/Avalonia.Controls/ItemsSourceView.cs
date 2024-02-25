@@ -253,6 +253,7 @@ namespace Avalonia.Controls
             return inner switch
             {
                 IEnumerable<object> e => e.GetEnumerator(),
+                null => Enumerable.Empty<object?>().GetEnumerator(),
                 _ => EnumerateItems(inner),
             };
         }
@@ -294,7 +295,7 @@ namespace Avalonia.Controls
             _collectionChanged?.Invoke(this, rewritten);
 
             if (rewritten.Action is NotifyCollectionChangedAction.Add or NotifyCollectionChangedAction.Remove or NotifyCollectionChangedAction.Reset)
-                _propertyChanged?.Invoke(this, new(nameof(Count)));
+                OnPropertyChanged(nameof(Count));
         }
 
         void ICollectionChangedListener.PostChanged(INotifyCollectionChanged sender, NotifyCollectionChangedEventArgs e)
@@ -310,6 +311,14 @@ namespace Avalonia.Controls
             }
 
             _postCollectionChanged?.Invoke(this, rewritten);
+        }
+
+        /// <summary>
+        /// Raises <see cref="PropertyChanged"/>.
+        /// </summary>
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            _propertyChanged?.Invoke(this, new(propertyName));
         }
 
         int IList.Add(object? value) => ThrowReadOnly();
@@ -337,6 +346,8 @@ namespace Avalonia.Controls
             if (_listening && _source is INotifyCollectionChanged inccOld)
                 CollectionChangedEventManager.Instance.RemoveListener(inccOld, this);
 
+            var oldItems = this.ToArray();
+
             _source = source switch
             {
                 IList list => list,
@@ -348,7 +359,14 @@ namespace Avalonia.Controls
                 _ => new List<object>(source.Cast<object>())
             };
 
-            Refresh();
+            Refresh(applyingDeferredUpdates: false, raiseEvents: false);
+
+            OnPropertyChanged(nameof(Source));
+
+            if (oldItems.Length > 0)
+                RaiseCollectionChanged(new(NotifyCollectionChangedAction.Remove, oldItems, 0));
+            if (Count > 0)
+                RaiseCollectionChanged(new(NotifyCollectionChangedAction.Add, this.ToArray(), 0));
 
             if (_listening && _source is INotifyCollectionChanged inccNew)
                 CollectionChangedEventManager.Instance.AddListener(inccNew, this);

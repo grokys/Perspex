@@ -767,7 +767,7 @@ namespace Avalonia.Controls.UnitTests.Primitives
 
             target.Selection = selection;
 
-            Assert.Same(target.ItemsSource, selection.Source);
+            Assert.Equal(target.ItemsSource, selection.Source);
         }
 
         [Fact]
