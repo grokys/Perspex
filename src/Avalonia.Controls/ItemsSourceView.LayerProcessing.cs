@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.Utils;
+using Avalonia.Reactive;
 using Avalonia.Threading;
 using Avalonia.Utilities;
 
@@ -201,6 +202,31 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
             RaiseCollectionChanged(CollectionUtils.ResetEventArgs);
     }
 
+    private IDisposable? EnterLayersBatchScope(bool filters = true, bool sorters = true)
+    {
+        Action? exitAllScopes = null;
+        
+        for (int i = 0; filters && i < Filters.Count; i++)
+        {
+            if (Filters[i].IsActive)
+            {
+                Filters[i].BeginBatchOperation();
+                exitAllScopes += Filters[i].EndBatchOperation;
+            }
+        }
+
+        for (int i = 0; sorters && i < Sorters.Count; i++)
+        {
+            if (Sorters[i].IsActive)
+            {
+                Sorters[i].BeginBatchOperation();
+                exitAllScopes += Sorters[i].EndBatchOperation;
+            }
+        }
+
+        return exitAllScopes == null ? null : Disposable.Create(exitAllScopes);
+    }
+
     private (List<object?> items, List<int> indexMap, HashSet<string> invalidationProperties) EvaluateLayers()
     {
         var result = new List<object?>(_source.Count);
@@ -208,6 +234,8 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
         var viewIndexToSourceIndex = new List<int>(_source.Count);
 
         var invalidationProperties = new HashSet<string>();
+
+        using var layerScopes = EnterLayersBatchScope();
 
         for (int i = 0; i < Filters.Count; i++)
         {
@@ -355,65 +383,77 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
         }
 
         bool? passes = null;
+        IDisposable? layerScopes = null;
 
-        for (int sourceIndex = 0; sourceIndex < Source.Count; sourceIndex++)
+        try
         {
-            if (Source[sourceIndex] != sender)
+            for (int sourceIndex = 0; sourceIndex < Source.Count; sourceIndex++)
             {
-                continue;
-            }
+                if (Source[sourceIndex] != sender)
+                {
+                    continue;
+                }
 
-            // If a collection doesn't raise CollectionChanged events, we aren't able to unsubscribe from stale items.
-            // So we can sometimes receive this event from items which are no longer in the collection. Don't execute
-            // the filter until we are sure that the item is still present.
-            passes ??= ItemPassesFilters(Filters, sender);
+                // If a collection doesn't raise CollectionChanged events, we aren't able to unsubscribe from stale items.
+                // So we can sometimes receive this event from items which are no longer in the collection. Don't execute
+                // the filter until we are sure that the item is still present.
+                if (passes == null)
+                {
+                    layerScopes = EnterLayersBatchScope();
+                    passes = ItemPassesFilters(Filters, sender);
+                }
 
-            switch ((layersState.indexMap[sourceIndex], passes))
-            {
-                case (-1, true):
-                    {
-                        var viewIndex = ViewIndex(sourceIndex, sender);
-
-                        layersState.indexMap[sourceIndex] = viewIndex;
-                        ShiftIndexMapOnViewChanged(sourceIndex + 1, 1);
-
-                        layersState.items.Insert(viewIndex, sender);
-                        RaiseCollectionChanged(new(NotifyCollectionChangedAction.Add, sender, viewIndex));
-                    }
-                    break;
-
-                case (int viewIndex, true) when HasActiveSorters:
-                    // To perform a correct binary search, the rest of the list must already be sorted. Since the changed item may
-                    // now have a stale index, this means that we have to remove it from the list before identifying the new index.
-                    layersState.items.RemoveAt(viewIndex);
-                    var newViewIndex = ViewIndex(sourceIndex, sender);
-                    layersState.items.Insert(newViewIndex, sender);
-
-                    if (newViewIndex != viewIndex)
-                    {
-                        var delta = newViewIndex > viewIndex ? -1 : 1;
-                        var (start, end) = (Math.Min(newViewIndex, viewIndex), Math.Max(newViewIndex, viewIndex));
-
-                        for (int i = 0; i < layersState.indexMap.Count; i++)
+                switch ((layersState.indexMap[sourceIndex], passes))
+                {
+                    case (-1, true):
                         {
-                            if (layersState.indexMap[i] >= start && layersState.indexMap[i] < end)
-                            {
-                                layersState.indexMap[i] += delta;
-                            }
+                            var viewIndex = ViewIndex(sourceIndex, sender);
+
+                            layersState.indexMap[sourceIndex] = viewIndex;
+                            ShiftIndexMapOnViewChanged(sourceIndex + 1, 1);
+
+                            layersState.items.Insert(viewIndex, sender);
+                            RaiseCollectionChanged(new(NotifyCollectionChangedAction.Add, sender, viewIndex));
                         }
+                        break;
 
-                        layersState.indexMap[sourceIndex] = newViewIndex;
+                    case (int viewIndex, true) when HasActiveSorters:
+                        // To perform a correct binary search, the rest of the list must already be sorted. Since the changed item may
+                        // now have a stale index, this means that we have to remove it from the list before identifying the new index.
+                        layersState.items.RemoveAt(viewIndex);
+                        var newViewIndex = ViewIndex(sourceIndex, sender);
+                        layersState.items.Insert(newViewIndex, sender);
 
-                        RaiseCollectionChanged(new(NotifyCollectionChangedAction.Move, sender, newViewIndex, viewIndex));
-                    }
-                    break;
-                case (int viewIndex, false):
-                    layersState.indexMap[sourceIndex] = -1;
-                    ShiftIndexMapOnViewChanged(sourceIndex + 1, -1);
-                    layersState.items.RemoveAt(viewIndex);
-                    RaiseCollectionChanged(new(NotifyCollectionChangedAction.Remove, sender, viewIndex));
-                    break;
+                        if (newViewIndex != viewIndex)
+                        {
+                            var delta = newViewIndex > viewIndex ? -1 : 1;
+                            var (start, end) = (Math.Min(newViewIndex, viewIndex), Math.Max(newViewIndex, viewIndex));
+
+                            for (int i = 0; i < layersState.indexMap.Count; i++)
+                            {
+                                if (layersState.indexMap[i] >= start && layersState.indexMap[i] < end)
+                                {
+                                    layersState.indexMap[i] += delta;
+                                }
+                            }
+
+                            layersState.indexMap[sourceIndex] = newViewIndex;
+
+                            RaiseCollectionChanged(new(NotifyCollectionChangedAction.Move, sender, newViewIndex, viewIndex));
+                        }
+                        break;
+                    case (int viewIndex, false):
+                        layersState.indexMap[sourceIndex] = -1;
+                        ShiftIndexMapOnViewChanged(sourceIndex + 1, -1);
+                        layersState.items.RemoveAt(viewIndex);
+                        RaiseCollectionChanged(new(NotifyCollectionChangedAction.Remove, sender, viewIndex));
+                        break;
+                }
             }
+        }
+        finally
+        {
+            layerScopes?.Dispose();
         }
 
         if (passes == null) // item is no longer in the collection, we can unsubscribe
@@ -432,6 +472,13 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
         {
             throw new InvalidOperationException("Layers not initialised.");
         }
+
+        using var layerScopes = e.Action switch 
+        { 
+            NotifyCollectionChangedAction.Add or NotifyCollectionChangedAction.Replace => EnterLayersBatchScope(),
+            NotifyCollectionChangedAction.Move => EnterLayersBatchScope(filters: false),
+            _ => null
+        };
 
         NotifyCollectionChangedEventArgs? rewrittenArgs;
 
@@ -542,7 +589,7 @@ public partial class ItemsSourceView : IWeakEventSubscriber<PropertyChangedEvent
                         }
                         else
                         {
-                            Debug.Fail("An INotifyPropertyChanged object was removed, but there is no record of a PropertyChanged subscribtion for it.");
+                            Debug.Fail("An INotifyPropertyChanged object was removed, but there is no record of a PropertyChanged subscription for it.");
                         }
                     }
                 }

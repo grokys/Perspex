@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using Avalonia.Data.Converters;
+using Avalonia.Logging;
 
 namespace Avalonia.Controls;
 
@@ -85,6 +86,10 @@ public class ComparableSorter : ItemSorter
     private EventHandler<ComparableSelectEventArgs>? _comparableSelector;
     private IComparer? _comparer;
 
+    private ComparableSelectEventArgs? _batchArgs;
+    private Dictionary<object, IComparable?>? _batchComparableCache;
+    private static readonly object s_batchNullItemKey = new();
+
     /// <summary>
     /// Gets or sets a delegate that will be executed twice each time a comparison is made, to select 
     /// an <see cref="IComparable"/> for the two items being compared.
@@ -129,20 +134,49 @@ public class ComparableSorter : ItemSorter
     /// <exception cref="InvalidCastException">Thrown if <paramref name="x"/> or <paramref name="y"/> cannot be converted to <see cref="IComparable"/>.</exception>
     public override int Compare(object? x, object? y)
     {
-        var compareResult = (Comparer ?? System.Collections.Comparer.Default).Compare(GetComparable(x), GetComparable(y));
+        var stateCopy = State; // ensure that both events are raised with the same state object
+        var compareResult = (Comparer ?? System.Collections.Comparer.Default).Compare(GetComparable(x, stateCopy), GetComparable(y, stateCopy));
         return SortDirection == ListSortDirection.Descending ? -compareResult : compareResult;
     }
 
-    private IComparable? GetComparable(object? item)
+    private IComparable? GetComparable(object? item, object? state)
     {
-        if (ComparableSelector is { } selector)
+        if (_batchComparableCache?.TryGetValue(item ?? s_batchNullItemKey, out var result) == true)
         {
-            var args = new ComparableSelectEventArgs { Item = item };
-            selector(this, args);
-            return args.Comparable;
+            return result;
         }
 
-        return (IComparable?)item;
+        if (ComparableSelector is { } selector)
+        {
+            var args = _batchArgs ?? new() { SorterState = state };
+            args.ResetFor(item);
+            selector(this, args);
+            result = args.Comparable;
+        }
+        else
+        {
+            result = (IComparable?)item;
+        }
+
+        _batchComparableCache?.Add(item ?? s_batchNullItemKey, result);
+        return result;
+    }
+
+    protected internal override void BeginBatchOperation()
+    {
+        if (_batchArgs != null)
+        {
+            throw new InvalidOperationException("Already sorting.");
+        }
+
+        _batchArgs = new() { SorterState = State };
+        _batchComparableCache = new();
+    }
+
+    protected internal override void EndBatchOperation()
+    {
+        _batchArgs = null;
+        _batchComparableCache = null;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -157,18 +191,36 @@ public class ComparableSorter : ItemSorter
         {
             OnInvalidated();
         }
+        else if (change.Property == StateProperty)
+        {
+            if (_batchArgs != null)
+                Logger.TryGet(LogEventLevel.Warning, LogArea.Control)?.Log(this, "State changed during batch operation!");
+        }
     }
 
     public class ComparableSelectEventArgs : EventArgs
     {
+        private object? _item;
+
         /// <summary>
         /// The item for which to provide an <see cref="IComparable"/>.
         /// </summary>
-        public object? Item { get; init; }
+        public object? Item { get => _item; init => _item = value; }
+
+        /// <summary>
+        /// Gets the object retrieved from <see cref="ItemsSourceViewLayer.State"/> when the event was raised, or null.
+        /// </summary>
+        public object? SorterState { get; init; }
 
         /// <summary>
         /// The <see cref="IComparable"/> object selected by the event handler, or null.
         /// </summary>
         public IComparable? Comparable { get; set; }
+
+        protected internal void ResetFor(object? item)
+        {
+            _item = item;
+            Comparable = null;
+        }
     }
 }

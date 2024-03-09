@@ -105,6 +105,16 @@ public abstract class ItemsSourceViewLayer : AvaloniaObject, INamed
         }
     }
 
+    /// <summary>
+    /// Called shortly before the layer is evaluated for one or more items.
+    /// </summary>
+    internal protected virtual void BeginBatchOperation() { }
+
+    /// <summary>
+    /// Called shortly after the layer has been evaluated for one or more items.
+    /// </summary>
+    internal protected virtual void EndBatchOperation() { }
+
     internal void Attach(AvaloniaObject anchor)
     {
         if (InheritanceParent != null && InheritanceParent != anchor)
