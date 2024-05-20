@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Avalonia.Media;
-using HarfBuzzSharp;
-using SharpDX.DirectWrite;
+using Vortice.DirectWrite;
 using FontMetrics = Avalonia.Media.FontMetrics;
 using FontSimulations = Avalonia.Media.FontSimulations;
 using GlyphMetrics = Avalonia.Media.GlyphMetrics;
@@ -12,13 +13,13 @@ namespace Avalonia.Direct2D1.Media
     {
         private bool _isDisposed;
 
-        public GlyphTypefaceImpl(SharpDX.DirectWrite.Font font)
+        public GlyphTypefaceImpl(IDWriteFont font)
         {
             DWFont = font;
 
-            FontFace = new FontFace(DWFont).QueryInterface<FontFace1>();
+            FontFace = DWFont.CreateFontFace().QueryInterface<IDWriteFontFace1>();
 
-            Face = new Face(GetTable);
+            Face = new HarfBuzzSharp.Face(GetTable);
 
             Font = new HarfBuzzSharp.Font(Face);
 
@@ -31,10 +32,10 @@ namespace Avalonia.Direct2D1.Media
                 Font.TryGetVerticalFontExtents(out fontExtents);
             }
 
-            Font.OpenTypeMetrics.TryGetPosition(OpenTypeMetricsTag.UnderlineOffset, out var underlinePosition);
-            Font.OpenTypeMetrics.TryGetPosition(OpenTypeMetricsTag.UnderlineSize, out var underlineThickness);
-            Font.OpenTypeMetrics.TryGetPosition(OpenTypeMetricsTag.StrikeoutOffset, out var strikethroughPosition);
-            Font.OpenTypeMetrics.TryGetPosition(OpenTypeMetricsTag.StrikeoutSize, out var strikethroughThickness);
+            Font.OpenTypeMetrics.TryGetPosition(HarfBuzzSharp.OpenTypeMetricsTag.UnderlineOffset, out var underlinePosition);
+            Font.OpenTypeMetrics.TryGetPosition(HarfBuzzSharp.OpenTypeMetricsTag.UnderlineSize, out var underlineThickness);
+            Font.OpenTypeMetrics.TryGetPosition(HarfBuzzSharp.OpenTypeMetricsTag.StrikeoutOffset, out var strikethroughPosition);
+            Font.OpenTypeMetrics.TryGetPosition(HarfBuzzSharp.OpenTypeMetricsTag.StrikeoutSize, out var strikethroughThickness);
 
             Metrics = new FontMetrics
             {
@@ -58,13 +59,16 @@ namespace Avalonia.Direct2D1.Media
             Stretch = (Avalonia.Media.FontStretch)DWFont.Stretch;
         }
 
-        private Blob GetTable(Face face, Tag tag)
+        private HarfBuzzSharp.Blob GetTable(HarfBuzzSharp.Face face, HarfBuzzSharp.Tag tag)
         {
             var dwTag = (int)SwapBytes(tag);
 
             if (FontFace.TryGetFontTable(dwTag, out var tableData, out _))
             {
-                return new Blob(tableData.Pointer, tableData.Size, MemoryMode.ReadOnly, () => { });
+                unsafe
+                {
+                    return new HarfBuzzSharp.Blob((nint)Unsafe.AsPointer(ref MemoryMarshal.GetReference(tableData)), tableData.Length, HarfBuzzSharp.MemoryMode.Duplicate, () => { });
+                }
             }
 
             return null;
@@ -77,11 +81,11 @@ namespace Avalonia.Direct2D1.Media
             return ((x & 0xFF00FF00) >> 8) | ((x & 0x00FF00FF) << 8);
         }
 
-        public SharpDX.DirectWrite.Font DWFont { get; }
+        public IDWriteFont DWFont { get; }
 
-        public FontFace1 FontFace { get; }
+        public IDWriteFontFace1 FontFace { get; }
 
-        public Face Face { get; }
+        public HarfBuzzSharp.Face Face { get; }
 
         public HarfBuzzSharp.Font Font { get; }
 

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Avalonia.Platform;
-using SharpDX.Direct2D1;
+using Vortice.Direct2D1;
 using AM = Avalonia.Media;
 
 namespace Avalonia.Direct2D1.Media
@@ -18,17 +18,17 @@ namespace Avalonia.Direct2D1.Media
         {
         }
 
-        private static Geometry CreateGeometry(AM.FillRule fillRule, IReadOnlyList<IGeometryImpl> children)
+        private static ID2D1Geometry CreateGeometry(AM.FillRule fillRule, IReadOnlyList<IGeometryImpl> children)
         {
             var count = children.Count;
-            var c = new Geometry[count];
+            var c = new ID2D1Geometry[count];
 
             for (var i = 0; i < count; ++i)
             {
                 c[i] = ((GeometryImpl)children[i]).Geometry;
             }
 
-            return new GeometryGroup(Direct2D1Platform.Direct2D1Factory, (FillMode)fillRule, c);
+            return Direct2D1Platform.Direct2D1Factory.CreateGeometryGroup((FillMode)fillRule, c);
         }
     }
 }

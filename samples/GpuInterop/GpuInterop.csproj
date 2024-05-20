@@ -7,7 +7,6 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <UseD3DCompiler>true</UseD3DCompiler>
-    <UseSharpDXMathematics>true</UseSharpDXMathematics>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -48,5 +47,5 @@
   <Import Project="..\..\build\SampleApp.props" />
   <Import Project="..\..\build\ReferenceCoreLibraries.props" />
   <Import Project="..\..\build\BuildTargets.targets" />
-  <Import Project="..\..\build\SharpDX.props" />
+  <Import Project="..\..\build\Vortice.props" />
 </Project>

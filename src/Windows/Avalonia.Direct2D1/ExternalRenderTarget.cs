@@ -1,8 +1,7 @@
 ﻿using Avalonia.Direct2D1.Media;
 using Avalonia.Direct2D1.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Rendering;
-using SharpDX;
+using SharpGen.Runtime;
 
 namespace Avalonia.Direct2D1
 {
@@ -31,7 +30,7 @@ namespace Avalonia.Direct2D1
                 {
                     _externalRenderTargetProvider.AfterDrawing();
                 }
-                catch (SharpDXException ex) when ((uint) ex.HResult == 0x8899000C) // D2DERR_RECREATE_TARGET
+                catch (SharpGenException ex) when ((uint) ex.HResult == 0x8899000C) // D2DERR_RECREATE_TARGET
                 {
                     _externalRenderTargetProvider.DestroyRenderTarget();
                 }

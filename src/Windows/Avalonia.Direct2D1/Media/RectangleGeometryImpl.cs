@@ -1,4 +1,4 @@
-using SharpDX.Direct2D1;
+using Vortice.Direct2D1;
 
 namespace Avalonia.Direct2D1.Media
 {
@@ -15,9 +15,9 @@ namespace Avalonia.Direct2D1.Media
         {
         }
 
-        private static Geometry CreateGeometry(Rect rect)
+        private static ID2D1Geometry CreateGeometry(Rect rect)
         {
-            return new RectangleGeometry(Direct2D1Platform.Direct2D1Factory, rect.ToDirect2D());
+            return Direct2D1Platform.Direct2D1Factory.CreateRectangleGeometry(rect.ToDirect2D());
         }
     }
 }

@@ -1,19 +1,18 @@
 using System;
 using Avalonia.Platform;
-using Avalonia.Rendering;
-using SharpDX.Direct2D1;
-using RenderTargetProperties = SharpDX.Direct2D1.RenderTargetProperties;
+using Vortice.Direct2D1;
+using RenderTargetProperties = Vortice.Direct2D1.RenderTargetProperties;
 
 namespace Avalonia.Direct2D1.Media
 {
     internal class WicRenderTargetBitmapImpl : WicBitmapImpl, IDrawingContextLayerImpl
     {
-        private readonly WicRenderTarget _renderTarget;
+        private readonly ID2D1RenderTarget _renderTarget;
 
         public WicRenderTargetBitmapImpl(
             PixelSize size,
             Vector dpi,
-            Platform.PixelFormat? pixelFormat = null)
+            PixelFormat? pixelFormat = null)
             : base(size, dpi, pixelFormat)
         {
             var props = new RenderTargetProperties
@@ -22,8 +21,7 @@ namespace Avalonia.Direct2D1.Media
                 DpiY = (float)dpi.Y,
             };
 
-            _renderTarget = new WicRenderTarget(
-                Direct2D1Platform.Direct2D1Factory,
+            _renderTarget = Direct2D1Platform.Direct2D1Factory.CreateWicBitmapRenderTarget(
                 WicImpl,
                 props);
         }

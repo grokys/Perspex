@@ -40,9 +40,9 @@ namespace Avalonia.Direct2D1.Media
             for (var i = 0; i < familyCount; i++)
             {
                 var font = Direct2D1FontCollectionCache.InstalledFontCollection.GetFontFamily(i)
-                    .GetMatchingFonts((SharpDX.DirectWrite.FontWeight)fontWeight,
-                        (SharpDX.DirectWrite.FontStretch)fontStretch,
-                        (SharpDX.DirectWrite.FontStyle)fontStyle).GetFont(0);
+                    .GetMatchingFonts((Vortice.DirectWrite.FontWeight)fontWeight,
+                        (Vortice.DirectWrite.FontStretch)fontStretch,
+                        (Vortice.DirectWrite.FontStyle)fontStyle).GetFont(0);
 
                 if (!font.HasCharacter(codepoint))
                 {
@@ -74,9 +74,9 @@ namespace Avalonia.Direct2D1.Media
             if (systemFonts.FindFamilyName(familyName, out var index))
             {
                 var font = systemFonts.GetFontFamily(index).GetFirstMatchingFont(
-                    (SharpDX.DirectWrite.FontWeight)weight,
-                    (SharpDX.DirectWrite.FontStretch)stretch,
-                    (SharpDX.DirectWrite.FontStyle)style);
+                    (Vortice.DirectWrite.FontWeight)weight,
+                    (Vortice.DirectWrite.FontStretch)stretch,
+                    (Vortice.DirectWrite.FontStyle)style);
 
                 glyphTypeface = new GlyphTypefaceImpl(font);
 
@@ -90,9 +90,9 @@ namespace Avalonia.Direct2D1.Media
 
         public bool TryCreateGlyphTypeface(Stream stream, FontSimulations fontSimulations, out IGlyphTypeface glyphTypeface)
         {
-            var fontLoader = new DWriteResourceFontLoader(Direct2D1Platform.DirectWriteFactory, new[] { stream });
+            var fontLoader = new DWriteResourceFontLoader(Direct2D1Platform.DirectWriteFactory, [stream]);
 
-            var fontCollection = new SharpDX.DirectWrite.FontCollection(Direct2D1Platform.DirectWriteFactory, fontLoader, fontLoader.Key);
+            var fontCollection = Direct2D1Platform.DirectWriteFactory.CreateCustomFontCollection(fontLoader, fontLoader.Key.PositionPointer, (int)fontLoader.Key.RemainingLength);
 
             if (fontCollection.FontFamilyCount > 0)
             {

@@ -17,7 +17,7 @@ namespace GpuInterop
                 {
                     RenderingMode = new []
                     {
-                        Win32RenderingMode.Vulkan
+                        Win32RenderingMode.AngleEgl
                     }
                 })
                 .With(new X11PlatformOptions(){RenderingMode =new[] { X11RenderingMode.Vulkan } })

@@ -2,23 +2,16 @@ using System;
 using Avalonia.Logging;
 using Avalonia.Media;
 using Avalonia.Platform;
-using SharpDX.Direct2D1;
-using Geometry = SharpDX.Direct2D1.Geometry;
-using PathGeometry = SharpDX.Direct2D1.PathGeometry;
+using Vortice.Direct2D1;
 
 namespace Avalonia.Direct2D1.Media
 {
     /// <summary>
     /// The platform-specific interface for <see cref="Avalonia.Media.Geometry"/>.
     /// </summary>
-    internal abstract class GeometryImpl : IGeometryImpl
+    internal abstract class GeometryImpl(ID2D1Geometry geometry) : IGeometryImpl
     {
         private const float ContourApproximation = 0.0001f;
-
-        public GeometryImpl(Geometry geometry)
-        {
-            Geometry = geometry;
-        }
 
         /// <inheritdoc/>
         public Rect Bounds => Geometry.GetWidenedBounds(0).ToAvalonia();
@@ -26,10 +19,10 @@ namespace Avalonia.Direct2D1.Media
         /// <inheritdoc />
         public double ContourLength => Geometry.ComputeLength(null, ContourApproximation);
 
-        public Geometry Geometry { get; }
+        public ID2D1Geometry Geometry { get; } = geometry;
 
         /// <inheritdoc/>
-        public Rect GetRenderBounds(Avalonia.Media.IPen pen)
+        public Rect GetRenderBounds(IPen pen)
         {
             if (pen == null || Math.Abs(pen.Thickness) < float.Epsilon)
                 return Geometry.GetBounds().ToAvalonia();
@@ -49,7 +42,7 @@ namespace Avalonia.Direct2D1.Media
 
         public IGeometryImpl GetWidenedGeometry(IPen pen)
         {
-            var result = new PathGeometry(Direct2D1Platform.Direct2D1Factory);
+            var result = Direct2D1Platform.Direct2D1Factory.CreatePathGeometry();
 
             using (var sink = result.Open())
             {
@@ -67,16 +60,16 @@ namespace Avalonia.Direct2D1.Media
         /// <inheritdoc/>
         public bool FillContains(Point point)
         {
-            return Geometry.FillContainsPoint(point.ToSharpDX());
+            return Geometry.FillContainsPoint(point.ToVortice());
         }
 
         /// <inheritdoc/>
         public IGeometryImpl Intersect(IGeometryImpl geometry)
         {
-            var result = new PathGeometry(Direct2D1Platform.Direct2D1Factory);
+            var result = Direct2D1Platform.Direct2D1Factory.CreatePathGeometry();
             using (var sink = result.Open())
             {
-                Geometry.Combine(((GeometryImpl)geometry).Geometry, CombineMode.Intersect, sink);
+                Geometry.CombineWithGeometry(((GeometryImpl)geometry).Geometry, CombineMode.Intersect, sink);
                 sink.Close();
             }
             return new StreamGeometryImpl(result);
@@ -85,19 +78,18 @@ namespace Avalonia.Direct2D1.Media
         /// <inheritdoc/>
         public bool StrokeContains(Avalonia.Media.IPen pen, Point point)
         {
-            return Geometry.StrokeContainsPoint(point.ToSharpDX(), (float)(pen?.Thickness ?? 0));
+            return Geometry.StrokeContainsPoint(point.ToVortice(), (float)(pen?.Thickness ?? 0));
         }
 
         public ITransformedGeometryImpl WithTransform(Matrix transform)
         {
             return new TransformedGeometryImpl(
-                new TransformedGeometry(
-                    Direct2D1Platform.Direct2D1Factory,
+                Direct2D1Platform.Direct2D1Factory.CreateTransformedGeometry(
                     GetSourceGeometry(),
                     transform.ToDirect2D()),
                 this);
         }
-        
+
         /// <inheritdoc />
         public bool TryGetPointAtDistance(double distance, out Point point)
         {
@@ -105,7 +97,7 @@ namespace Avalonia.Direct2D1.Media
             point = new Point(tangentVector.X, tangentVector.Y);
             return true;
         }
-        
+
         /// <inheritdoc />
         public bool TryGetPointAndTangentAtDistance(double distance, out Point point, out Point tangent)
         {
@@ -125,6 +117,6 @@ namespace Avalonia.Direct2D1.Media
             return false;
         }
 
-        protected virtual Geometry GetSourceGeometry() => Geometry;
+        protected virtual ID2D1Geometry GetSourceGeometry() => Geometry;
     }
 }

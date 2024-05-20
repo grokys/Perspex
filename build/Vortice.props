@@ -1,0 +1,13 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VorticeVersion>3.5.0</VorticeVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Vortice.DirectX" Version="$(VorticeVersion)" />
+    <PackageReference Include="Vortice.DXGI" Version="$(VorticeVersion)" />
+    <PackageReference Include="Vortice.Direct2D1" Version="$(VorticeVersion)" />
+    <PackageReference Include="Vortice.Direct3D11" Version="$(VorticeVersion)" />
+    <PackageReference Include="Vortice.Direct3D9" Version="$(VorticeVersion)" Condition="'$(UseDirect3D9)' == 'true'" />
+    <PackageReference Include="Vortice.D3DCompiler" Version="$(VorticeVersion)" Condition="'$(UseD3DCompiler)' == 'true'" />
+  </ItemGroup>
+</Project>

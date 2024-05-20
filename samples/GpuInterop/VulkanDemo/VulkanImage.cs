@@ -6,11 +6,12 @@ using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Platform;
 using Avalonia.Vulkan;
-using SharpDX.DXGI;
 using Silk.NET.Vulkan;
 using Silk.NET.Vulkan.Extensions.KHR;
 using SilkNetDemo;
 using SkiaSharp;
+using Vortice.Direct3D11;
+using Vortice.DXGI;
 using Device = Silk.NET.Vulkan.Device;
 using Format = Silk.NET.Vulkan.Format;
 
@@ -28,7 +29,7 @@ public unsafe class VulkanImage : IDisposable
         private ImageUsageFlags _imageUsageFlags { get; }
         private ImageView _imageView { get; set; }
         private DeviceMemory _imageMemory { get; set; }
-        private readonly SharpDX.Direct3D11.Texture2D? _d3dTexture2D;
+        private readonly ID3D11Texture2D? _d3dTexture2D;
         
         internal Image InternalHandle { get; private set; }
         internal Format Format { get; }
@@ -118,14 +119,14 @@ public unsafe class VulkanImage : IDisposable
             if (handleType == ExternalMemoryHandleTypeFlags.D3D11TextureBit && exportable)
             {
                 _d3dTexture2D = D3DMemoryHelper.CreateMemoryHandle(vk.D3DDevice, size, Format);
-                using var dxgi = _d3dTexture2D.QueryInterface<SharpDX.DXGI.Resource1>();
+                using var dxgi = _d3dTexture2D.QueryInterface<IDXGIResource1>();
 
                 handleImport = new ImportMemoryWin32HandleInfoKHR
                 {
                     PNext = &dedicatedAllocation,
                     SType = StructureType.ImportMemoryWin32HandleInfoKhr,
                     HandleType = ExternalMemoryHandleTypeFlags.D3D11TextureBit,
-                    Handle = dxgi.CreateSharedHandle(null, SharedResourceFlags.Read | SharedResourceFlags.Write),
+                    Handle = dxgi.CreateSharedHandle(null, Vortice.DXGI.SharedResourceFlags.Read | Vortice.DXGI.SharedResourceFlags.Write, null),
                 };
             }
 
@@ -215,9 +216,9 @@ public unsafe class VulkanImage : IDisposable
             {
                 if (_d3dTexture2D != null)
                 {
-                    using var dxgi = _d3dTexture2D!.QueryInterface<Resource1>();
+                    using var dxgi = _d3dTexture2D!.QueryInterface<IDXGIResource1>();
                     return new PlatformHandle(
-                        dxgi.CreateSharedHandle(null, SharedResourceFlags.Read | SharedResourceFlags.Write),
+                        dxgi.CreateSharedHandle(null, Vortice.DXGI.SharedResourceFlags.Read | Vortice.DXGI.SharedResourceFlags.Write, null),
                         KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle);
                 }
 

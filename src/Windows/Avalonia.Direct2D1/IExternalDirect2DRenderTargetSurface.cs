@@ -1,8 +1,10 @@
-﻿namespace Avalonia.Direct2D1
+﻿using Vortice.Direct2D1;
+
+namespace Avalonia.Direct2D1
 {
     public interface IExternalDirect2DRenderTargetSurface
     {
-        SharpDX.Direct2D1.RenderTarget GetOrCreateRenderTarget();
+        ID2D1RenderTarget GetOrCreateRenderTarget();
         void DestroyRenderTarget();
         void BeforeDrawing();
         void AfterDrawing();

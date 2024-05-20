@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Avalonia.Platform;
-using SharpDX.WIC;
 using PixelFormat = Avalonia.Platform.PixelFormat;
 
 namespace Avalonia.Direct2D1.Media.Imaging

@@ -1,25 +1,20 @@
 using Avalonia.Direct2D1.Media;
 using Avalonia.Direct2D1.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Rendering;
+using Vortice.Direct2D1;
 
 namespace Avalonia.Direct2D1
 {
-    internal class RenderTarget : IRenderTarget, ILayerFactory
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RenderTarget"/> class.
+    /// </summary>
+    /// <param name="renderTarget">The render target.</param>
+    internal class RenderTarget(ID2D1RenderTarget renderTarget) : IRenderTarget, ILayerFactory
     {
         /// <summary>
         /// The render target.
         /// </summary>
-        private readonly SharpDX.Direct2D1.RenderTarget _renderTarget;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RenderTarget"/> class.
-        /// </summary>
-        /// <param name="renderTarget">The render target.</param>
-        public RenderTarget(SharpDX.Direct2D1.RenderTarget renderTarget)
-        {
-            _renderTarget = renderTarget;
-        }
+        private readonly ID2D1RenderTarget _renderTarget = renderTarget;
 
         /// <summary>
         /// Creates a drawing context for a rendering session.

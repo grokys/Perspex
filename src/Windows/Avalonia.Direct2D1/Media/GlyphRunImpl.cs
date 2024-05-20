@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Platform;
-using SharpDX.DirectWrite;
+using Vortice.DirectWrite;
 
 #nullable enable
 
@@ -13,11 +13,11 @@ namespace Avalonia.Direct2D1.Media
     {
         private readonly GlyphTypefaceImpl _glyphTypefaceImpl;
 
-        private readonly short[] _glyphIndices;
+        private readonly ushort[] _glyphIndices;
         private readonly float[] _glyphAdvances;
         private readonly GlyphOffset[] _glyphOffsets;
 
-        private SharpDX.DirectWrite.GlyphRun? _glyphRun;
+        private Vortice.DirectWrite.GlyphRun? _glyphRun;
 
         public GlyphRunImpl(IGlyphTypeface glyphTypeface, double fontRenderingEmSize,
             IReadOnlyList<GlyphInfo> glyphInfos, Point baselineOrigin)
@@ -29,11 +29,11 @@ namespace Avalonia.Direct2D1.Media
 
             var glyphCount = glyphInfos.Count;
 
-            _glyphIndices = new short[glyphCount];
+            _glyphIndices = new ushort[glyphCount];
 
             for (var i = 0; i < glyphCount; i++)
             {
-                _glyphIndices[i] = (short)glyphInfos[i].GlyphIndex;
+                _glyphIndices[i] = glyphInfos[i].GlyphIndex;
             }
 
             _glyphAdvances = new float[glyphCount];
@@ -69,7 +69,7 @@ namespace Avalonia.Direct2D1.Media
             Bounds = new Rect(baselineOrigin.X, 0, width, height);
         }
 
-        public SharpDX.DirectWrite.GlyphRun GlyphRun
+        public Vortice.DirectWrite.GlyphRun GlyphRun
         {
             get
             {
@@ -78,10 +78,10 @@ namespace Avalonia.Direct2D1.Media
                     return _glyphRun;
                 }
 
-                _glyphRun = new SharpDX.DirectWrite.GlyphRun
+                _glyphRun = new Vortice.DirectWrite.GlyphRun
                 {
                     FontFace = _glyphTypefaceImpl.FontFace,
-                    FontSize = (float)FontRenderingEmSize,
+                    FontEmSize = (float)FontRenderingEmSize,
                     Advances = _glyphAdvances,
                     Indices = _glyphIndices,
                     Offsets = _glyphOffsets

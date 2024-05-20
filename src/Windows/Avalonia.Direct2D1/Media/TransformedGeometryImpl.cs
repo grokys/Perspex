@@ -1,5 +1,5 @@
 using Avalonia.Platform;
-using SharpDX.Direct2D1;
+using Vortice.Direct2D1;
 
 namespace Avalonia.Direct2D1.Media
 {
@@ -9,8 +9,8 @@ namespace Avalonia.Direct2D1.Media
         /// Initializes a new instance of the <see cref="StreamGeometryImpl"/> class.
         /// </summary>
         /// <param name="source">The source geometry.</param>
-        /// <param name="geometry">An existing Direct2D <see cref="TransformedGeometry"/>.</param>
-        public TransformedGeometryImpl(TransformedGeometry geometry, GeometryImpl source)
+        /// <param name="geometry">An existing Direct2D <see cref="ID2D1TransformedGeometry"/>.</param>
+        public TransformedGeometryImpl(ID2D1TransformedGeometry geometry, GeometryImpl source)
             : base(geometry)
         {
             SourceGeometry = source;
@@ -19,8 +19,8 @@ namespace Avalonia.Direct2D1.Media
         public IGeometryImpl SourceGeometry { get; }
 
         /// <inheritdoc/>
-        public Matrix Transform => ((TransformedGeometry)Geometry).Transform.ToAvalonia();
+        public Matrix Transform => Geometry.QueryInterface<ID2D1TransformedGeometry>().Transform.ToAvalonia();
 
-        protected override Geometry GetSourceGeometry() => ((TransformedGeometry)Geometry).SourceGeometry;
+        protected override ID2D1Geometry GetSourceGeometry() => Geometry.QueryInterface<ID2D1TransformedGeometry>().SourceGeometry;
     }
 }

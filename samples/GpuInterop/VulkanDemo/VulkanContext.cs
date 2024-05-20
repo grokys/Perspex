@@ -11,7 +11,7 @@ using Silk.NET.Vulkan.Extensions.EXT;
 using Silk.NET.Vulkan.Extensions.KHR;
 using SilkNetDemo;
 using SkiaSharp;
-using D3DDevice = SharpDX.Direct3D11.Device;
+using Vortice.Direct3D11;
 
 namespace GpuInterop.VulkanDemo;
 
@@ -26,7 +26,7 @@ public unsafe class VulkanContext : IDisposable
     public required VulkanCommandBufferPool Pool { get; init; }
     public required GRContext GrContext { get; init; }
     public required DescriptorPool DescriptorPool { get; init; }
-    public required D3DDevice? D3DDevice { get; init; }
+    public required ID3D11Device? D3DDevice { get; init; }
 
     public static (VulkanContext? result, string info) TryCreate(ICompositionGpuInterop gpuInterop)
     {
@@ -244,7 +244,7 @@ public unsafe class VulkanContext : IDisposable
                     
                     
 
-                    D3DDevice? d3dDevice = null;
+                    ID3D11Device? d3dDevice = null;
                     if (physicalDeviceIDProperties.DeviceLuidvalid &&
                         RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
                         !gpuInterop.SupportedImageHandleTypes.Contains(KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaqueNtHandle)

@@ -1,21 +1,20 @@
 using Avalonia.Media;
 using Avalonia.Rendering.Utilities;
-using Avalonia.Utilities;
-using SharpDX.Direct2D1;
+using Vortice.Direct2D1;
 
 namespace Avalonia.Direct2D1.Media
 {
     internal sealed class ImageBrushImpl : BrushImpl
     {
-        private readonly OptionalDispose<Bitmap1> _bitmap;
+        private readonly OptionalDispose<ID2D1Bitmap1> _bitmap;
 
         public ImageBrushImpl(
             ITileBrush brush,
-            SharpDX.Direct2D1.RenderTarget target,
+            ID2D1RenderTarget target,
             BitmapImpl bitmap,
             Rect destinationRect)
         {
-            var dpi = new Vector(target.DotsPerInch.Width, target.DotsPerInch.Height);
+            var dpi = new Vector(target.Dpi.Width, target.Dpi.Height);
             var calc = new TileBrushCalculator(brush, bitmap.PixelSize.ToSizeWithDpi(dpi), destinationRect.Size);
 
             Vector brushOffset = default;
@@ -25,8 +24,7 @@ namespace Avalonia.Direct2D1.Media
             if (!calc.NeedsIntermediate)
             {
                 _bitmap = bitmap.GetDirect2DBitmap(target);
-                PlatformBrush = new BitmapBrush(
-                    target,
+                PlatformBrush = target.CreateBitmapBrush(
                     _bitmap.Value,
                     GetBitmapBrushProperties(brush),
                     GetBrushProperties(brush, calc.DestinationRect, brushOffset));
@@ -35,8 +33,7 @@ namespace Avalonia.Direct2D1.Media
             {
                 using (var intermediate = RenderIntermediate(target, bitmap, calc))
                 {
-                    PlatformBrush = new BitmapBrush(
-                        target,
+                    PlatformBrush = target.CreateBitmapBrush(
                         intermediate.Bitmap,
                         GetBitmapBrushProperties(brush),
                         GetBrushProperties(brush, calc.DestinationRect, brushOffset));
@@ -96,19 +93,20 @@ namespace Avalonia.Direct2D1.Media
             return (tileMode & TileMode.FlipY) != 0 ? ExtendMode.Mirror : ExtendMode.Wrap;
         }
 
-        private BitmapRenderTarget RenderIntermediate(
-            SharpDX.Direct2D1.RenderTarget target,
+        private ID2D1BitmapRenderTarget RenderIntermediate(
+            ID2D1RenderTarget target,
             BitmapImpl bitmap,
             TileBrushCalculator calc)
         {
-            var result = new BitmapRenderTarget(
-                target,
-                CompatibleRenderTargetOptions.None,
-                calc.IntermediateSize.ToSharpDX());
+            var result = target.CreateCompatibleRenderTarget(
+                calc.IntermediateSize.ToSharpDX(),
+                null,
+                null,
+                CompatibleRenderTargetOptions.None);
 
             using (var context = new RenderTarget(result).CreateDrawingContext(true))
             {
-                var dpi = new Vector(target.DotsPerInch.Width, target.DotsPerInch.Height);
+                var dpi = new Vector(target.Dpi.Width, target.Dpi.Height);
                 var rect = new Rect(bitmap.PixelSize.ToSizeWithDpi(dpi));
 
                 context.Clear(Colors.Transparent);

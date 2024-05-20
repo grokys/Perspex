@@ -1,19 +1,17 @@
 ﻿using Avalonia.Direct2D1.Media;
 using Avalonia.Direct2D1.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Rendering;
-using SharpDX;
-using SharpDX.Direct2D1;
-using SharpDX.DXGI;
+using Vortice.Direct2D1;
+using Vortice.DXGI;
 
 namespace Avalonia.Direct2D1
 {   
     internal abstract class SwapChainRenderTarget : IRenderTarget, ILayerFactory
     {
-        private Size2 _savedSize;
-        private Size2F _savedDpi;
-        private DeviceContext _deviceContext;
-        private SwapChain1 _swapChain;
+        private Vortice.Mathematics.SizeI _savedSize;
+        private Vortice.Mathematics.Size _savedDpi;
+        private ID2D1DeviceContext _deviceContext;
+        private IDXGISwapChain1 _swapChain;
 
         /// <summary>
         /// Creates a drawing context for a rendering session.
@@ -76,13 +74,13 @@ namespace Avalonia.Direct2D1
                     Count = 1,
                     Quality = 0,
                 },
-                Usage = Usage.RenderTargetOutput,
+                BufferUsage = Usage.RenderTargetOutput,
                 BufferCount = 1,
                 SwapEffect = SwapEffect.Discard,
             };
 
-            using (var dxgiAdapter = Direct2D1Platform.DxgiDevice.Adapter)
-            using (var dxgiFactory = dxgiAdapter.GetParent<SharpDX.DXGI.Factory2>())
+            using (var dxgiAdapter = Direct2D1Platform.DxgiDevice.GetAdapter())
+            using (var dxgiFactory = dxgiAdapter.GetParent<IDXGIFactory2>())
             {
                 _swapChain = CreateSwapChain(dxgiFactory, swapChainDescription);
             }
@@ -90,21 +88,21 @@ namespace Avalonia.Direct2D1
 
         private void CreateDeviceContext()
         {
-            _deviceContext = new DeviceContext(Direct2D1Platform.Direct2D1Device, DeviceContextOptions.None) { DotsPerInch = _savedDpi };
+            _deviceContext = Direct2D1Platform.Direct2D1Device.CreateDeviceContext(DeviceContextOptions.None);
+            _deviceContext.SetDpi(_savedDpi.Width, _savedDpi.Height);
 
             if (_swapChain == null)
             {
                 CreateSwapChain();
             }
 
-            using (var dxgiBackBuffer = _swapChain.GetBackBuffer<Surface>(0))
-            using (var d2dBackBuffer = new Bitmap1(
-                _deviceContext,
+            using (var dxgiBackBuffer = _swapChain.GetBuffer<IDXGISurface>(0))
+            using (var d2dBackBuffer = _deviceContext.CreateBitmapFromDxgiSurface(
                 dxgiBackBuffer,
                 new BitmapProperties1(
-                    new SharpDX.Direct2D1.PixelFormat
+                    new Vortice.DCommon.PixelFormat
                     {
-                        AlphaMode = SharpDX.Direct2D1.AlphaMode.Premultiplied,
+                        AlphaMode = Vortice.DCommon.AlphaMode.Premultiplied,
                         Format = Format.B8G8R8A8_UNorm
                     },
                     _savedSize.Width,
@@ -115,10 +113,10 @@ namespace Avalonia.Direct2D1
             }
         }
 
-        protected abstract SwapChain1 CreateSwapChain(SharpDX.DXGI.Factory2 dxgiFactory, SwapChainDescription1 swapChainDesc);
+        protected abstract IDXGISwapChain1 CreateSwapChain(IDXGIFactory2 dxgiFactory, SwapChainDescription1 swapChainDesc);
 
-        protected abstract Size2F GetWindowDpi();
+        protected abstract Vortice.Mathematics.Size GetWindowDpi();
 
-        protected abstract Size2 GetWindowSize();
+        protected abstract Vortice.Mathematics.SizeI GetWindowSize();
     }
 }

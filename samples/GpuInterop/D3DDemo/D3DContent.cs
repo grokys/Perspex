@@ -1,22 +1,9 @@
-using SharpDX;
-using SharpDX.D3DCompiler;
-using SharpDX.Direct3D;
-
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using SharpDX.Direct2D1;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using SharpDX.Mathematics.Interop;
-using Buffer = SharpDX.Direct3D11.Buffer;
-using DeviceContext = SharpDX.Direct2D1.DeviceContext;
-using DxgiFactory1 = SharpDX.DXGI.Factory1;
-using Matrix = SharpDX.Matrix;
-using D3DDevice = SharpDX.Direct3D11.Device;
-using DxgiResource = SharpDX.DXGI.Resource;
-using FeatureLevel = SharpDX.Direct3D.FeatureLevel;
-using InputElement = SharpDX.Direct3D11.InputElement;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using Vortice;
+using Vortice.D3DCompiler;
+using Vortice.Direct3D11;
+using Vortice.DXGI;
 
 
 namespace GpuInterop.D3DDemo;
@@ -24,34 +11,29 @@ namespace GpuInterop.D3DDemo;
 public class D3DContent
 {
 
-    public static Buffer CreateMesh(D3DDevice device)
+    public static ID3D11Buffer CreateMesh(ID3D11Device device)
     {
         // Compile Vertex and Pixel shaders
-        var vertexShaderByteCode = ShaderBytecode.CompileFromFile("D3DDemo\\MiniCube.fx", "VS", "vs_4_0");
-        var vertexShader = new VertexShader(device, vertexShaderByteCode);
+        var vertexShaderByteCode = Compiler.CompileFromFile("D3DDemo\\MiniCube.fx", "VS", "vs_4_0");
+        var vertexShader = device.CreateVertexShader(vertexShaderByteCode.Span);
 
-        var pixelShaderByteCode = ShaderBytecode.CompileFromFile("D3DDemo\\MiniCube.fx", "PS", "ps_4_0");
-        var pixelShader = new PixelShader(device, pixelShaderByteCode);
+        var pixelShaderByteCode = Compiler.CompileFromFile("D3DDemo\\MiniCube.fx", "PS", "ps_4_0");
+        var pixelShader = device.CreatePixelShader(pixelShaderByteCode.Span);
 
-        var signature = ShaderSignature.GetInputSignature(vertexShaderByteCode);
+        var signature = Compiler.GetInputSignatureBlob(vertexShaderByteCode.Span);
 
         var inputElements = new[]
         {
-            new InputElement("POSITION", 0, Format.R32G32B32A32_Float, 0, 0),
-            new InputElement("COLOR", 0, Format.R32G32B32A32_Float, 16, 0)
+            new InputElementDescription("POSITION", 0, Format.R32G32B32A32_Float, 0, 0),
+            new InputElementDescription("COLOR", 0, Format.R32G32B32A32_Float, 16, 0)
         };
 
         // Layout from VertexShader input signature
-        var layout = new InputLayout(
-            device,
-            signature,
-            inputElements);
+        var layout = device.CreateInputLayout(
+            inputElements,
+            signature);
 
-        // Instantiate Vertex buffer from vertex data
-        using var vertices = Buffer.Create(
-            device,
-            BindFlags.VertexBuffer,
-            new[]
+        var verticesBuffer = new[]
             {
                 new Vector4(-1.0f, -1.0f, -1.0f, 1.0f), new Vector4(1.0f, 0.0f, 0.0f, 1.0f), // Front
                 new Vector4(-1.0f, 1.0f, -1.0f, 1.0f), new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
@@ -89,22 +71,24 @@ public class D3DContent
                 new Vector4(1.0f, -1.0f, -1.0f, 1.0f), new Vector4(0.0f, 1.0f, 1.0f, 1.0f),
                 new Vector4(1.0f, 1.0f, -1.0f, 1.0f), new Vector4(0.0f, 1.0f, 1.0f, 1.0f),
                 new Vector4(1.0f, 1.0f, 1.0f, 1.0f), new Vector4(0.0f, 1.0f, 1.0f, 1.0f),
-            });
+            };
+
+        // Instantiate Vertex buffer from vertex data
+        using var dataStream = DataStream.Create(verticesBuffer, true, false);
+        using var vertices = device.CreateBuffer(new BufferDescription((int)dataStream.Length, BindFlags.VertexBuffer), dataStream);
 
         // Create Constant Buffer
-        var constantBuffer = new Buffer(device, Utilities.SizeOf<Matrix>(), ResourceUsage.Default,
-            BindFlags.ConstantBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
+        var constantBuffer = device.CreateBuffer(new BufferDescription(Unsafe.SizeOf<Matrix4x4>(), BindFlags.ConstantBuffer, ResourceUsage.Default, CpuAccessFlags.None, ResourceOptionFlags.None, 0));
 
         var context = device.ImmediateContext;
 
         // Prepare All the stages
-        context.InputAssembler.InputLayout = layout;
-        context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-        context.InputAssembler.SetVertexBuffers(0,
-            new VertexBufferBinding(vertices, Utilities.SizeOf<Vector4>() * 2, 0));
-        context.VertexShader.SetConstantBuffer(0, constantBuffer);
-        context.VertexShader.Set(vertexShader);
-        context.PixelShader.Set(pixelShader);
+        context.IASetInputLayout(layout);
+        context.IASetPrimitiveTopology(Vortice.Direct3D.PrimitiveTopology.TriangleList);
+        context.IASetVertexBuffer(0, vertices, Unsafe.SizeOf<Vector4>() * 2, 0);
+        context.VSSetConstantBuffer(0, constantBuffer);
+        context.VSSetShader(vertexShader);
+        context.PSSetShader(pixelShader);
         return constantBuffer;
     }
 }

@@ -1,5 +1,5 @@
 using Avalonia.Platform;
-using SharpDX.Direct2D1;
+using Vortice.Direct2D1;
 using AM = Avalonia.Media;
 
 namespace Avalonia.Direct2D1.Media
@@ -20,16 +20,16 @@ namespace Avalonia.Direct2D1.Media
         {
         }
 
-        private static Geometry CreateGeometry(
+        private static ID2D1Geometry CreateGeometry(
             AM.GeometryCombineMode combineMode,
             IGeometryImpl geometry1,
             IGeometryImpl geometry2)
         {
             var g1 = ((GeometryImpl)geometry1).Geometry;
             var g2 = ((GeometryImpl)geometry2).Geometry;
-            var dest = new PathGeometry(Direct2D1Platform.Direct2D1Factory);
+            var dest = Direct2D1Platform.Direct2D1Factory.CreatePathGeometry();
             using var sink = dest.Open();
-            g1.Combine(g2, (CombineMode)combineMode, sink);
+            g1.CombineWithGeometry(g2, (CombineMode)combineMode, sink);
             sink.Close();
             return dest;
         }

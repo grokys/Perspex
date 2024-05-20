@@ -1,32 +1,24 @@
 ﻿using System;
 using System.IO;
 using Avalonia.Platform;
-using Avalonia.Rendering;
-using Avalonia.Utilities;
-using SharpDX;
-using SharpDX.Direct2D1;
-using D2DBitmap = SharpDX.Direct2D1.Bitmap1;
+using Vortice.Direct2D1;
 
 namespace Avalonia.Direct2D1.Media.Imaging
 {
-    internal class D2DRenderTargetBitmapImpl : D2DBitmapImpl, IDrawingContextLayerImpl, ILayerFactory
+    internal class D2DRenderTargetBitmapImpl(ID2D1BitmapRenderTarget renderTarget) : D2DBitmapImpl(renderTarget.Bitmap.QueryInterface<ID2D1Bitmap1>()), IDrawingContextLayerImpl, ILayerFactory
     {
-        private readonly BitmapRenderTarget _renderTarget;
-
-        public D2DRenderTargetBitmapImpl(BitmapRenderTarget renderTarget)
-            : base(renderTarget.Bitmap.QueryInterface<Bitmap1>())
-        {
-            _renderTarget = renderTarget;
-        }
+        private readonly ID2D1BitmapRenderTarget _renderTarget = renderTarget;
 
         public static D2DRenderTargetBitmapImpl CreateCompatible(
-            SharpDX.Direct2D1.RenderTarget renderTarget,
+            ID2D1RenderTarget renderTarget,
             Size size)
         {
-            var bitmapRenderTarget = new BitmapRenderTarget(
-                renderTarget,
-                CompatibleRenderTargetOptions.None,
-                new Size2F((float)size.Width, (float)size.Height));
+            var bitmapRenderTarget = renderTarget.CreateCompatibleRenderTarget(
+                new Vortice.Mathematics.Size((float)size.Width, (float)size.Height),
+                null,
+                null,
+                CompatibleRenderTargetOptions.None);
+            ;
             return new D2DRenderTargetBitmapImpl(bitmapRenderTarget);
         }
 
@@ -52,9 +44,9 @@ namespace Avalonia.Direct2D1.Media.Imaging
             _renderTarget.Dispose();
         }
 
-        public override OptionalDispose<D2DBitmap> GetDirect2DBitmap(SharpDX.Direct2D1.RenderTarget target)
+        public override OptionalDispose<ID2D1Bitmap1> GetDirect2DBitmap(ID2D1RenderTarget target)
         {
-            return new OptionalDispose<D2DBitmap>(_renderTarget.Bitmap.QueryInterface<Bitmap1>(), false);
+            return new OptionalDispose<ID2D1Bitmap1>(_renderTarget.Bitmap.QueryInterface<ID2D1Bitmap1>(), false);
         }
 
         public override void Save(Stream stream, int? quality = null)
