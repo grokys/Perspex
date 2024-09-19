@@ -24,9 +24,6 @@ internal class FpsCounter
     public FpsCounter(DiagnosticTextRenderer textRenderer)
         => _textRenderer = textRenderer;
 
-    public void FpsTick()
-        => _framesThisSecond++;
-
     public Rect? RenderFps(ImmediateDrawingContext context, string aux, bool hasLayer, Rect? oldRect)
     {
         var now = _stopwatch.Elapsed;

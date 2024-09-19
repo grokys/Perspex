@@ -52,7 +52,6 @@
         <Property Name="Root" Type="CompositionVisual?"/>
         <Property Name="IsEnabled" Type="bool"/>
         <Property Name="DebugOverlays" Type="RendererDebugOverlays"/>
-        <Property Name="LastLayoutPassTiming" Type="LayoutPassTiming" Internal="true"/>
         <Property Name="Scaling" Type="double"/>
         <Property Name="PixelSize" Type="PixelSize" />
     </Object>

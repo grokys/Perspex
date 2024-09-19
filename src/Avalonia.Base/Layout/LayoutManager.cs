@@ -2,14 +2,13 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Avalonia.Diagnostics;
 using Avalonia.Logging;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.Utilities;
-
-#nullable enable
 
 namespace Avalonia.Layout
 {
@@ -38,8 +37,6 @@ namespace Avalonia.Layout
         }
 
         public virtual event EventHandler? LayoutUpdated;
-
-        internal Action<LayoutPassTiming>? LayoutPassTimed { get; set; }
 
         /// <inheritdoc/>
         public virtual void InvalidateMeasure(Layoutable control)
@@ -124,19 +121,13 @@ namespace Avalonia.Layout
             if (!_running)
             {
                 const LogEventLevel timingLogLevel = LogEventLevel.Information;
-                var captureTiming = LayoutPassTimed is not null || Logger.IsEnabled(timingLogLevel, LogArea.Layout);
                 var startingTimestamp = 0L;
 
-                if (captureTiming)
-                {
-                    Logger.TryGet(timingLogLevel, LogArea.Layout)?.Log(
-                        this,
-                        "Started layout pass. To measure: {Measure} To arrange: {Arrange}",
-                        _toMeasure.Count,
-                        _toArrange.Count);
-
-                    startingTimestamp = Stopwatch.GetTimestamp();
-                }
+                Logger.TryGet(timingLogLevel, LogArea.Layout)?.Log(
+                    this,
+                    "Started layout pass. To measure: {Measure} To arrange: {Arrange}",
+                    _toMeasure.Count,
+                    _toArrange.Count);
 
                 _toMeasure.BeginLoop(MaxPasses);
                 _toArrange.BeginLoop(MaxPasses);
@@ -164,13 +155,7 @@ namespace Avalonia.Layout
                 _toMeasure.EndLoop();
                 _toArrange.EndLoop();
 
-                if (captureTiming)
-                {
-                    var elapsed = StopwatchHelper.GetElapsedTime(startingTimestamp);
-                    LayoutPassTimed?.Invoke(new LayoutPassTiming(_totalPassCount, elapsed));
-
-                    Logger.TryGet(timingLogLevel, LogArea.Layout)?.Log(this, "Layout pass finished in {Time}", elapsed);
-                }
+                Logger.TryGet(timingLogLevel, LogArea.Layout)?.Log(this, "Layout pass finished in {Time}", StopwatchHelper.GetElapsedTime(startingTimestamp));
             }
 
             _queued = false;
@@ -246,6 +231,7 @@ namespace Avalonia.Layout
 
         private void ExecuteMeasurePass()
         {
+            using var _ = AvaloniaMetrics.BeginVisualMeasure();
             while (_toMeasure.Count > 0)
             {
                 var control = _toMeasure.Dequeue();
@@ -261,6 +247,7 @@ namespace Avalonia.Layout
 
         private void ExecuteArrangePass()
         {
+            using var _ = AvaloniaMetrics.BeginVisualArrange();
             while (_toArrange.Count > 0)
             {
                 var control = _toArrange.Dequeue();

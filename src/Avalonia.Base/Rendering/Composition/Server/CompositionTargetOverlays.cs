@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Threading;
+using Avalonia.Diagnostics;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Platform;
@@ -14,9 +18,10 @@ internal class CompositionTargetOverlays
     private FrameTimeGraph? _updateTimeGraph;
     private FrameTimeGraph? _layoutTimeGraph;
     private Rect? _oldFpsCounterRect;
-    private long _updateStarted;
     private readonly ServerCompositionTarget _target;
     private readonly DiagnosticTextRenderer? _diagnosticTextRenderer;
+    private MeterListener? _meterListener;
+    private double _lastMeasure, _lastArrange, _lastUpdate, _lastRender;
 
     public CompositionTargetOverlays(
         ServerCompositionTarget target,
@@ -40,8 +45,6 @@ internal class CompositionTargetOverlays
     private FrameTimeGraph? UpdateTimeGraph
         => _updateTimeGraph ??= CreateTimeGraph("RUpdate");
 
-
-
     public bool RequireLayer => DebugOverlays.HasAnyFlag(RendererDebugOverlays.DirtyRects);
 
     private FrameTimeGraph? CreateTimeGraph(string title)
@@ -51,11 +54,17 @@ internal class CompositionTargetOverlays
         return new FrameTimeGraph(360, new Size(360.0, 64.0), 1000.0 / 60.0, title, _diagnosticTextRenderer);
     }
 
-
     public void OnChanged(RendererDebugOverlays debugOverlays)
     {
         DebugOverlays = debugOverlays;
         _oldFpsCounterRect = null;
+
+        if (_meterListener is null)
+        {
+            _meterListener = new MeterListener();
+            _meterListener.SetMeasurementEventCallback<double>(MeterMeasurementCallback);
+        }
+
         if ((DebugOverlays & RendererDebugOverlays.Fps) == 0)
         {
             _fpsCounter?.Reset();
@@ -64,29 +73,32 @@ internal class CompositionTargetOverlays
         if ((DebugOverlays & RendererDebugOverlays.LayoutTimeGraph) == 0)
         {
             _layoutTimeGraph?.Reset();
+            _meterListener.DisableMeasurementEvents(AvaloniaMetrics.s_visualMeasure);
+            _meterListener.DisableMeasurementEvents(AvaloniaMetrics.s_visualArrange);
+        }
+        else
+        {
+            _meterListener.EnableMeasurementEvents(AvaloniaMetrics.s_visualMeasure);
+            _meterListener.EnableMeasurementEvents(AvaloniaMetrics.s_visualArrange);
         }
 
         if ((DebugOverlays & RendererDebugOverlays.RenderTimeGraph) == 0)
         {
             _renderTimeGraph?.Reset();
+            _meterListener.DisableMeasurementEvents(AvaloniaMetrics.s_compositorRender);
+            _meterListener.DisableMeasurementEvents(AvaloniaMetrics.s_compositorUpdate);
+        }
+        else
+        {
+            _meterListener.EnableMeasurementEvents(AvaloniaMetrics.s_compositorRender);
+            _meterListener.EnableMeasurementEvents(AvaloniaMetrics.s_compositorUpdate);
         }
     }
-
-
-    private bool CaptureTiming => (DebugOverlays & RendererDebugOverlays.RenderTimeGraph) != 0;
 
     public void Draw(IDrawingContextImpl targetContext, bool hasLayer)
     {
         if (DebugOverlays != RendererDebugOverlays.None)
         {
-            if (CaptureTiming)
-            {
-                var elapsed = StopwatchHelper.GetElapsedTime(_updateStarted);
-                RenderTimeGraph?.AddFrameValue(elapsed.TotalMilliseconds);
-            }
-
-            
-
             if (DebugOverlays.HasFlag(RendererDebugOverlays.DirtyRects))
                 _target.DirtyRects.Visualize(targetContext);
 
@@ -95,18 +107,6 @@ internal class CompositionTargetOverlays
             using (var immediate = new ImmediateDrawingContext(targetContext, false))
                 DrawOverlays(immediate, hasLayer, _target.PixelSize.ToSize(_target.Scaling));
         }
-    }
-
-    public void MarkUpdateCallStart()
-    {
-        if (CaptureTiming)
-            _updateStarted = CaptureTiming ? Stopwatch.GetTimestamp() : 0L;
-    }
-
-    public void MarkUpdateCallEnd()
-    {
-        if (CaptureTiming)
-            UpdateTimeGraph?.AddFrameValue(StopwatchHelper.GetElapsedTime(_updateStarted).TotalMilliseconds);
     }
 
     private void DrawOverlays(ImmediateDrawingContext targetContext, bool hasLayer, Size logicalSize)
@@ -142,21 +142,44 @@ internal class CompositionTargetOverlays
         }
 
         if (DebugOverlays.HasFlag(RendererDebugOverlays.LayoutTimeGraph))
+        {
+            var layoutTotal = Interlocked.Exchange(ref _lastMeasure, 0)
+                              + Interlocked.Exchange(ref _lastArrange, 0); 
+            LayoutTimeGraph!.AddFrameValue(layoutTotal);
             DrawTimeGraph(LayoutTimeGraph);
+        }
 
         if (DebugOverlays.HasFlag(RendererDebugOverlays.RenderTimeGraph))
         {
+            LayoutTimeGraph!.AddFrameValue(Interlocked.Exchange(ref _lastRender, 0));
+            LayoutTimeGraph!.AddFrameValue(Interlocked.Exchange(ref _lastUpdate, 0));
             DrawTimeGraph(RenderTimeGraph);
             DrawTimeGraph(UpdateTimeGraph);
         }
     }
 
-
-    public void OnLastLayoutPassTimingChanged(LayoutPassTiming lastLayoutPassTiming)
+    private void MeterMeasurementCallback(
+        Instrument instrument,
+        double measurement,
+        ReadOnlySpan<KeyValuePair<string, object?>> tags,
+        object? state)
     {
-        if ((DebugOverlays & RendererDebugOverlays.LayoutTimeGraph) != 0)
+        // Some events happen on UI thread.
+        if (instrument == AvaloniaMetrics.s_visualMeasure)
         {
-            LayoutTimeGraph?.AddFrameValue(lastLayoutPassTiming.Elapsed.TotalMilliseconds);
+            Interlocked.Exchange(ref _lastMeasure, measurement);
+        }
+        else if (instrument == AvaloniaMetrics.s_visualArrange)
+        {
+            Interlocked.Exchange(ref _lastArrange, measurement);
+        }
+        else if (instrument == AvaloniaMetrics.s_compositorUpdate)
+        {
+            Interlocked.Exchange(ref _lastUpdate, measurement);
+        }
+        else if (instrument == AvaloniaMetrics.s_compositorRender)
+        {
+            Interlocked.Exchange(ref _lastRender, measurement);
         }
     }
 }

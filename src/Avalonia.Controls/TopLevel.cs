@@ -23,6 +23,8 @@ using Avalonia.Utilities;
 using Avalonia.Input.Platform;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Diagnostics;
+using Avalonia.Metadata;
 using Avalonia.Rendering.Composition;
 using Avalonia.Threading;
 
@@ -138,7 +140,6 @@ namespace Avalonia.Controls
         private TargetWeakEventSubscriber<TopLevel, ResourcesChangedEventArgs>? _resourcesChangesSubscriber;
         private IStorageProvider? _storageProvider;
         private Screens? _screens;
-        private LayoutDiagnosticBridge? _layoutDiagnosticBridge;
         
         /// <summary>
         /// Initializes static members of the <see cref="TopLevel"/> class.
@@ -402,12 +403,6 @@ namespace Avalonia.Controls
                 if (_layoutManager is null)
                 {
                     _layoutManager = CreateLayoutManager();
-
-                    if (_layoutManager is LayoutManager typedLayoutManager)
-                    {
-                        _layoutDiagnosticBridge = new LayoutDiagnosticBridge(Renderer.Diagnostics, typedLayoutManager);
-                        _layoutDiagnosticBridge.SetupBridge();
-                    }
                 }
 
                 return _layoutManager;
@@ -705,9 +700,6 @@ namespace Avalonia.Controls
             {
                 _applicationThemeHost.ActualThemeVariantChanged -= GlobalActualThemeVariantChanged;
             }
-            
-            _layoutDiagnosticBridge?.Dispose();
-            _layoutDiagnosticBridge = null;
 
             _pointerOverPreProcessor?.OnCompleted();
             _pointerOverPreProcessorSubscription?.Dispose();
@@ -929,49 +921,5 @@ namespace Avalonia.Controls
         }
 
         ITextInputMethodImpl? ITextInputMethodRoot.InputMethod => PlatformImpl?.TryGetFeature<ITextInputMethodImpl>();
-
-        /// <summary>
-        /// Provides layout pass timing from the layout manager to the renderer, for diagnostics purposes.
-        /// </summary>
-        private sealed class LayoutDiagnosticBridge : IDisposable
-        {
-            private readonly RendererDiagnostics _diagnostics;
-            private readonly LayoutManager _layoutManager;
-            private bool _isHandling;
-
-            public LayoutDiagnosticBridge(RendererDiagnostics diagnostics, LayoutManager layoutManager)
-            {
-                _diagnostics = diagnostics;
-                _layoutManager = layoutManager;
-
-                diagnostics.PropertyChanged += OnDiagnosticsPropertyChanged;
-            }
-
-            public void SetupBridge()
-            {
-                var needsHandling = (_diagnostics.DebugOverlays & RendererDebugOverlays.LayoutTimeGraph) != 0;
-                if (needsHandling != _isHandling)
-                {
-                    _isHandling = needsHandling;
-                    _layoutManager.LayoutPassTimed = needsHandling
-                        ? timing => _diagnostics.LastLayoutPassTiming = timing
-                        : null;
-                }
-            }
-
-            private void OnDiagnosticsPropertyChanged(object? sender, PropertyChangedEventArgs e)
-            {
-                if (e.PropertyName == nameof(RendererDiagnostics.DebugOverlays))
-                {
-                    SetupBridge();
-                }
-            }
-
-            public void Dispose()
-            {
-                _diagnostics.PropertyChanged -= OnDiagnosticsPropertyChanged;
-                _layoutManager.LayoutPassTimed = null;
-            }
-        }
     }
 }

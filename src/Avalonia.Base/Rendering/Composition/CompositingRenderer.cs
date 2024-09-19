@@ -65,9 +65,6 @@ internal class CompositingRenderer : IRendererWithCompositor, IHitTester
             case nameof(RendererDiagnostics.DebugOverlays):
                 CompositionTarget.DebugOverlays = Diagnostics.DebugOverlays;
                 break;
-            case nameof(RendererDiagnostics.LastLayoutPassTiming):
-                CompositionTarget.LastLayoutPassTiming = Diagnostics.LastLayoutPassTiming;
-                break;
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Avalonia.Collections.Pooled;
+using Avalonia.Diagnostics;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Media.Immutable;
@@ -75,8 +76,6 @@ namespace Avalonia.Rendering.Composition.Server
             _overlays.OnChanged(DebugOverlays);
         }
 
-        partial void OnLastLayoutPassTimingChanged() => _overlays.OnLastLayoutPassTimingChanged(LastLayoutPassTiming);
-
         partial void DeserializeChangesExtra(BatchStreamReader c)
         {
             _redrawRequested = true;
@@ -121,7 +120,8 @@ namespace Avalonia.Rendering.Composition.Server
 
             Revision++;
 
-            _overlays.MarkUpdateCallStart();
+            var rUpdateTiming = AvaloniaMetrics.BeginCompositorUpdate();
+            var renderTiming = AvaloniaMetrics.BeginCompositorRender();
 
             var transform = Matrix.CreateScale(Scaling, Scaling);
             // Update happens in a separate phase to extend dirty rect if needed
@@ -136,8 +136,8 @@ namespace Avalonia.Rendering.Composition.Server
             _updateRequested = false;
             Readback.CompleteWrite(Revision);
 
-            _overlays.MarkUpdateCallEnd();
-            
+            rUpdateTiming.Dispose();
+
             if (!_redrawRequested)
                 return;
 
@@ -187,11 +187,13 @@ namespace Avalonia.Rendering.Composition.Server
                             var rect = new PixelRect(default, PixelSize).ToRect(1);
                             renderTargetContext.DrawBitmap(_layer, 1, rect, rect);
                         }
+                        renderTiming.Dispose();
                         _overlays.Draw(renderTargetContext, true);
                     }
                     else
                     {
                         RenderRootToContextWithClip(renderTargetContext, Root);
+                        renderTiming.Dispose();
                         _overlays.Draw(renderTargetContext, false);
                     }
                 }
