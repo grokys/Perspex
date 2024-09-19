@@ -26,6 +26,12 @@ internal static class AvaloniaMetrics
     internal static readonly Histogram<double> s_visualArrange = s_meter
         .CreateHistogram<double>(
             "avalonia.visual.arrange.time", "ms");
+    private static readonly Histogram<double> s_visualRender = s_meter
+        .CreateHistogram<double>(
+            "avalonia.visual.render.time", "ms");
+    private static readonly Histogram<double> s_visualInput = s_meter
+        .CreateHistogram<double>(
+            "avalonia.visual.input.time", "ms");
     private static readonly ObservableUpDownCounter<int> s_visualHandlerCount = s_meter
         .CreateObservableUpDownCounter(
             "avalonia.visual.handler.count",
@@ -41,6 +47,8 @@ internal static class AvaloniaMetrics
     public static HistogramReportDisposable BeginCompositorUpdate() => new(s_compositorUpdate);
     public static HistogramReportDisposable BeginVisualMeasure() => new(s_visualMeasure);
     public static HistogramReportDisposable BeginVisualArrange() => new(s_visualArrange);
+    public static HistogramReportDisposable BeginVisualInput() => new(s_visualInput);
+    public static HistogramReportDisposable BeginVisualRender() => new(s_visualRender);
 
     internal readonly ref struct HistogramReportDisposable
     {

@@ -829,6 +829,8 @@ namespace Avalonia.Controls
             {
                 Dispatcher.UIThread.Send(static state =>
                 {
+                    using var _ = AvaloniaMetrics.BeginVisualInput();
+
                     var (topLevel, e) = (ValueTuple<TopLevel, RawInputEventArgs>)state!;
                     if (e is RawPointerEventArgs pointerArgs)
                     {
