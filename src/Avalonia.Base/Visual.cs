@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using Avalonia.Collections;
 using Avalonia.Data;
+using Avalonia.Diagnostics;
 using Avalonia.Logging;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
@@ -31,6 +32,8 @@ namespace Avalonia
     [UsableDuringInitialization]
     public partial class Visual : StyledElement, IAvaloniaListItemValidator<Visual>
     {
+        internal static int RootedVisualChildrenCount { get; private set; }
+
         /// <summary>
         /// Defines the <see cref="Bounds"/> property.
         /// </summary>
@@ -493,6 +496,7 @@ namespace Avalonia
             Logger.TryGet(LogEventLevel.Verbose, LogArea.Visual)?.Log(this, "Attached to visual tree");
 
             _visualRoot = e.Root;
+            RootedVisualChildrenCount++;
             if (_visualParent is null)
             {
                 throw new InvalidOperationException("Visual was attached to the root without being added to the visual parent first.");
@@ -541,6 +545,7 @@ namespace Avalonia
             Logger.TryGet(LogEventLevel.Verbose, LogArea.Visual)?.Log(this, "Detached from visual tree");
 
             _visualRoot = null;
+            RootedVisualChildrenCount--;
 
             if (RenderTransform is IMutableTransform mutableTransform)
             {
