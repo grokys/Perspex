@@ -9,6 +9,8 @@ namespace Avalonia.Threading;
 /// </summary>
 public partial class DispatcherTimer
 {
+    internal static int ActiveTimersCount { get; private set; }
+
     /// <summary>
     ///     Creates a timer that uses theUI thread's Dispatcher2 to
     ///     process the timer event at background priority.
@@ -147,6 +149,7 @@ public partial class DispatcherTimer
             if (!_isEnabled)
             {
                 _isEnabled = true;
+                ActiveTimersCount++;
 
                 Restart();
             }
@@ -165,6 +168,7 @@ public partial class DispatcherTimer
             if (_isEnabled)
             {
                 _isEnabled = false;
+                ActiveTimersCount--;
                 updateOSTimer = true;
 
                 // If the operation is in the queue, abort it.

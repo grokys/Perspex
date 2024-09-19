@@ -43,6 +43,12 @@ internal static class AvaloniaMetrics
             () => Visual.RootedVisualChildrenCount,
             "{visual}");
 
+    private static readonly ObservableUpDownCounter<int> s_dispatcherTimerCount = s_meter
+        .CreateObservableUpDownCounter(
+            "avalonia.dispatcher.timer.count",
+            () => DispatcherTimer.ActiveTimersCount,
+            "{timer}");
+
     public static HistogramReportDisposable BeginCompositorRender() => new(s_compositorRender);
     public static HistogramReportDisposable BeginCompositorUpdate() => new(s_compositorUpdate);
     public static HistogramReportDisposable BeginVisualMeasure() => new(s_visualMeasure);
