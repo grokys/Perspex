@@ -32,6 +32,9 @@ internal static class AvaloniaMetrics
     private static readonly Histogram<double> s_visualInput = s_meter
         .CreateHistogram<double>(
             "avalonia.visual.input.time", "ms");
+
+    // These counters are unused, because Observable counters get pulled by the listener. We don't push anything into them. 
+#pragma warning disable CA1823 // Remove unused private members
     private static readonly ObservableUpDownCounter<int> s_visualHandlerCount = s_meter
         .CreateObservableUpDownCounter(
             "avalonia.visual.handler.count",
@@ -42,12 +45,12 @@ internal static class AvaloniaMetrics
             "avalonia.visual.count",
             () => Visual.RootedVisualChildrenCount,
             "{visual}");
-
     private static readonly ObservableUpDownCounter<int> s_dispatcherTimerCount = s_meter
         .CreateObservableUpDownCounter(
             "avalonia.dispatcher.timer.count",
             () => DispatcherTimer.ActiveTimersCount,
             "{timer}");
+#pragma warning restore CA1823 // Remove unused private members
 
     public static HistogramReportDisposable BeginCompositorRender() => new(s_compositorRender);
     public static HistogramReportDisposable BeginCompositorUpdate() => new(s_compositorUpdate);
