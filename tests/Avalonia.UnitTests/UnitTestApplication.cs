@@ -80,6 +80,7 @@ namespace Avalonia.UnitTests
                 .Bind<PlatformHotkeyConfiguration>().ToSingleton<PlatformHotkeyConfiguration>()
                 .Bind<IPlatformSettings>().ToSingleton<DefaultPlatformSettings>()
                 .Bind<IAccessKeyHandler>().ToConstant(Services.AccessKeyHandler)
+                .Bind<KeyGestureFormatInfo>().ToConstant(new  KeyGestureFormatInfo(new System.Collections.Generic.Dictionary<Key, string>()))
                 ;
             
             // This is a hack to make tests work, we need to refactor the way font manager is registered

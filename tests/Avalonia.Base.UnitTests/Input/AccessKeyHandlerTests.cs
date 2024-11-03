@@ -206,6 +206,31 @@ namespace Avalonia.Base.UnitTests.Input
             menu.Verify(x => x.Open(), Times.Once);
         }
 
+        [Fact]
+        public void Should_Handle_Numeric_AccessKey()
+        {
+            using var app = UnitTestApplication.Start(TestServices.StyledWindow);
+            var button = new Button();
+            var root = new TestRoot(button);
+            var target = new AccessKeyHandler();
+            var raised = 0;
+
+            target.SetOwner(root);
+            target.Register('1', button);
+            button.AddHandler(AccessKeyHandler.AccessKeyPressedEvent, (s, e) => ++raised);
+
+            KeyDown(root, Key.LeftAlt);
+            Assert.Equal(0, raised);
+
+            KeyDown(root, Key.D1, KeyModifiers.Alt);
+            Assert.Equal(1, raised);
+
+            KeyUp(root, Key.D1, KeyModifiers.Alt);
+            KeyUp(root, Key.LeftAlt);
+
+            Assert.Equal(1, raised);
+        }
+
         private static void KeyDown(IInputElement target, Key key, KeyModifiers modifiers = KeyModifiers.None)
         {
             target.RaiseEvent(new KeyEventArgs
