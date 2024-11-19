@@ -581,13 +581,27 @@ namespace Avalonia.Win32
                 return;
             }
 
-            var position = Position;
-            requestedWindowRect.left = position.X;
-            requestedWindowRect.top = position.Y;
-            requestedWindowRect.right = position.X + windowWidth;
-            requestedWindowRect.bottom = position.Y + windowHeight;
+            // If the window is minimized, don't change the restore position, because this.Position is currently
+            // out of screen with values similar to -32000,-32000. Windows considers such a position invalid on restore
+            // and instead moves the window back to 0,0.
+            if (windowPlacement.ShowCmd == ShowWindowCommand.ShowMinimized)
+            {
+                // The window is minimized but will be restored to maximized: don't change our normal size,
+                // or it will incorrectly be set to the maximized size.
+                if ((windowPlacement.Flags & WindowPlacementFlags.RestoreToMaximized) != 0)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                var position = Position;
+                windowPlacement.NormalPosition.left = position.X;
+                windowPlacement.NormalPosition.top = position.Y;
+            }
 
-            windowPlacement.NormalPosition = requestedWindowRect;
+            windowPlacement.NormalPosition.right = windowPlacement.NormalPosition.left + windowWidth;
+            windowPlacement.NormalPosition.bottom = windowPlacement.NormalPosition.top + windowHeight;
 
             windowPlacement.ShowCmd = !_shown ? ShowWindowCommand.Hide : _lastWindowState switch
             {
