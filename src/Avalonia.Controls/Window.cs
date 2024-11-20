@@ -1056,9 +1056,9 @@ namespace Avalonia.Controls
         {
             _shown = false;
 
-            base.HandleClosed();
-
             RaiseEvent(new RoutedEventArgs(WindowClosedEvent));
+
+            base.HandleClosed();
 
             Owner = null;
         }
