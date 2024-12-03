@@ -132,5 +132,19 @@
         </TextBlock>
       </StackPanel>
     </TabItem>
+    <TabItem Header="Multi Binding">
+      <StackPanel Margin="10">
+        <TextBox Name="FirstNameTextBox" Width="200" Margin="0,0,0,10" />
+        <TextBox Name="LastNameTextBox" Width="200" Margin="0,0,0,10" />
+        <TextBlock FontSize="16" FontWeight="Bold" TextAlignment="Center">
+          <TextBlock.Text>
+            <MultiBinding StringFormat="Full Name: {0} {1}">
+              <Binding ElementName="FirstNameTextBox" Path="Text" />
+              <Binding ElementName="LastNameTextBox" Path="Text" />
+            </MultiBinding>
+          </TextBlock.Text>
+        </TextBlock>
+      </StackPanel>
+    </TabItem>
   </TabControl>
 </Window>
