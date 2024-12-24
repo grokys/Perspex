@@ -1185,6 +1185,11 @@ namespace Avalonia.X11 {
 		Prepend			= 1,
 		Append			= 2
 	}
+    	
+    internal enum PropertyState {
+		NewValue		= 0,
+		Delete			= 1
+	}
 
 	[StructLayout (LayoutKind.Sequential)]
 	internal struct XKeyBoardState {
