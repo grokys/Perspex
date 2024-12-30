@@ -18,13 +18,15 @@ internal sealed class DynamicPluginPropertyAccessorNode : ExpressionNode, IPrope
     private IPropertyAccessor? _accessor;
     private bool _enableDataValidation;
 
-    public DynamicPluginPropertyAccessorNode(string propertyName)
+    public DynamicPluginPropertyAccessorNode(string propertyName, bool canBeNull = false)
     {
         _onValueChanged = OnValueChanged;
         PropertyName = propertyName;
+        CanBeNull = canBeNull;
     }
 
     public IPropertyAccessor? Accessor => _accessor;
+    public bool CanBeNull { get; }
     public string PropertyName { get; }
     public Type? ValueType => _accessor?.PropertyType;
 

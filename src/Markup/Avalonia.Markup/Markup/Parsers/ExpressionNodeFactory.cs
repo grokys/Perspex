@@ -52,7 +52,7 @@ namespace Avalonia.Markup.Parsers
                         ++negated;
                         break;
                     case BindingExpressionGrammar.PropertyNameNode propName:
-                        node = new DynamicPluginPropertyAccessorNode(propName.PropertyName);
+                        node = new DynamicPluginPropertyAccessorNode(propName.PropertyName, propName.CanBeNull);
                         break;
                     case BindingExpressionGrammar.SelfNode:
                         node = null;
@@ -114,7 +114,7 @@ namespace Avalonia.Markup.Parsers
             var type = LookupType(typeResolver, attached.Namespace, attached.TypeName);
             var property = AvaloniaPropertyRegistry.Instance.FindRegistered(type, attached.PropertyName) ??
                 throw new InvalidOperationException($"Cannot find property {type}.{attached.PropertyName}.");
-            return new AvaloniaPropertyAccessorNode(property);
+            return new AvaloniaPropertyAccessorNode(property, attached.CanBeNull);
         }
 
         private static LogicalAncestorElementNode LogicalAncestorNode(

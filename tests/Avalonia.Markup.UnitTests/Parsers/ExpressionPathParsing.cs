@@ -11,6 +11,13 @@ namespace Avalonia.Markup.UnitTests.Parsers
 {
     public class ExpressionObserverBuilderTests
     {
+        private static readonly Func<string, string, Type> _typeResolver;
+
+        static ExpressionObserverBuilderTests()
+        {
+            _typeResolver = (_, name) => name == "Owner" ? typeof(Owner) : null;
+        }
+
         [Fact]
         public void Should_Build_Single_Property()
         {
@@ -52,6 +59,32 @@ namespace Avalonia.Markup.UnitTests.Parsers
             AssertIsProperty(result[0], "Foo");
             AssertIsProperty(result[1], "Bar");
             AssertIsProperty(result[2], "Baz");
+        }
+
+        [Fact]
+        public void Should_Build_Property_Chain_With_Null_Conditional()
+        {
+            var result = Parse("Foo.Bar?.Baz");
+
+            Assert.Equal(3, result.Count);
+            AssertIsProperty(result[0], "Foo", canBeNull: false);
+            AssertIsProperty(result[1], "Bar", canBeNull: true);
+            AssertIsProperty(result[2], "Baz", canBeNull: false);
+        }
+
+        [Fact]
+        public void Should_Build_Property_Chain_With_Attached_Property_Null_Conditional()
+        {
+            var result = Parse("Foo.(Owner.Foo)?.Baz");
+
+            Assert.Equal(3, result.Count);
+            AssertIsProperty(result[0], "Foo", canBeNull: false);
+
+            var attachedNode = Assert.IsType<AvaloniaPropertyAccessorNode>(result[1]);
+            Assert.Equal(Owner.FooProperty, attachedNode.Property);
+            Assert.True(attachedNode.CanBeNull);
+
+            AssertIsProperty(result[2], "Baz", canBeNull: false);
         }
 
         [Fact]
@@ -153,10 +186,11 @@ namespace Avalonia.Markup.UnitTests.Parsers
             Assert.IsType<DynamicPluginStreamNode>(result[1]);
         }
 
-        private static void AssertIsProperty(ExpressionNode node, string name)
+        private static void AssertIsProperty(ExpressionNode node, string name, bool canBeNull = false)
         {
             var p = Assert.IsType<DynamicPluginPropertyAccessorNode>(node);
             Assert.Equal(name, p.PropertyName);
+            Assert.Equal(canBeNull, p.CanBeNull);
         }
 
         private static void AssertIsIndexer(ExpressionNode node, params string[] args)
@@ -169,7 +203,21 @@ namespace Avalonia.Markup.UnitTests.Parsers
         {
             var reader = new CharacterReader(path.AsSpan());
             var (astNodes, sourceMode) = BindingExpressionGrammar.Parse(ref reader);
-            return ExpressionNodeFactory.CreateFromAst(astNodes, null, null, out _);
+            return ExpressionNodeFactory.CreateFromAst(astNodes, _typeResolver, null, out _);
+        }
+
+        private static class Owner
+        {
+            public static readonly AttachedProperty<string> FooProperty =
+                AvaloniaProperty.RegisterAttached<AvaloniaObject, string>(
+                    "Foo",
+                    typeof(Owner),
+                    defaultValue: "foo");
+
+            public static readonly AttachedProperty<AvaloniaObject> SomethingProperty =
+                AvaloniaProperty.RegisterAttached<AvaloniaObject, AvaloniaObject>(
+                    "Something",
+                    typeof(Owner));
         }
     }
 }

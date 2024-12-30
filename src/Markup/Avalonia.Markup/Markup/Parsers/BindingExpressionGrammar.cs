@@ -180,7 +180,14 @@ namespace Avalonia.Markup.Parsers
 
                 if (!identifier.IsEmpty)
                 {
-                    nodes.Add(new PropertyNameNode { PropertyName = identifier.ToString() });
+                    var canBeNull = ParseNullConditional(ref r);
+
+                    nodes.Add(new PropertyNameNode 
+                    {
+                        CanBeNull = canBeNull,
+                        PropertyName = identifier.ToString() 
+                    });
+
                     return State.AfterMember;
                 }
 
@@ -219,8 +226,11 @@ namespace Avalonia.Markup.Parsers
                 throw new ExpressionParseException(r.Position, "Expected ')'.");
             }
 
+            var canBeNull = ParseNullConditional(ref r);
+
             nodes.Add(new AttachedPropertyNameNode
             {
+                CanBeNull = canBeNull,
                 Namespace = ns,
                 TypeName = owner,
                 PropertyName = name.ToString()
@@ -417,6 +427,18 @@ namespace Avalonia.Markup.Parsers
             return !r.End && r.TakeIf('.');
         }
 
+        private static bool ParseNullConditional(ref CharacterReader r)
+        {
+            if (r.TryPeek(2) is { } s && s.Length == 2 && s[0] == '?' && s[1] == '.')
+            {
+                // We need to skip the '?' but leave the '.' intact.
+                r.Take();
+                return true;
+            }
+
+            return false;
+        }
+
         private enum State
         {
             Start,
@@ -456,11 +478,13 @@ namespace Avalonia.Markup.Parsers
 
         public class PropertyNameNode : INode
         {
+            public bool CanBeNull { get; set; }
             public string PropertyName { get; set; } = string.Empty;
         }
 
         public class AttachedPropertyNameNode : INode
         {
+            public bool CanBeNull { get; set; }
             public string Namespace { get; set; } = string.Empty;
             public string TypeName { get; set; } = string.Empty;
             public string PropertyName { get; set; } = string.Empty;

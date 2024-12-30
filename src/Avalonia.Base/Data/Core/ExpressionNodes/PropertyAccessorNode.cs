@@ -25,6 +25,7 @@ internal sealed class PropertyAccessorNode : ExpressionNode, IPropertyAccessorNo
     }
 
     public IPropertyAccessor? Accessor => _accessor;
+    public bool CanBeNull { get; }
     public string PropertyName { get; }
     public Type? ValueType => _accessor?.PropertyType;
 

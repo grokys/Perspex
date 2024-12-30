@@ -8,6 +8,7 @@ namespace Avalonia.Data.Core.ExpressionNodes;
 internal interface IPropertyAccessorNode
 {
     string PropertyName { get; }
+    bool CanBeNull { get; }
     IPropertyAccessor? Accessor { get; }
     void EnableDataValidation();
 }

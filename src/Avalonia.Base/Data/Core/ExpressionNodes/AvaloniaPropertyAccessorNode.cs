@@ -10,11 +10,13 @@ internal sealed class AvaloniaPropertyAccessorNode :
     ISettableNode,
     IWeakEventSubscriber<AvaloniaPropertyChangedEventArgs>
 {
-    public AvaloniaPropertyAccessorNode(AvaloniaProperty property)
+    public AvaloniaPropertyAccessorNode(AvaloniaProperty property, bool canBeNull = false)
     {
         Property = property;
+        CanBeNull = canBeNull;
     }
 
+    public bool CanBeNull { get; }
     public AvaloniaProperty Property { get; }
     public Type? ValueType => Property.PropertyType;
 
