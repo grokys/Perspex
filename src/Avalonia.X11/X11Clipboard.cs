@@ -217,6 +217,14 @@ namespace Avalonia.X11
                 _requestedFormatsTcs = new TaskCompletionSource<IntPtr[]>();
             XConvertSelection(_x11.Display, _x11.Atoms.CLIPBOARD, _x11.Atoms.TARGETS, _x11.Atoms.TARGETS, _handle,
                 IntPtr.Zero);
+
+            XEvent xEvent;
+            do
+            {
+                XNextEvent(_x11.Display, out xEvent);
+            } while (xEvent.type != XEventName.SelectionNotify);
+            OnEvent(ref xEvent);
+            
             return _requestedFormatsTcs.Task;
         }
 
@@ -224,7 +232,17 @@ namespace Avalonia.X11
         {
             if (_requestedDataTcs == null || _requestedDataTcs.Task.IsCompleted)
                 _requestedDataTcs = new TaskCompletionSource<object>();
-            XConvertSelection(_x11.Display, _x11.Atoms.CLIPBOARD, format, format, _handle, IntPtr.Zero);
+            IntPtr property = XInternAtom(_x11.Display, "XSEL_DATA", false);
+            XConvertSelection(_x11.Display, _x11.Atoms.CLIPBOARD, format, property, _handle, IntPtr.Zero);
+            XSync(_x11.Display, false);
+            
+            XEvent xEvent;
+            do
+            {
+                XNextEvent(_x11.Display, out xEvent);
+            } while (xEvent.type != XEventName.SelectionNotify);
+            OnEvent(ref xEvent);
+
             return _requestedDataTcs.Task;
         }
 
