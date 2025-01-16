@@ -1,6 +1,3 @@
-using System;
-using Avalonia.Collections;
-using Avalonia.Controls.Shapes;
 using Avalonia.Controls.Utils;
 using Avalonia.Layout;
 using Avalonia.Media;

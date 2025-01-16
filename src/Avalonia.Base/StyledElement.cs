@@ -834,6 +834,9 @@ namespace Avalonia
 
         private void ApplyStyle(IStyle style, IStyleHost? host, FrameType type)
         {
+            if (style is Styling.Container m)
+                m.TryAttach(this, host, type);
+
             if (style is Style s)
                 s.TryAttach(this, host, type);
 

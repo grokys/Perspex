@@ -275,6 +275,32 @@ namespace Avalonia.Markup.Parsers
             return (State.CanHaveType, new NameSyntax { Name = name.ToString() });
         }
 
+        private static double ParseDecimal(ref CharacterReader r)
+        {
+            var number = r.ParseNumber();
+            if (number.IsEmpty)
+            {
+                throw new ExpressionParseException(r.Position, $"Expected a number after.");
+            }
+
+            return double.Parse(number.ToString());
+        }
+
+        private static T ParseEnum<T>(ref CharacterReader r) where T : struct
+        {
+            var identifier = r.ParseIdentifier();
+
+            if (Enum.TryParse<T>(identifier.ToString(), true, out T value))
+                return value;
+
+            throw new ExpressionParseException(r.Position, $"Expected a {typeof(T)} after.");
+        }
+
+        private static string ParseString(ref CharacterReader r)
+        {
+            return r.ParseIdentifier().ToString();
+        }
+
         private static (State, ISyntax) ParseTypeName(ref CharacterReader r)
         {
             return (State.CanHaveType, ParseType(ref r, new OfTypeSyntax()));
@@ -649,6 +675,16 @@ namespace Avalonia.Markup.Parsers
             public override bool Equals(object? obj)
             {
                 return obj is NestingSyntax;
+            }
+        }
+
+        public class DecimalSyntax : ISyntax
+        {
+            public decimal Number { get; set; }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is DecimalSyntax dec && dec.Number == Number;
             }
         }
     }

@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="ControlCatalog.Pages.ContainerQueryPage"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="using:ControlCatalog.ViewModels"
+             d:DesignHeight="800"
+             d:DesignWidth="400"
+             mc:Ignorable="d">
+  <StackPanel Spacing="10">
+    <StackPanel.Styles>
+      <Container ContainerName="UniformGrid"
+                 Query="max-width:400">
+        <Style Selector="UniformGrid#ContentGrid">
+          <Setter Property="Columns"
+                  Value="1"/>
+        </Style>
+      </Container>
+      <Container ContainerName="UniformGrid"
+                 Query="min-width:400">
+        <Style Selector="UniformGrid#ContentGrid">
+          <Setter Property="Columns"
+                  Value="2"/>
+        </Style>
+      </Container>
+      <Container ContainerName="UniformGrid"
+                 Query="min-width:800">
+        <Style Selector="UniformGrid#ContentGrid">
+          <Setter Property="Columns"
+                  Value="3"/>
+        </Style>
+      </Container>
+      <Container ContainerName="UniformGrid"
+                 Query="min-width:1200">
+        <Style Selector="UniformGrid#ContentGrid">
+          <Setter Property="Columns"
+                  Value="4"/>
+        </Style>
+      </Container>
+    </StackPanel.Styles>
+    <TextBlock Text="Dynamically change properties of controls based on the size of a parent container."/>
+    <Border ContainerName="UniformGrid"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            ContainerType="Width">
+      <ScrollViewer VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled">
+        <Grid RowDefinitions="Auto,*">
+          <UniformGrid Name="ContentGrid">
+            <Border Margin="10"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="20"
+                    ClipToBounds="True">
+              <Image Stretch="Uniform"
+                     HorizontalAlignment="Stretch"
+                     Source="/Assets/image1.jpg"/>
+            </Border>
+            <Border Margin="10"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="20"
+                    ClipToBounds="True">
+              <Image Stretch="Uniform"
+                     HorizontalAlignment="Stretch"
+                     Source="/Assets/image2.jpg"/>
+            </Border>
+            <Border Margin="10"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="20"
+                    ClipToBounds="True">
+              <Image Stretch="Uniform"
+                     HorizontalAlignment="Stretch"
+                     Source="/Assets/image3.jpg"/>
+            </Border>
+            <Border Margin="10"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="20"
+                    ClipToBounds="True">
+              <Image Stretch="Uniform"
+                     HorizontalAlignment="Stretch"
+                     Source="/Assets/image4.jpg"/>
+            </Border>
+            <Border Margin="10"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="20"
+                    ClipToBounds="True">
+              <Image Stretch="Uniform"
+                     HorizontalAlignment="Stretch"
+                     Source="/Assets/image5.jpg"/>
+            </Border>
+            <Border Margin="10"
+                    HorizontalAlignment="Stretch"
+                    CornerRadius="20"
+                    ClipToBounds="True">
+              <Image Stretch="Uniform"
+                     HorizontalAlignment="Stretch"
+                     Source="/Assets/image6.jpg"/>
+            </Border>
+            <Border HorizontalAlignment="Stretch"
+                    CornerRadius="20"
+                    ClipToBounds="True">
+              <Image Stretch="Uniform"
+                     HorizontalAlignment="Stretch"
+                     Source="/Assets/image7.jpg"/>
+            </Border>
+          </UniformGrid>
+        </Grid>
+      </ScrollViewer>
+    </Border>
+  </StackPanel>
+</UserControl>

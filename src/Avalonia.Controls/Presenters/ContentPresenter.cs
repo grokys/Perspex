@@ -10,6 +10,8 @@ using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Metadata;
+using Avalonia.Platform;
+using Avalonia.Styling;
 using Avalonia.Utilities;
 
 namespace Avalonia.Controls.Presenters
@@ -18,7 +20,7 @@ namespace Avalonia.Controls.Presenters
     /// Presents a single item of data inside a <see cref="TemplatedControl"/> template.
     /// </summary>
     [PseudoClasses(":empty")]
-    public class ContentPresenter : Control
+    public class ContentPresenter : Control, IContainer
     {
         /// <summary>
         /// Defines the <see cref="Background"/> property.
@@ -165,6 +167,20 @@ namespace Avalonia.Controls.Presenters
         /// </summary>
         public static readonly StyledProperty<bool> RecognizesAccessKeyProperty =
             AvaloniaProperty.Register<ContentPresenter, bool>(nameof(RecognizesAccessKey));
+
+        /// <summary>
+        /// Defines the <see cref="ContainerType"/> property
+        /// </summary>
+        public static readonly StyledProperty<ContainerType> ContainerTypeProperty =
+            AvaloniaProperty.Register<ContentPresenter, ContainerType>(nameof(ContainerType),
+            defaultValue: ContainerType.Normal);
+
+        /// <summary>
+        /// Defines the <see cref="ContainerName"/> property
+        /// </summary>
+        public static readonly StyledProperty<string?> ContainerNameProperty =
+            AvaloniaProperty.Register<ContentPresenter, string?>(nameof(ContainerName),
+            defaultValue: null);
 
         private Control? _child;
         private bool _createdChild;
@@ -398,6 +414,23 @@ namespace Avalonia.Controls.Presenters
             set => SetValue(RecognizesAccessKeyProperty, value);
         }
 
+        /// <inheritdoc/>
+        public ContainerType ContainerType
+        {
+            get => GetValue(ContainerTypeProperty);
+            set => SetValue(ContainerTypeProperty, value);
+        }
+
+        /// <inheritdoc/>
+        public string? ContainerName
+        {
+            get => GetValue(ContainerNameProperty);
+            set => SetValue(ContainerNameProperty, value);
+        }
+
+        /// <inheritdoc/>
+        VisualQueryProvider IContainer.QueryProvider => _queryProvider ??= new VisualQueryProvider(this);
+
         /// <summary>
         /// Gets the host content control.
         /// </summary>
@@ -513,6 +546,7 @@ namespace Avalonia.Controls.Presenters
 
         private Thickness? _layoutThickness;
         private double _scale;
+        private VisualQueryProvider? _queryProvider;
 
         private Thickness LayoutThickness
         {

@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Logging;
 using Avalonia.Reactive;
+using Avalonia.Styling;
 using Avalonia.VisualTree;
 
 #nullable enable
@@ -543,13 +544,51 @@ namespace Avalonia.Layout
                 ApplyStyling();
                 ApplyTemplate();
 
-                var constrained = LayoutHelper.ApplyLayoutConstraints(
+                var constrainedSize = LayoutHelper.ApplyLayoutConstraints(
                     this,
                     availableSize.Deflate(margin));
-                var measured = MeasureOverride(constrained);
 
-                var width = measured.Width;
-                var height = measured.Height;
+                var isContainer = false;
+                ContainerType containerType = ContainerType.Normal;
+
+                if(this is IContainer container && container.ContainerType != ContainerType.Normal)
+                {
+                    isContainer = true;
+                    containerType = container.ContainerType;
+                    container.QueryProvider.SetSize(constrainedSize.Width, constrainedSize.Height, containerType);
+                }
+
+                var measured = MeasureOverride(constrainedSize);
+
+                double width, height;
+
+                if (isContainer)
+                {
+                    switch (containerType)
+                    {
+                        case ContainerType.Width:
+                            width = double.IsInfinity(constrainedSize.Width) ? measured.Width : constrainedSize.Width;
+                            height = measured.Height;
+                            break;
+                        case ContainerType.Height:
+                            width = measured.Width;
+                            height = double.IsInfinity(constrainedSize.Height) ? measured.Height : constrainedSize.Height;
+                            break;
+                        case ContainerType.WidthAndHeight:
+                            width = double.IsInfinity(constrainedSize.Width) ? measured.Width : constrainedSize.Width;
+                            height = double.IsInfinity(constrainedSize.Height) ? measured.Height : constrainedSize.Height;
+                            break;
+                        default:
+                            width = measured.Width;
+                            height = measured.Height;
+                            break;
+                    }
+                }
+                else
+                {
+                    width = measured.Width;
+                    height = measured.Height;
+                }
 
                 {
                     double widthCache = Width;
