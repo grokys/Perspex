@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using Avalonia.Controls.Presenters;
 using Avalonia.Input;
@@ -164,8 +164,8 @@ partial class AvaloniaView
 
             if (_view._topLevelImpl.Input is { } input)
             {
-                input.Invoke(new RawKeyEventArgs(KeyboardDevice.Instance!, 0, _view.InputRoot,
-                    RawKeyEventType.KeyDown, key, RawInputModifiers.None, physicalKey, keySymbol));
+                //input.Invoke(new RawKeyEventArgs(KeyboardDevice.Instance!, 0, _view.InputRoot,
+                //    RawKeyEventType.KeyDown, key, RawInputModifiers.None, physicalKey, keySymbol));
 
                 input.Invoke(new RawKeyEventArgs(KeyboardDevice.Instance!, 0, _view.InputRoot,
                     RawKeyEventType.KeyUp, key, RawInputModifiers.None, physicalKey, keySymbol));
@@ -221,7 +221,7 @@ partial class AvaloniaView
             string result = "";
             if (string.IsNullOrEmpty(_markedText))
             {
-                if(surroundingText != null && r.EndIndex < surroundingText.Length)
+                if (surroundingText != null && r.EndIndex <= surroundingText.Length)
                 {
                     result = surroundingText[r.StartIndex..r.EndIndex];
                 }
