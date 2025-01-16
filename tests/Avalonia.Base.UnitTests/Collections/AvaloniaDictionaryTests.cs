@@ -156,5 +156,31 @@ namespace Avalonia.Base.UnitTests.Collections
 
             Assert.Equal(new[] { "Count", CommonPropertyNames.IndexerName }, tracker.Names);
         }
+
+        [Fact]
+        public void Constructor_Should_Throw_ArgumentNullException_When_Dictionary_Is_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var target = new AvaloniaDictionary<string, string>(null);
+            });
+        }
+
+        [Fact]
+        public void Constructor_Should_Initialize_With_Provided_Dictionary()
+        {
+            var initialDictionary = new Dictionary<string, string>
+            {
+                { "key1", "value1" },
+                { "key2", "value2" }
+            };
+
+            var target = new AvaloniaDictionary<string, string>(initialDictionary);
+
+            Assert.Equal(2, target.Count);
+            Assert.Equal("value1", target["key1"]);
+            Assert.Equal("value2", target["key2"]);
+        }
+
     }
 }
