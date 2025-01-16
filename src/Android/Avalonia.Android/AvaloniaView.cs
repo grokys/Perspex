@@ -17,10 +17,11 @@ namespace Avalonia.Android
 {
     public class AvaloniaView : FrameLayout
     {
-        private EmbeddableControlRoot _root;
+        private EmbeddableControlRoot? _root;
         private readonly ViewImpl _view;
 
         private IDisposable? _timerSubscription;
+        private object? _content;
         private bool _surfaceCreated;
 
         public AvaloniaView(Context context) : base(context)
@@ -28,11 +29,7 @@ namespace Avalonia.Android
             _view = new ViewImpl(this);
             AddView(_view.View);
 
-            _root = new EmbeddableControlRoot(_view);
-            _root.Prepare();
-
             this.SetBackgroundColor(global::Android.Graphics.Color.Transparent);
-            OnConfigurationChanged();
 
             _view.InternalView.SurfaceWindowCreated += InternalView_SurfaceWindowCreated;
         }
@@ -52,16 +49,43 @@ namespace Avalonia.Android
 
         public object? Content
         {
-            get { return _root.Content; }
-            set { _root.Content = value; }
+            get { return _root?.Content; }
+            set
+            {
+                _content = null;
+                if (_root != null)
+                    _root.Content = value;
+                else
+                {
+                    _content = value;
+                }
+            }
         }
 
         internal new void Dispose()
         {
+            _root?.Dispose();
+            _root = null;
+        }
+
+        protected override void OnDetachedFromWindow()
+        {
+            base.OnDetachedFromWindow();
             OnVisibilityChanged(false);
             _surfaceCreated = false;
-            _root?.Dispose();
-            _root = null!;
+        }
+
+        protected override void OnAttachedToWindow()
+        {
+            _root = new EmbeddableControlRoot(_view);
+            _root.Prepare();
+            if(_content != null)
+            {
+                _root.Content = _content;
+            }
+            SendConfigurationChanged(Context?.Resources?.Configuration);
+
+            base.OnAttachedToWindow();
         }
 
         public override bool DispatchKeyEvent(KeyEvent? e)
@@ -88,6 +112,7 @@ namespace Avalonia.Android
         {
             if (_root == null || !_surfaceCreated)
                 return;
+
             if (isVisible && _timerSubscription == null)
             {
                 if (AvaloniaLocator.Current.GetService<IRenderTimer>() is ChoreographerTimer timer)
@@ -113,16 +138,17 @@ namespace Avalonia.Android
         protected override void OnConfigurationChanged(Configuration? newConfig)
         {
             base.OnConfigurationChanged(newConfig);
-            OnConfigurationChanged();
+            SendConfigurationChanged(newConfig ?? Context?.Resources?.Configuration);
         }
 
-        private void OnConfigurationChanged()
+        private void SendConfigurationChanged(Configuration? newConfig)
         {
-            if (Context is { } context)
+            _view.InsetsManager?.SetDefaultSystemLightMode(!(newConfig?.UiMode.HasFlag(UiMode.NightYes) ?? false));
+            if (Context is { } context && newConfig is { } config)
             {
                 var settings =
                     AvaloniaLocator.Current.GetRequiredService<IPlatformSettings>() as AndroidPlatformSettings;
-                settings?.OnViewConfigurationChanged(context);
+                settings?.OnViewConfigurationChanged(context, config);
                 ((AndroidScreens)_view.TryGetFeature<IScreenImpl>()!).OnChanged();
             }
         }

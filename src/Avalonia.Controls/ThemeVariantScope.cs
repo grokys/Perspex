@@ -15,6 +15,11 @@ namespace Avalonia.Controls
         public static readonly StyledProperty<ThemeVariant?> RequestedThemeVariantProperty =
             ThemeVariant.RequestedThemeVariantProperty.AddOwner<ThemeVariantScope>();
 
+        static ThemeVariantScope()
+        {
+            RequestedThemeVariantProperty.OverrideDefaultValue<ThemeVariantScope>(ThemeVariant.Default);
+        }
+
         /// <summary>
         /// Gets or sets the UI theme variant that is used by the control (and its child elements) for resource determination.
         /// The UI theme you specify with ThemeVariant can override the app-level ThemeVariant.

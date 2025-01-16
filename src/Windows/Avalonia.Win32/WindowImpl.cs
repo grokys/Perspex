@@ -915,12 +915,12 @@ namespace Avalonia.Win32
             }
         }
 
-        public unsafe void SetFrameThemeVariant(PlatformThemeVariant themeVariant)
+        public unsafe void SetFrameThemeVariant(PlatformThemeVariant? themeVariant)
         {
-            _currentThemeVariant = themeVariant;
+            _currentThemeVariant = themeVariant ?? Win32Platform.Instance.PlatformSettings.GetColorValues().ThemeVariant;
             if (Win32Platform.WindowsVersion.Build >= 22000)
             {
-                var pvUseBackdropBrush = themeVariant == PlatformThemeVariant.Dark ? 1 : 0;
+                var pvUseBackdropBrush = _currentThemeVariant == PlatformThemeVariant.Dark ? 1 : 0;
                 DwmSetWindowAttribute(
                     _hwnd,
                     (int)DwmWindowAttribute.DWMWA_USE_IMMERSIVE_DARK_MODE,

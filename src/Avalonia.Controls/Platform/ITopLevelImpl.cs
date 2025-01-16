@@ -136,6 +136,6 @@ namespace Avalonia.Platform
         /// Sets the <see cref="PlatformThemeVariant"/> on the frame if it should be dark or light.
         /// Also applies for the mobile status bar.
         /// </summary>
-        void SetFrameThemeVariant(PlatformThemeVariant themeVariant);
+        void SetFrameThemeVariant(PlatformThemeVariant? themeVariant);
     }
 }
