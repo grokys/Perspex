@@ -16,7 +16,7 @@ namespace Avalonia.Media.TextFormatting
         private readonly TextParagraphProperties _paragraphProperties;
         private TextLineMetrics _textLineMetrics;
         private TextLineBreak? _textLineBreak;
-        private readonly FlowDirection _resolvedFlowDirection;
+        internal readonly FlowDirection _resolvedFlowDirection;
 
         private Rect _inkBounds;
         private Rect _bounds;
@@ -1459,7 +1459,7 @@ namespace Avalonia.Media.TextFormatting
 
                     if (paragraphFlowDirection == FlowDirection.RightToLeft)
                     {
-                        start -= (widthIncludingTrailingWhitespace - width);
+                        start -= widthIncludingTrailingWhitespace - width;
                     }
 
                     return Math.Max(0, start);
