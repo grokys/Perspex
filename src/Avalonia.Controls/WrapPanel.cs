@@ -140,7 +140,7 @@ namespace Avalonia.Controls
             var childConstraint = new Size(
                 itemWidthSet ? itemWidth : constraint.Width,
                 itemHeightSet ? itemHeight : constraint.Height);
-            
+
             for (int i = 0, count = children.Count; i < count; i++)
             {
                 var child = children[i];
@@ -213,14 +213,18 @@ namespace Avalonia.Controls
                     if (MathUtilities.GreaterThan(sz.U, uvFinalSize.U)) // The element is wider then the constraint - give it a separate line
                     {
                         // Switch to next line which only contain one element
-                        ArrangeLine(accumulatedV, sz.V, i, ++i, useItemU, itemU);
+                        ArrangeLine(accumulatedV, sz.V, i, i + 1, useItemU, itemU);
 
                         accumulatedV += sz.V;
                         curLineSize = new UVSize(orientation);
+                        firstInLine = i + 1;
                     }
-                    firstInLine = i;
+                    else
+                    {
+                        firstInLine = i;
+                    }
                 }
-                else // Continue to accumulate a line
+                else // Continue to accumulate in the current line
                 {
                     curLineSize.U += sz.U;
                     curLineSize.V = Max(sz.V, curLineSize.V);
