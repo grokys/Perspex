@@ -73,4 +73,8 @@ internal class NuiClipboardImpl : IClipboard
 
     public Task<string[]> GetFormatsAsync() =>
         throw new PlatformNotSupportedException();
+
+    /// <inheritdoc />
+    public Task FlushAsync() => 
+        Task.CompletedTask;
 }

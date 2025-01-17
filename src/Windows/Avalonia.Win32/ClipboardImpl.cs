@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using Avalonia.Reactive;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
+using Avalonia.Reactive;
 using Avalonia.Threading;
 using Avalonia.Win32.Interop;
 using MicroCom.Runtime;
@@ -15,6 +15,13 @@ namespace Avalonia.Win32
     {
         private const int OleRetryCount = 10;
         private const int OleRetryDelay = 100;
+        /// <summary>
+        /// The amount of time in milliseconds to sleep before flushing the clipboard after a set.
+        /// </summary>
+        /// <remarks>
+        /// This is mitigation for clipboard listener issues.
+        /// </remarks>
+        private const int OleFlushDelay = 10;
 
         private static async Task<IDisposable> OpenClipboard()
         {
@@ -32,7 +39,7 @@ namespace Avalonia.Win32
 
         public async Task<string?> GetTextAsync()
         {
-            using(await OpenClipboard())
+            using (await OpenClipboard())
             {
                 IntPtr hText = UnmanagedMethods.GetClipboardData(UnmanagedMethods.ClipboardFormat.CF_UNICODETEXT);
                 if (hText == IntPtr.Zero)
@@ -54,7 +61,7 @@ namespace Avalonia.Win32
 
         public async Task SetTextAsync(string? text)
         {
-            using(await OpenClipboard())
+            using (await OpenClipboard())
             {
                 UnmanagedMethods.EmptyClipboard();
 
@@ -68,7 +75,7 @@ namespace Avalonia.Win32
 
         public async Task ClearAsync()
         {
-            using(await OpenClipboard())
+            using (await OpenClipboard())
             {
                 UnmanagedMethods.EmptyClipboard();
             }
@@ -90,7 +97,7 @@ namespace Avalonia.Win32
 
                 if (--i == 0)
                     Marshal.ThrowExceptionForHR(hr);
-                
+
                 await Task.Delay(OleRetryDelay);
             }
         }
@@ -138,6 +145,35 @@ namespace Avalonia.Win32
 
                 if (--i == 0)
                     Marshal.ThrowExceptionForHR(hr);
+
+                await Task.Delay(OleRetryDelay);
+            }
+        }
+
+        /// <summary>
+        /// Permanently renders the contents of the last IDataObject that was set onto the clipboard.
+        /// </summary>
+        public async Task FlushAsync()
+        {
+            await Task.Delay(OleFlushDelay);
+
+            // Retry OLE operations several times as mitigation for clipboard locking issues in TS sessions.
+
+            int i = OleRetryCount;
+
+            while (true)
+            {
+                var hr = UnmanagedMethods.OleFlushClipboard();
+
+                if (hr == 0)
+                {
+                    break;
+                }
+
+                if (--i == 0)
+                {
+                    Marshal.ThrowExceptionForHR(hr);
+                }
 
                 await Task.Delay(OleRetryDelay);
             }
