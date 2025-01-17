@@ -4,6 +4,7 @@
     <IncludeLinuxSkia>true</IncludeLinuxSkia>
     <IncludeWasmSkia>true</IncludeWasmSkia>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AvsIncludeSkiaSharp3>true</AvsIncludeSkiaSharp3>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\NoiseAsset_256X256_PNG.png" />
