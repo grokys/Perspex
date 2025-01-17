@@ -58,7 +58,6 @@ namespace Avalonia.Media.TextFormatting
 
             var currentProperties = defaultProperties;
 
-            var hasOverride = false;
 
             var i = 0;
 
@@ -92,15 +91,8 @@ namespace Avalonia.Media.TextFormatting
                 }
 
                 length = Math.Max(0, textRange.Start + textRange.Length - firstTextSourceIndex);
-
-                if (hasOverride)
-                {
-                    continue;
-                }
-
-                hasOverride = true;
-
                 currentProperties = propertiesOverride.Value;
+                break;
             }
 
             if (length < text.Length && i == textModifier.Count)
