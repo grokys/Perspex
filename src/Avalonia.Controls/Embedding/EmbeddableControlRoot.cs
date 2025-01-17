@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using Avalonia.Automation.Peers;
+using Avalonia.Controls.Automation;
+using Avalonia.Controls.Automation.Peers;
 using Avalonia.Controls.Platform;
 using Avalonia.Input;
 using Avalonia.Platform;
-using Avalonia.Styling;
 
 namespace Avalonia.Controls.Embedding
 {
@@ -51,6 +53,11 @@ namespace Avalonia.Controls.Embedding
         }
 
         protected override Type StyleKeyOverride => typeof(EmbeddableControlRoot);
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new EmbeddableControlRootAutomationPeer(this);
+        }
 
         public void Dispose()
         {

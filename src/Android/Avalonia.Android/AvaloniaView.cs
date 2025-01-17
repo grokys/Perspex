@@ -5,6 +5,8 @@ using Android.Content.Res;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidX.Core.View;
+using AndroidX.CustomView.Widget;
 using Avalonia.Android.Platform;
 using Avalonia.Android.Platform.SkiaPlatform;
 using Avalonia.Controls;
@@ -19,6 +21,7 @@ namespace Avalonia.Android
     {
         private EmbeddableControlRoot _root;
         private readonly ViewImpl _view;
+        private readonly ExploreByTouchHelper _accessHelper;
 
         private IDisposable? _timerSubscription;
         private bool _surfaceCreated;
@@ -26,6 +29,7 @@ namespace Avalonia.Android
         public AvaloniaView(Context context) : base(context)
         {
             _view = new ViewImpl(this);
+
             AddView(_view.View);
 
             _root = new EmbeddableControlRoot(_view);
@@ -35,6 +39,9 @@ namespace Avalonia.Android
             OnConfigurationChanged();
 
             _view.InternalView.SurfaceWindowCreated += InternalView_SurfaceWindowCreated;
+
+            _accessHelper = new AvaloniaAccessHelper(this);
+            ViewCompat.SetAccessibilityDelegate(this, _accessHelper);
         }
 
         private void InternalView_SurfaceWindowCreated(object? sender, EventArgs e)
@@ -64,10 +71,21 @@ namespace Avalonia.Android
             _root = null!;
         }
 
+        protected override void OnFocusChanged(bool gainFocus, FocusSearchDirection direction, global::Android.Graphics.Rect? previouslyFocusedRect)
+        {
+            base.OnFocusChanged(gainFocus, direction, previouslyFocusedRect);
+            _accessHelper.OnFocusChanged(gainFocus, (int)direction, previouslyFocusedRect);
+        }
+
+        protected override bool DispatchHoverEvent(MotionEvent? e)
+        {
+            return _accessHelper.DispatchHoverEvent(e!) || base.DispatchHoverEvent(e);
+        }
+
         public override bool DispatchKeyEvent(KeyEvent? e)
         {
             if (!_view.View.DispatchKeyEvent(e))
-                return base.DispatchKeyEvent(e);
+                return _accessHelper.DispatchKeyEvent(e!) || base.DispatchKeyEvent(e);
             return true;
         }
 
