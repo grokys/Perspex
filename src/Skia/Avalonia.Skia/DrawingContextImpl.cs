@@ -964,34 +964,39 @@ namespace Avalonia.Skia
                                 (originPoint.Y - centerPoint.Y) * radiusX / radiusY + centerPoint.Y);
                         
                         var origin = originPoint.ToSKPoint();
-                        
-                        // reverse the order of the stops to match D2D
-                        var reversedColors = new SKColor[stopColors.Length];
-                        Array.Copy(stopColors, reversedColors, stopColors.Length);
-                        Array.Reverse(reversedColors);
+
+                        var endOffset = 0.0;
 
                         // and then reverse the reference point of the stops
                         var reversedStops = new float[stopOffsets.Length];
                         for (var i = 0; i < stopOffsets.Length; i++)
                         {
-                            reversedStops[i] = stopOffsets[i];
+                            var offset = stopOffsets[i];
+
+                            if (endOffset < offset)
+                            {
+                                endOffset = offset;
+                            }
+
+                            reversedStops[i] = offset;
+
                             if (reversedStops[i] > 0 && reversedStops[i] < 1)
                             {
-                                reversedStops[i] = Math.Abs(1 - stopOffsets[i]);
+                                reversedStops[i] = Math.Abs(1 - offset);
                             }
                         }
                             
                         // compose with a background colour of the final stop to match D2D's behaviour of filling with the final color
                         using (var shader = SKShader.CreateCompose(
-                                   SKShader.CreateColor(reversedColors[0]),
-                                   transform.HasValue
-                                       ? SKShader.CreateTwoPointConicalGradient(center, (float)radiusX, origin, 0,
-                                           reversedColors, reversedStops, tileMode, transform.Value.ToSKMatrix())
-                                       : SKShader.CreateTwoPointConicalGradient(center, (float)radiusX, origin, 0,
-                                           reversedColors, reversedStops, tileMode)
+                                SKShader.CreateColor(stopColors[0]),
+                                    transform.HasValue
+                                        ? SKShader.CreateTwoPointConicalGradient(start, radiusStart, end, radiusEnd,
+                                            stopColors, stopOffsets, tileMode, transform.Value.ToSKMatrix())
+                                        : SKShader.CreateTwoPointConicalGradient(start, radiusStart, end, radiusEnd,
+                                            stopColors, stopOffsets, tileMode)
 
-                               )
-                              )
+                                        )
+                                )
                         {
                             paintWrapper.Paint.Shader = shader;
                         }
