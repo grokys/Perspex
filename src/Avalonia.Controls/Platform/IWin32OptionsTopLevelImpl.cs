@@ -21,5 +21,10 @@ namespace Avalonia.Controls.Platform
         /// Gets or sets a custom callback for the window's WndProc
         /// </summary>
         public CustomWndProcHookCallback? WndProcHookCallback { get; set; }
+
+        /// <summary>
+        /// Sets hints that configure the shape of window corners.
+        /// </summary>
+        void SetWindowCornerHints(Win32WindowCornerHints hints);
     }
 }
