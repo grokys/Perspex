@@ -12,7 +12,8 @@ public class TextInputOptions
             AutoCapitalization = GetAutoCapitalization(avaloniaObject),
             IsSensitive = GetIsSensitive(avaloniaObject),
             Lowercase = GetLowercase(avaloniaObject),
-            Uppercase = GetUppercase(avaloniaObject)
+            Uppercase = GetUppercase(avaloniaObject),
+            HideSuggestions = GetHideSuggestions(avaloniaObject),
         };
 
         return result;
@@ -253,4 +254,37 @@ public class TextInputOptions
     /// Text contains sensitive data like card numbers and should not be stored  
     /// </summary>
     public bool IsSensitive { get; set; }
+    
+    /// <summary>
+    /// Defines the <see cref="HideSuggestions"/> property.
+    /// </summary>
+    public static readonly AttachedProperty<bool> HideSuggestionsProperty =
+        AvaloniaProperty.RegisterAttached<TextInputOptions, StyledElement, bool>(
+            "HideSuggestions",
+            inherits: true);
+    
+    /// <summary>
+    /// Sets the value of the attached <see cref="HideSuggestionsProperty"/> on a control.
+    /// </summary>
+    /// <param name="avaloniaObject">The control.</param>
+    /// <param name="value">The property value to set.</param>
+    public static void SetHideSuggestions(StyledElement avaloniaObject, bool value)
+    {
+        avaloniaObject.SetValue(HideSuggestionsProperty, value);
+    }
+
+    /// <summary>
+    /// Gets the value of the attached <see cref="HideSuggestionsProperty"/>.
+    /// </summary>
+    /// <param name="avaloniaObject">The target.</param>
+    /// <returns>true if HideSuggestions</returns>
+    public static bool GetHideSuggestions(StyledElement avaloniaObject)
+    {
+        return avaloniaObject.GetValue(HideSuggestionsProperty);
+    }
+    
+    /// <summary>
+    /// Hide virtual keyboard suggestions
+    /// </summary>
+    public bool HideSuggestions { get; set; }
 }
