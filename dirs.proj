@@ -28,8 +28,14 @@
   <ItemGroup Condition="'$(SkipObscurePlatforms)' == 'True'">
     <ProjectReference Remove="**/*Tizen/**/*.*proj" />
   </ItemGroup>
+  <ItemGroup>
 
+    <ProjectReference Remove="**/*Tizen/**/*.*proj" />
+    <ProjectReference Remove="**/samples/**/*.*proj" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SlnGen" Version="8.5.17" PrivateAssets="all" />
   </ItemGroup>
+ 
 </Project>

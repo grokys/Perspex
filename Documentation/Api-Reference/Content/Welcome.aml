@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="9d5e6c91-4ff0-4044-afb7-cd85faad1986" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+			<para>This is a sample conceptual topic.  You can use this as a starting point for adding more conceptual
+content to your help project.</para>
+		</introduction>
+
+		<section>
+			<title>Getting Started</title>
+			<content>
+				<para>To get started, add a documentation source to the project (a Visual Studio solution, project, or
+assembly and XML comments file).  See the <legacyBold>Getting Started</legacyBold> topics in the Sandcastle Help
+File Builder's help file for more information.  The following default items are included in this project:</para>
+
+				<list class="bullet">
+					<listItem>
+						<para><localUri>ContentLayout.content</localUri> - Use the content layout file to manage the
+conceptual content in the project and define its layout in the table of contents.</para>
+					</listItem>
+
+					<listItem>
+						<para>The <localUri>.\media</localUri> folder - Place images in this folder that you will reference
+from conceptual content using <codeInline>medialLink</codeInline> or <codeInline>mediaLinkInline</codeInline>
+elements.  If you will not have any images in the file, you may remove this folder.</para>
+					</listItem>
+
+					<listItem>
+						<para>The <localUri>.\icons</localUri> folder - This contains a default logo for the help file.  You
+may replace it or remove it and the folder if not wanted.  If removed or if you change the file name, update
+the <ui>Transform Args</ui> project properties page by removing or changing the filename in the
+<codeInline>logoFile</codeInline> transform argument.  Note that unlike images referenced from conceptual topics,
+the logo file should have its <legacyBold>BuildAction</legacyBold> property set to <codeInline>Content</codeInline>.</para>
+					</listItem>
+
+					<listItem>
+						<para>The <localUri>.\Content</localUri> folder - Use this to store your conceptual topics.  You may
+name the files and organize them however you like.  One suggestion is to lay the files out on disk as you have
+them in the content layout file as shown in this project but the choice is yours.  Files can be added via the
+Solution Explorer or from within the content layout file editor.  Files must appear in the content layout file
+in order to be compiled into the help file.</para>
+					</listItem>
+				</list>
+
+				<para>See the <legacyBold>Conceptual Content</legacyBold> topics in the Sandcastle Help File Builder's
+help file for more information.  See the <legacyBold> Sandcastle MAML Guide</legacyBold> for details on Microsoft
+Assistance Markup Language (MAML) which is used to create these topics.</para>
+			</content>
+		</section>
+
+		<relatedTopics>
+			<link xlink:href="db6826c2-9ece-41a8-b32e-8b86b14fe01c" />
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>
