@@ -385,4 +385,40 @@ internal class JSStorageFolder : JSStorageItem, IStorageBookmarkFolder
             throw new UnauthorizedAccessException("User denied permissions to open the file", ex);
         }
     }
+
+    public async Task<IStorageFolder?> GetFolderAsync(string name)
+    {
+        try
+        {
+            var storageFile = await StorageHelper.GetFolder(FileHandle, name);
+            if (storageFile is null)
+            {
+                return null;
+            }
+
+            return new JSStorageFolder(storageFile);
+        }
+        catch (JSException ex) when (ex.Message == BrowserStorageProvider.NoPermissionsMessage)
+        {
+            throw new UnauthorizedAccessException("User denied permissions to open the folder", ex);
+        }
+    }
+
+    public async Task<IStorageFile?> GetFileAsync(string name)
+    {
+        try
+        {
+            var storageFile = await StorageHelper.GetFile(FileHandle, name);
+            if (storageFile is null)
+            {
+                return null;
+            }
+
+            return new JSStorageFile(storageFile);
+        }
+        catch (JSException ex) when (ex.Message == BrowserStorageProvider.NoPermissionsMessage)
+        {
+            throw new UnauthorizedAccessException("User denied permissions to open the file", ex);
+        }
+    }
 }

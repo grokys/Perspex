@@ -294,6 +294,79 @@ internal class AndroidStorageFolder : AndroidStorageItem, IStorageBookmarkFolder
             return destination;
         }
     }
+
+    private async Task<IStorageItem?> GetItemAsync(string name, bool isDirectory)
+    {
+        if (!await EnsureExternalFilesPermission(false))
+        {
+            return null;
+        }
+
+        var contentResolver = Activity.ContentResolver;
+        if (contentResolver == null)
+        {
+            return null;
+        }
+
+        var root = PermissionRoot ?? Uri;
+        var folderId = root != Uri ? DocumentsContract.GetDocumentId(Uri) : DocumentsContract.GetTreeDocumentId(Uri);
+        var childrenUri = DocumentsContract.BuildChildDocumentsUriUsingTree(root, folderId);
+
+        var projection = new[]
+        {
+            DocumentsContract.Document.ColumnDocumentId,
+            DocumentsContract.Document.ColumnMimeType,
+            DocumentsContract.Document.ColumnDisplayName
+        };
+
+        if (childrenUri != null)
+        {
+            using var cursor = contentResolver.Query(childrenUri, projection, null, null, null);
+            if (cursor != null)
+            {
+                while (cursor.MoveToNext())
+                {
+                    var id = cursor.GetString(0);
+                    var mime = cursor.GetString(1);
+
+                    var fileName = cursor.GetString(2);
+                    if (fileName != name)
+                    {
+                        continue;
+                    }                   
+
+                    bool mineDirectory = mime == DocumentsContract.Document.MimeTypeDir;
+                    if (isDirectory != mineDirectory)
+                    {
+                        return null;
+                    }
+
+                    var uri = DocumentsContract.BuildDocumentUriUsingTree(root, id);
+                    if (uri == null)
+                    {
+                        return null;
+                    }
+
+                    return isDirectory ? new AndroidStorageFolder(Activity, uri, false, this, root) :
+                        new AndroidStorageFile(Activity, uri, this, root);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public async Task<IStorageFolder?> GetFolderAsync(string name)
+    {
+        var folder = await GetItemAsync(name, true);
+        return (IStorageFolder?)folder;
+    }
+
+    public async Task<IStorageFile?> GetFileAsync(string name)
+    {
+        var file = await GetItemAsync(name, false);
+        return (IStorageFile?)file;
+    }
 }
 
 internal sealed class WellKnownAndroidStorageFolder : AndroidStorageFolder
