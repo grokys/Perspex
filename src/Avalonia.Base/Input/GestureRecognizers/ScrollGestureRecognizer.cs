@@ -14,6 +14,9 @@ namespace Avalonia.Input.GestureRecognizers
         private bool _canHorizontallyScroll;
         private bool _canVerticallyScroll;
         private bool _isScrollInertiaEnabled;
+        private Vector? _offset;
+        private Size? _viewport;
+        private Size? _extent;
         private readonly static int s_defaultScrollStartDistance = (int)((AvaloniaLocator.Current?.GetService<IPlatformSettings>()?.GetTapSize(PointerType.Touch).Height ?? 10) / 2);
         private int _scrollStartDistance = s_defaultScrollStartDistance;
 
@@ -59,6 +62,30 @@ namespace Avalonia.Input.GestureRecognizers
                 unsetValue: s_defaultScrollStartDistance);
 
         /// <summary>
+        /// Defines the <see cref="ScrollStartDistance"/> property.
+        /// </summary>
+        public static readonly DirectProperty<ScrollGestureRecognizer, Vector?> OffsetProperty =
+            AvaloniaProperty.RegisterDirect<ScrollGestureRecognizer, Vector?>(nameof(Offset),
+                o => o.Offset, (o, v) => o.Offset = v,
+                unsetValue: null);
+
+        /// <summary>
+        /// Defines the <see cref="ScrollStartDistance"/> property.
+        /// </summary>
+        public static readonly DirectProperty<ScrollGestureRecognizer, Size?> ExtentProperty =
+            AvaloniaProperty.RegisterDirect<ScrollGestureRecognizer, Size?>(nameof(Extent),
+                o => o.Extent, (o, v) => o.Extent = v,
+                unsetValue: null);
+
+        /// <summary>
+        /// Defines the <see cref="ScrollStartDistance"/> property.
+        /// </summary>
+        public static readonly DirectProperty<ScrollGestureRecognizer, Size?> ViewportProperty =
+            AvaloniaProperty.RegisterDirect<ScrollGestureRecognizer, Size?>(nameof(Viewport),
+                o => o.Viewport, (o, v) => o.Viewport = v,
+                unsetValue: null);
+
+        /// <summary>
         /// Gets or sets a value indicating whether the content can be scrolled horizontally.
         /// </summary>
         public bool CanHorizontallyScroll
@@ -94,6 +121,33 @@ namespace Avalonia.Input.GestureRecognizers
             set => SetAndRaise(ScrollStartDistanceProperty, ref _scrollStartDistance, value);
         }
 
+        /// <summary>
+        /// Gets the extent of the scrollable content.
+        /// </summary>
+        public Size? Extent
+        {
+            get => _extent;
+            private set => SetAndRaise(ExtentProperty, ref _extent, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the current scroll offset.
+        /// </summary>
+        public Vector? Offset
+        {
+            get => _offset;
+            private set => SetAndRaise(OffsetProperty, ref _offset, value);
+        }
+
+        /// <summary>
+        /// Gets the size of the viewport on the scrollable content.
+        /// </summary>
+        public Size? Viewport
+        {
+            get => _viewport;
+            private set => SetAndRaise(ViewportProperty, ref _viewport, value);
+        }
+
         protected override void PointerPressed(PointerPressedEventArgs e)
         {
             if (e.Pointer.Type == PointerType.Touch || e.Pointer.Type == PointerType.Pen)
@@ -115,10 +169,34 @@ namespace Avalonia.Input.GestureRecognizers
                 var rootPoint = e.GetPosition(_rootTarget);
                 if (!_scrolling)
                 {
-                    if (CanHorizontallyScroll && Math.Abs(_trackedRootPoint.X - rootPoint.X) > ScrollStartDistance)
-                        _scrolling = true;
-                    if (CanVerticallyScroll && Math.Abs(_trackedRootPoint.Y - rootPoint.Y) > ScrollStartDistance)
-                        _scrolling = true;
+                    if (CanVerticallyScroll)
+                    {
+                        double delta = _trackedRootPoint.Y - rootPoint.Y;
+
+                        if (Offset?.Y == 0 && delta < 0)
+                            return;
+
+                        if (Offset?.Y + Viewport?.Height - Extent?.Height == 0 && delta > 0)
+                            return;
+
+                        if (Math.Abs(delta) > ScrollStartDistance)
+                            _scrolling = true;
+                    }
+
+                    if (CanHorizontallyScroll)
+                    {
+                        double delta = _trackedRootPoint.X - rootPoint.X;
+
+                        if (Offset?.X == 0 && delta < 0)
+                            return;
+
+                        if (Offset?.X + Viewport?.Width - Extent?.Width == 0 && delta > 0)
+                            return;
+
+                        if (Math.Abs(delta) > ScrollStartDistance)
+                            _scrolling = true;
+                    }
+
                     if (_scrolling)
                     {                        
                         // Correct _trackedRootPoint with ScrollStartDistance, so scrolling does not start with a skip of ScrollStartDistance

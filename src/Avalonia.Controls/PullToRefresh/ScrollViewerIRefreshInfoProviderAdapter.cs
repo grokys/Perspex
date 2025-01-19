@@ -14,7 +14,7 @@ namespace Avalonia.Controls.PullToRefresh
         private PullDirection _refreshPullDirection;
         private ScrollViewer? _scrollViewer;
         private RefreshInfoProvider? _refreshInfoProvider;
-        private PullGestureRecognizer? _pullGestureRecognizer;
+        private ScrollablePullGestureRecognizer? _pullGestureRecognizer;
         private InputElement? _interactionSource;
         private bool _isVisualizerInteractionSourceAttached;
 
@@ -124,7 +124,7 @@ namespace Avalonia.Controls.PullToRefresh
 
             _refreshInfoProvider = new RefreshInfoProvider(_refreshPullDirection, refreshVIsualizerSize, ElementComposition.GetElementVisual(content));
 
-            _pullGestureRecognizer = new PullGestureRecognizer(_refreshPullDirection);
+            _pullGestureRecognizer = new ScrollablePullGestureRecognizer(_refreshPullDirection);
 
             if (_interactionSource != null)
             {
@@ -259,6 +259,29 @@ namespace Avalonia.Controls.PullToRefresh
             }
 
             return false;
+        }
+
+        public void UpdatePullDirection(PullDirection pullDirection)
+        {
+            _refreshPullDirection = pullDirection;
+
+            if (_refreshInfoProvider != null)
+            {
+                _refreshInfoProvider.PullDirection = pullDirection;
+            }
+
+            if (_pullGestureRecognizer != null)
+            {
+                _pullGestureRecognizer.PullDirection = pullDirection;
+            }
+        }
+
+        public void UpdateVisualizerSize(Size? refreshVisualizerSize)
+        {
+            if (_refreshInfoProvider != null)
+            {
+                _refreshInfoProvider.RefreshVisualizerSize = refreshVisualizerSize ?? default;
+            }
         }
 
         private void CleanUpScrollViewer()
