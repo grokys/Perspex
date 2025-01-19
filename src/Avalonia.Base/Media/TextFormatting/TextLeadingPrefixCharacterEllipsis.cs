@@ -49,16 +49,19 @@ namespace Avalonia.Media.TextFormatting
         /// <inheritdoc />
         public override TextRun[]? Collapse(TextLine textLine)
         {
-            var textRuns = textLine.TextRuns;
+            var textRuns = textLine is TextLineImpl line ? line.LogicalTextRuns : textLine.TextRuns;
 
-            if (textRuns.Count == 0)
+            for (var i = 0; i < textRuns.Count; i++)
             {
-                return null;
+                if (textRuns[i] is ShapedTextRun { IsReversed: true } shapedRun)
+                {
+                    shapedRun.Reverse();
+                }
             }
 
             var runIndex = 0;
             var currentWidth = 0.0;
-            var shapedSymbol = TextFormatterImpl.CreateSymbol(Symbol, FlowDirection.LeftToRight);
+            var shapedSymbol = TextFormatter.CreateSymbol(Symbol, FlowDirection);
 
             if (Width < shapedSymbol.GlyphRun.Bounds.Width)
             {
