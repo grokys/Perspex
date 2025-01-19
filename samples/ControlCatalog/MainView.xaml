@@ -139,6 +139,9 @@
       <TabItem Header="Pointers">
         <pages:PointersPage />
       </TabItem>
+      <TabItem Header="Popups">
+        <pages:PopupsPage />
+      </TabItem>
       <TabItem Header="ProgressBar">
         <pages:ProgressBarPage />
       </TabItem>

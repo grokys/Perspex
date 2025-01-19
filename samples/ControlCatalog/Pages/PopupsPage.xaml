@@ -1,0 +1,18 @@
+<UserControl x:Class="ControlCatalog.Pages.PopupsPage"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  
+  <StackPanel Orientation="Vertical" Spacing="10">
+    
+    <TextBlock Text="'Light Dismiss' Popup" />
+    <Button Content="Show Popup" Click="ButtonLightDismiss_OnClick" />
+
+    <TextBlock Text="Popup that stays open" />
+    <Button Content="Show Popup" Click="ButtonPopupStaysOpen_OnClick" />
+
+    <TextBlock Text="TopMost popup that stays open" />
+    <Button Content="Show Popup" Click="ButtonTopMostPopupStaysOpen" />
+
+  </StackPanel>
+  
+</UserControl>
