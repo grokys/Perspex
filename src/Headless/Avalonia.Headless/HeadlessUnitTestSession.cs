@@ -137,6 +137,7 @@ public sealed class HeadlessUnitTestSession : IDisposable
 
         return Disposable.Create(() =>
         {
+            HeadlessTimeProvider.GetCurrent().Reset();
             scope.Dispose();
             Dispatcher.ResetForUnitTests();
             SynchronizationContext.SetSynchronizationContext(null);

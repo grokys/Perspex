@@ -19,8 +19,7 @@ public static class HeadlessWindowExtensions
     /// <returns>Bitmap with last rendered frame. Null, if nothing was rendered.</returns>
     public static WriteableBitmap? CaptureRenderedFrame(this TopLevel topLevel)
     {
-        Dispatcher.UIThread.RunJobs();
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+        Dispatcher.UIThread.PulseRenderFrames(1);
         return topLevel.GetLastRenderedFrame();
     }
 
@@ -129,11 +128,10 @@ public static class HeadlessWindowExtensions
 
     private static void RunJobsOnImpl(this TopLevel topLevel, Action<IHeadlessWindow> action)
     {
-        Dispatcher.UIThread.RunJobs();
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick();
-        Dispatcher.UIThread.RunJobs();
+        // Most of input operations that involve hit test require frame to be rendered.
+        Dispatcher.UIThread.PulseRenderFrames(1);
         action(GetImpl(topLevel));
-        Dispatcher.UIThread.RunJobs();
+        Dispatcher.UIThread.PulseTime(TimeSpan.FromMilliseconds(1));
     }
 
     private static IHeadlessWindow GetImpl(this TopLevel topLevel)
