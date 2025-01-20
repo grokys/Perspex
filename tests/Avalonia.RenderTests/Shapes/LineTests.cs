@@ -76,5 +76,33 @@ namespace Avalonia.Direct2D1.RenderTests.Shapes
             await RenderToFile(target);
             CompareImages();
         }
+
+        [Fact]
+        public async Task Lines_With_DashArray()
+        {
+            var stackPanel = new StackPanel();
+
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [1] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [1, 1] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [1, 6] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [6, 1] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [0.25, 1] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [4, 1, 1, 1, 1, 1] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [5, 5, 1, 5] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [1, 2, 4] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [4, 2, 4] });
+            stackPanel.Children.Add(new Line() { Margin = new Thickness(8), StrokeThickness = 8, StartPoint = new Point(0, 0), EndPoint = new Point(200, 0), Stroke = Brushes.Black, StrokeDashArray = [4, 2, 4, 1, 1] });
+
+
+            Decorator target = new Decorator
+            {
+                Width = 200,
+                Height = 200,
+                Child = stackPanel
+            };
+
+            await RenderToFile(target);
+            CompareImages();
+        }
     }
 }
