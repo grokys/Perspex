@@ -1,4 +1,5 @@
 using System;
+using Avalonia.Controls;
 using Avalonia.VisualTree;
 
 namespace Avalonia
@@ -52,8 +53,21 @@ namespace Avalonia
 
             if (common != null)
             {
-                var thisOffset = GetOffsetFrom(common, from);
-                var thatOffset = GetOffsetFrom(common, to);
+                Matrix thisOffset;
+                if (TryGetAdorner(from, common, out var adornedFrom, out var adornerLayerFrom))
+                {
+                    thisOffset = GetOffsetFrom(common, adornedFrom!) * GetOffsetFrom(adornerLayerFrom!, from);
+                }
+                else
+                    thisOffset = GetOffsetFrom(common, from);
+
+                Matrix thatOffset;
+                if (TryGetAdorner(to, common, out var adornedTo, out var adornerLayerTo))
+                {
+                    thatOffset = GetOffsetFrom(common, adornedTo!) * GetOffsetFrom(adornerLayerTo!, to);
+                }
+                else
+                    thatOffset = GetOffsetFrom(common, to);
 
                 if (!thatOffset.TryInvert(out var thatOffsetInverted))
                 {
@@ -64,6 +78,29 @@ namespace Avalonia
             }
 
             return null;
+        }
+
+        private static bool TryGetAdorner(Visual target, Visual? stopAtVisual, out Visual? adorned, out Visual? adornerLayer)
+        {
+            var element = target;
+            while (element != null && element != stopAtVisual)
+            {
+                if (AdornerLayerBase.GetAdornedElement(element) is { } adornedElement)
+                {
+                    adorned = adornedElement;
+                    adornerLayer = element;
+                    while (adornerLayer != null && adornerLayer is not IAdornerLayer)
+                    {
+                        adornerLayer = adornerLayer.VisualParent;
+                    }
+                    return adornerLayer != null;
+                }
+                element = element.VisualParent;
+            }
+
+            adorned = null;
+            adornerLayer = null;
+            return false;
         }
 
         /// <summary>
