@@ -1,40 +1,59 @@
 using System;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace Avalonia.Threading;
 
-public class DispatcherPriorityAwaitable : INotifyCompletion
+/// <summary>
+/// Represents an awaitable object that asynchronously yields control back to the current dispatcher
+/// and provides an opportunity for the dispatcher to process other events.
+/// </summary>
+/// <remarks>
+/// The <see cref="Dispatcher.Yield"/> method returns a <see cref="DispatcherPriorityAwaitable"/>.
+/// </remarks>
+public readonly struct DispatcherPriorityAwaitable
 {
-    private readonly Dispatcher _dispatcher;
-    private protected readonly Task Task;
-    private readonly DispatcherPriority _priority;
+	private readonly Dispatcher _dispatcher;
+	private readonly DispatcherPriority _priority;
 
-    internal DispatcherPriorityAwaitable(Dispatcher dispatcher, Task task, DispatcherPriority priority)
-    {
-        _dispatcher = dispatcher;
-        Task = task;
-        _priority = priority;
-    }
-    
-    public void OnCompleted(Action continuation) =>
-        Task.ContinueWith(_ => _dispatcher.Post(continuation, _priority));
+	internal DispatcherPriorityAwaitable(Dispatcher dispatcher, DispatcherPriority priority)
+	{
+		_dispatcher = dispatcher;
+		_priority = priority;
+	}
 
-    public bool IsCompleted => Task.IsCompleted;
-
-    public void GetResult() => Task.GetAwaiter().GetResult();
-
-    public DispatcherPriorityAwaitable GetAwaiter() => this;
+	/// <summary>
+	/// Returns an object that waits for the completion of an asynchronous task.
+	/// </summary>
+	public DispatcherPriorityAwaiter GetAwaiter() =>
+		new(_dispatcher, _priority);
 }
 
-public sealed class DispatcherPriorityAwaitable<T> : DispatcherPriorityAwaitable
+/// <summary>
+/// Represents an object that waits for the completion of an asynchronous task.
+/// </summary>
+public readonly struct DispatcherPriorityAwaiter : INotifyCompletion
 {
-    internal DispatcherPriorityAwaitable(Dispatcher dispatcher, Task<T> task, DispatcherPriority priority) : base(
-        dispatcher, task, priority)
-    {
-    }
+	private readonly Dispatcher _dispatcher;
+	private readonly DispatcherPriority _priority;
 
-    public new T GetResult() => ((Task<T>)Task).GetAwaiter().GetResult();
+	internal DispatcherPriorityAwaiter(Dispatcher dispatcher, DispatcherPriority priority)
+	{
+		_dispatcher = dispatcher;
+		_priority = priority;
+	}
 
-    public new DispatcherPriorityAwaitable<T> GetAwaiter() => this;
+	/// <inheritdoc/>
+	public void GetResult() { }
+
+	/// </inheritdoc/>
+	public bool IsCompleted => false;
+
+	/// <inheritdoc/>
+	public void OnCompleted(Action completion)
+	{
+		if (_dispatcher is null)
+			throw new InvalidOperationException($"The {nameof(DispatcherPriorityAwaiter)} was not configured with a valid {nameof(Dispatcher)}");
+
+		_dispatcher.Post(completion, _priority);
+	}
 }
