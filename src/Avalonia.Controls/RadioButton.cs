@@ -101,14 +101,21 @@ namespace Avalonia.Controls
             if (value.GetValueOrDefault())
             {
                 EnsureRadioGroupManager();
-                _groupManager.OnCheckedChanged(this);
+                _groupManager?.OnCheckedChanged(this);
             }
         }
         
-        [MemberNotNull(nameof(_groupManager))]
         private void EnsureRadioGroupManager(IRenderRoot? root = null)
         {
-            _groupManager = RadioButtonGroupManager.GetOrCreateForRoot(root ?? this.GetVisualRoot());
+            root = root ?? this.GetVisualRoot();
+
+            if (root == null) 
+            {
+                return;
+            }
+
+            _groupManager = RadioButtonGroupManager.GetOrCreateForRoot(root);
+
             _groupManager.Add(this);
         }
     }
