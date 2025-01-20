@@ -570,11 +570,11 @@ NSWindowStyleMask WindowImpl::CalculateStyleMask() {
 
         case SystemDecorationsFull:
             s = s | NSWindowStyleMaskTitled | NSWindowStyleMaskClosable;
-
-            if ((_canResize && _isEnabled) || _transitioningWindowState) {
-                s = s | NSWindowStyleMaskResizable;
-            }
             break;
+    }
+
+    if ((_canResize && _isEnabled) || _transitioningWindowState) {
+        s = s | NSWindowStyleMaskResizable;
     }
 
     if (!IsOwned()) {
