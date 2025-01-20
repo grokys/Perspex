@@ -88,6 +88,12 @@
         <TextBox Width="200" Text="Custom font italic" FontWeight="Normal" FontStyle="Italic" FontFamily="/Assets/Fonts/SourceSansPro-Italic.ttf#Source Sans Pro"/>
         <TextBox Width="200" Text="Custom font italic bold" FontWeight="Bold" FontStyle="Italic" FontFamily="/Assets/Fonts/SourceSansPro-*.ttf#Source Sans Pro"/>
       </StackPanel>
+
+      <StackPanel Orientation="Vertical" Spacing="8" Margin="8">
+        <TextBox Width="200" Text="Default casing" />
+        <TextBox Width="200" Text="Upper casing" CharacterCasing="Upper" />
+        <TextBox Width="200" Text="Lower casing" CharacterCasing="Lower" />
+      </StackPanel>
     </WrapPanel>
     <TextBox AcceptsReturn="True" TextWrapping="Wrap" Height="200" MaxWidth="400"
              FontFamily="avares://ControlCatalog/Assets/Fonts#WenQuanYi Micro Hei"
