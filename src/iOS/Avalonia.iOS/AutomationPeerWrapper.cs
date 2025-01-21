@@ -28,12 +28,14 @@ namespace Avalonia.iOS
             get => (AvaloniaView)base.AccessibilityContainer!;
             set => base.AccessibilityContainer = value;
         }
-
+        
+        [Export("accessibilityContainerType")]
         public UIAccessibilityContainerType AccessibilityContainerType { get; set; }
 
         public AutomationPeerWrapper(AvaloniaView container, AutomationPeer peer) : base(container)
         {
             AccessibilityContainer = container;
+            IsAccessibilityElement = true;
 
             _peer = peer;
             _peer.ChildrenChanged += PeerChildrenChanged;
@@ -45,9 +47,11 @@ namespace Avalonia.iOS
             UpdateChildren();
         }
 
+        [Export("accessibilityElementCount")]
         public nint AccessibilityElementCount() => 
             _childrenList.Count;
 
+        [Export("accessibilityElementAtIndex:")]
         public NSObject? GetAccessibilityElementAt(nint index)
         {
             try
@@ -60,6 +64,7 @@ namespace Avalonia.iOS
             return null;
         }
 
+        [Export("indexOfAccessibilityElement:")]
         public nint GetIndexOfAccessibilityElement(NSObject element)
         {
             int indexOf = _childrenList.IndexOf(((AutomationPeerWrapper)element)._peer);
@@ -125,9 +130,6 @@ namespace Avalonia.iOS
 
         private void PeerChildrenChanged(object? sender, EventArgs e) => UpdateChildren();
 
-        private void PeerPropertyChanged(object? sender, AutomationPropertyChangedEventArgs e)
-        {
-            UpdateProperties(e.Property);
-        }
+        private void PeerPropertyChanged(object? sender, AutomationPropertyChangedEventArgs e) => UpdateProperties(e.Property);
     }
 }
