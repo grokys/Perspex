@@ -6,7 +6,7 @@
         x:DataType="Window"
         Title="Show Window Test">
   <integrationTestApp:MeasureBorder Name="MyBorder" Background="{DynamicResource SystemRegionBrush}">
-    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
       <Label Grid.Column="0" Grid.Row="1">Client Size</Label>
       <TextBox Name="CurrentClientSize" Grid.Column="1" Grid.Row="1" IsReadOnly="True"
                Text="{Binding ClientSize, Mode=OneWay}" />
@@ -54,6 +54,9 @@
       <TextBlock Grid.Column="1" Grid.Row="11" Name="CurrentMeasuredWithText" Text="{Binding #MyBorder.MeasuredWith}" />
 
       <Button Name="HideButton" Grid.Row="12" Command="{Binding $parent[Window].Hide}">Hide</Button>
+
+      <Button Name="AddToWidth" Grid.Row="13" Click="AddToWidth_Click">Add to Width</Button>
+      <Button Name="AddToHeight" Grid.Row="14" Click="AddToHeight_Click">Add to Height</Button>
       
     </Grid>
   </integrationTestApp:MeasureBorder>

@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 
 namespace IntegrationTestApp
@@ -70,5 +71,8 @@ namespace IntegrationTestApp
         {
             _orderTextBox!.Text = MacOSIntegration.GetOrderedIndex(this).ToString();
         }
+
+        private void AddToWidth_Click(object? sender, RoutedEventArgs e) => Width += 10;
+        private void AddToHeight_Click(object? sender, RoutedEventArgs e) => Height += 10;
     }
 }
