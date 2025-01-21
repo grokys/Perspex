@@ -32,6 +32,9 @@ namespace Avalonia.iOS
         [Export("accessibilityContainerType")]
         public UIAccessibilityContainerType AccessibilityContainerType { get; set; }
 
+        [Export("accessibilityElements")]
+        public NSObject? AccessibilityElements { get; set; }
+
         public AutomationPeerWrapper(AvaloniaView container, AutomationPeer peer) : base(container)
         {
             AccessibilityContainer = container;
@@ -90,6 +93,7 @@ namespace Avalonia.iOS
 
         private void UpdateChildren()
         {
+            List<NSObject> wrappers = new(); 
             foreach (AutomationPeer child in _peer.GetChildren())
             {
                 if (child.IsOffscreen())
@@ -99,10 +103,15 @@ namespace Avalonia.iOS
                 }
                 else if (!_childrenMap.ContainsKey(child))
                 {
+                    var wrapper = new AutomationPeerWrapper(AccessibilityContainer, child);
+                    wrappers.Add(wrapper);
+
                     _childrenList.Add(child);
-                    _childrenMap.Add(child, new AutomationPeerWrapper(AccessibilityContainer, child));
+                    _childrenMap.Add(child, wrapper);
                 }
             }
+
+            AccessibilityElements = NSArray.FromObjects(wrappers.ToArray());
         }
 
         private static void UpdateName(AutomationPeerWrapper self)
