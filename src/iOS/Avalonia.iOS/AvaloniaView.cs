@@ -46,7 +46,11 @@ namespace Avalonia.iOS
             _topLevelImpl = new TopLevelImpl(this);
             _input = new InputHandler(this, _topLevelImpl);
             _topLevel = new EmbeddableControlRoot(_topLevelImpl);
-            _accessWrapper = new(this, ControlAutomationPeer.CreatePeerForElement(_topLevel));
+
+            _childrenList = new();
+            _childrenMap = new();
+            _accessWrapper = new(this);
+            AccessibilityContainerType = UIAccessibilityContainerType.SemanticGroup;
 
             _topLevel.Prepare();
 
@@ -80,9 +84,6 @@ namespace Avalonia.iOS
                 MultipleTouchEnabled = true;
 #endif
             }
-
-            IsAccessibilityElement = true;
-            AccessibilityContainerType = UIAccessibilityContainerType.SemanticGroup;
         }
 
         [SuppressMessage("Interoperability", "CA1422:Validate platform compatibility")]

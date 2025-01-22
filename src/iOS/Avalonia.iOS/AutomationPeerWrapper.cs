@@ -8,7 +8,7 @@ using UIKit;
 
 namespace Avalonia.iOS
 {
-    public class AutomationPeerWrapper : UIAccessibilityElement, IUIAccessibilityContainer
+    public class AutomationPeerWrapper : UIAccessibilityElement
     {
         private static readonly IReadOnlyDictionary<AutomationProperty, Action<AutomationPeerWrapper>> s_propertySetters =
             new Dictionary<AutomationProperty, Action<AutomationPeerWrapper>>()
@@ -18,100 +18,37 @@ namespace Avalonia.iOS
                 { AutomationElementIdentifiers.BoundingRectangleProperty, UpdateBoundingRectangle },
             };
 
+        private readonly AvaloniaView _view;
         private readonly AutomationPeer _peer;
 
-        private List<AutomationPeer> _childrenList;
-        private Dictionary<AutomationPeer, AutomationPeerWrapper> _childrenMap;
-
-        public new AvaloniaView AccessibilityContainer
+        public AutomationPeerWrapper(AvaloniaView view, AutomationPeer? peer = null) : base(view)
         {
-            get => (AvaloniaView)base.AccessibilityContainer!;
-            set => base.AccessibilityContainer = value;
-        }
-        
-        [Export("accessibilityContainerType")]
-        public UIAccessibilityContainerType AccessibilityContainerType { get; set; }
+            _view = view;
+            _peer = peer ?? ControlAutomationPeer.CreatePeerForElement(view.TopLevel);
 
-        [Export("accessibilityElements")]
-        public NSObject? AccessibilityElements { get; set; }
-
-        public AutomationPeerWrapper(AvaloniaView container, AutomationPeer peer) : base(container)
-        {
-            AccessibilityContainer = container;
-            IsAccessibilityElement = true;
-
-            _peer = peer;
-            _peer.ChildrenChanged += PeerChildrenChanged;
             _peer.PropertyChanged += PeerPropertyChanged;
             UpdateProperties();
 
-            _childrenList = new();
-            _childrenMap = new();
-            UpdateChildren();
-        }
+            _peer.ChildrenChanged += PeerChildrenChanged;
+            _view.UpdateChildren(_peer);
 
-        [Export("accessibilityElementCount")]
-        public nint AccessibilityElementCount() => 
-            _childrenList.Count;
-
-        [Export("accessibilityElementAtIndex:")]
-        public NSObject? GetAccessibilityElementAt(nint index)
-        {
-            try
-            {
-                return _childrenMap[_childrenList[(int)index]];
-            }
-            catch (KeyNotFoundException) { }
-            catch (ArgumentOutOfRangeException) { }
-
-            return null;
-        }
-
-        [Export("indexOfAccessibilityElement:")]
-        public nint GetIndexOfAccessibilityElement(NSObject element)
-        {
-            int indexOf = _childrenList.IndexOf(((AutomationPeerWrapper)element)._peer);
-            return indexOf < 0 ? NSRange.NotFound : indexOf;
+            AccessibilityContainer = _view;
+            AccessibilityIdentifier = _peer.GetAutomationId();
         }
 
         private void UpdateProperties()
         {
-            foreach (AutomationProperty property in s_propertySetters.Keys)
-            {
-                s_propertySetters[property](this);
-            }
+            UpdateProperties(s_propertySetters.Keys.ToArray());
         }
 
         private void UpdateProperties(params AutomationProperty[] properties)
         {
+            IsAccessibilityElement = _peer.IsContentElement() && !_peer.IsOffscreen();
             foreach (AutomationProperty property in properties
                 .Where(s_propertySetters.ContainsKey))
             {
                 s_propertySetters[property](this);
             }
-        }
-
-        private void UpdateChildren()
-        {
-            List<NSObject> wrappers = new(); 
-            foreach (AutomationPeer child in _peer.GetChildren())
-            {
-                if (child.IsOffscreen())
-                {
-                    _childrenList.Remove(child);
-                    _childrenMap.Remove(child);
-                }
-                else if (!_childrenMap.ContainsKey(child))
-                {
-                    var wrapper = new AutomationPeerWrapper(AccessibilityContainer, child);
-                    wrappers.Add(wrapper);
-
-                    _childrenList.Add(child);
-                    _childrenMap.Add(child, wrapper);
-                }
-            }
-
-            AccessibilityElements = NSArray.FromObjects(wrappers.ToArray());
         }
 
         private static void UpdateName(AutomationPeerWrapper self)
@@ -128,17 +65,23 @@ namespace Avalonia.iOS
         {
             Rect bounds = self._peer.GetBoundingRectangle();
             PixelRect screenRect = new PixelRect(
-                self.AccessibilityContainer.TopLevel.PointToScreen(bounds.TopLeft),
-                self.AccessibilityContainer.TopLevel.PointToScreen(bounds.BottomRight)
+                self._view.TopLevel.PointToScreen(bounds.TopLeft),
+                self._view.TopLevel.PointToScreen(bounds.BottomRight)
                 );
             self.AccessibilityFrame = new CoreGraphics.CGRect(
                 screenRect.X, screenRect.Y,
                 screenRect.Width, screenRect.Height
                 );
+            UIAccessibility.PostNotification(UIAccessibilityPostNotification.LayoutChanged, null);
         }
 
-        private void PeerChildrenChanged(object? sender, EventArgs e) => UpdateChildren();
+        private void PeerChildrenChanged(object? sender, EventArgs e) => _view.UpdateChildren(_peer);
 
         private void PeerPropertyChanged(object? sender, AutomationPropertyChangedEventArgs e) => UpdateProperties(e.Property);
+
+        public static implicit operator AutomationPeer(AutomationPeerWrapper instance) 
+        {
+            return instance._peer;
+        }
     }
 }
