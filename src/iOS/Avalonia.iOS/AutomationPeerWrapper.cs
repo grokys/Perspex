@@ -27,23 +27,21 @@ namespace Avalonia.iOS
             _peer = peer ?? ControlAutomationPeer.CreatePeerForElement(view.TopLevel);
 
             _peer.PropertyChanged += PeerPropertyChanged;
-            UpdateProperties();
-
             _peer.ChildrenChanged += PeerChildrenChanged;
-            _view.UpdateChildren(_peer);
 
             AccessibilityContainer = _view;
             AccessibilityIdentifier = _peer.GetAutomationId();
         }
 
-        private void UpdateProperties()
+        public void UpdateProperties()
         {
             UpdateProperties(s_propertySetters.Keys.ToArray());
         }
 
-        private void UpdateProperties(params AutomationProperty[] properties)
+        public void UpdateProperties(params AutomationProperty[] properties)
         {
-            IsAccessibilityElement = _peer.IsContentElement() && !_peer.IsOffscreen();
+            AccessibilityRespondsToUserInteraction = _peer.IsEnabled();
+
             foreach (AutomationProperty property in properties
                 .Where(s_propertySetters.ContainsKey))
             {
@@ -72,7 +70,6 @@ namespace Avalonia.iOS
                 screenRect.X, screenRect.Y,
                 screenRect.Width, screenRect.Height
                 );
-            UIAccessibility.PostNotification(UIAccessibilityPostNotification.LayoutChanged, null);
         }
 
         private void PeerChildrenChanged(object? sender, EventArgs e) => _view.UpdateChildren(_peer);

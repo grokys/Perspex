@@ -17,8 +17,11 @@ namespace Avalonia.iOS
         public UIAccessibilityContainerType AccessibilityContainerType { get; set; }
 
         [Export("accessibilityElementCount")]
-        public nint AccessibilityElementCount() =>
-            _childrenList.Count;
+        public nint AccessibilityElementCount() 
+        {
+            UpdateChildren(_accessWrapper);
+            return _childrenList.Count;
+        }
 
         [Export("accessibilityElementAtIndex:")]
         public NSObject? GetAccessibilityElementAt(nint index)
@@ -44,13 +47,22 @@ namespace Avalonia.iOS
         {
             foreach (AutomationPeer child in peer.GetChildren())
             {
-                if (!_childrenMap.ContainsKey(child))
+                if (child.GetName().Length == 0 ||
+                    child.IsOffscreen())
                 {
-                    AutomationPeerWrapper wrapper = new (this, child);
-
-                    _childrenList.Add(child);
-                    _childrenMap.Add(child, wrapper);
+                    _childrenList.Remove(child);
+                    _childrenMap.Remove(child);
                 }
+                else if (!_childrenMap.TryGetValue(child, out AutomationPeerWrapper? wrapper))
+                {
+                    _childrenList.Add(child);
+                    _childrenMap.Add(child, new(this, child));
+                }
+                else
+                {
+                    wrapper.UpdateProperties();
+                }
+                UpdateChildren(child);
             }
         }
     }
