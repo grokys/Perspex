@@ -182,6 +182,10 @@ namespace Avalonia.Native
             using (var n = Native.GetBytes(format))
                 return n.Bytes;
         }
+
+        /// <inheritdoc />
+        public Task FlushAsync() =>
+            Task.CompletedTask;
     }
     
     class ClipboardDataObject : IDataObject, IDisposable

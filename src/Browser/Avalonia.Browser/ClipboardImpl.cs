@@ -25,5 +25,9 @@ namespace Avalonia.Browser
         public Task<string[]> GetFormatsAsync() => Task.FromResult(Array.Empty<string>());
 
         public Task<object?> GetDataAsync(string format) => Task.FromResult<object?>(null);
+
+        /// <inheritdoc />
+        public Task FlushAsync() =>
+            Task.CompletedTask;
     }
 }

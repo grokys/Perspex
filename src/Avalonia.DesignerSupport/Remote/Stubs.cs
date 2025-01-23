@@ -225,6 +225,9 @@ namespace Avalonia.DesignerSupport.Remote
         public Task<string[]> GetFormatsAsync() => Task.FromResult(Array.Empty<string>());
 
         public Task<object> GetDataAsync(string format) => Task.FromResult((object)null);
+
+        public Task FlushAsync() =>
+            Task.CompletedTask;
     }
 
     class CursorFactoryStub : ICursorFactory

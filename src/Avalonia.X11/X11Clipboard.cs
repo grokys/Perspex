@@ -310,7 +310,7 @@ namespace Avalonia.X11
         public Task SetDataObjectAsync(IDataObject data)
         {
             _storedDataObject = data;
-            XSetSelectionOwner(_x11.Display, _x11.Atoms.CLIPBOARD, _handle, IntPtr.Zero);            
+            XSetSelectionOwner(_x11.Display, _x11.Atoms.CLIPBOARD, _handle, IntPtr.Zero);
             return StoreAtomsInClipboardManager(data);
         }
 
@@ -350,5 +350,9 @@ namespace Avalonia.X11
             
             return await SendDataRequest(formatAtom);
         }
+
+        /// <inheritdoc />
+        public Task FlushAsync() =>
+            Task.CompletedTask;
     }
 }

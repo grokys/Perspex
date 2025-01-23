@@ -51,6 +51,12 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0006</DiagnosticId>
+    <Target>M:Avalonia.Input.Platform.IClipboard.FlushAsync</Target>
+    <Left>baseline/netstandard2.0/Avalonia.Base.dll</Left>
+    <Right>target/netstandard2.0/Avalonia.Base.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0006</DiagnosticId>
     <Target>M:Avalonia.Controls.Notifications.IManagedNotificationManager.Close(System.Object)</Target>
     <Left>baseline/netstandard2.0/Avalonia.Controls.dll</Left>
     <Right>target/netstandard2.0/Avalonia.Controls.dll</Right>

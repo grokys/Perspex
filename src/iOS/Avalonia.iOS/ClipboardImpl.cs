@@ -57,5 +57,9 @@ namespace Avalonia.iOS
 
             return Task.FromResult<object?>(null);
         }
+
+        /// <inheritdoc />
+        public Task FlushAsync() =>
+            Task.CompletedTask;
     }
 }
