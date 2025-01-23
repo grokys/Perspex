@@ -6,7 +6,7 @@ namespace Avalonia.Automation
     public enum IsOffscreenBehavior
     {
         /// <summary>
-        /// The AutomationProperty IsOffscreen is calculated based on IsVisible.
+        /// The AutomationProperty IsOffscreen is calculated based on IsEffectivelyVisible.
         /// </summary>
         Default,
         /// <summary>
