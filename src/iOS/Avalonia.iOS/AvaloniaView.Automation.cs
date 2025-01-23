@@ -7,14 +7,13 @@ using UIKit;
 namespace Avalonia.iOS
 {
     public partial class AvaloniaView : IUIAccessibilityContainer
-    {
-        private readonly AutomationPeerWrapper _accessWrapper;
-
-        private readonly List<AutomationPeer> _childrenList;
-        private readonly Dictionary<AutomationPeer, AutomationPeerWrapper> _childrenMap;
+    {   
+        private readonly List<AutomationPeer> _childrenList = new();
+        private readonly Dictionary<AutomationPeer, AutomationPeerWrapper> _childrenMap = new();
 
         [Export("accessibilityContainerType")]
-        public UIAccessibilityContainerType AccessibilityContainerType { get; set; }
+        public UIAccessibilityContainerType AccessibilityContainerType { get; set; } = 
+            UIAccessibilityContainerType.SemanticGroup;
 
         [Export("accessibilityElementCount")]
         public nint AccessibilityElementCount() 
@@ -47,7 +46,8 @@ namespace Avalonia.iOS
         {
             foreach (AutomationPeer child in peer.GetChildren())
             {
-                if (child.GetName().Length == 0 ||
+                if ((child.GetName().Length == 0 &&
+                    !child.IsKeyboardFocusable()) ||
                     child.IsOffscreen())
                 {
                     _childrenList.Remove(child);
@@ -61,6 +61,7 @@ namespace Avalonia.iOS
                 else
                 {
                     wrapper.UpdateProperties();
+                    wrapper.UpdateTraits();
                 }
                 UpdateChildren(child);
             }
