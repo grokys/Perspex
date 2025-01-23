@@ -12,7 +12,10 @@ partial class AvaloniaView
         public UITextAutocapitalizationType AutocapitalizationType { get; private set; }
 
         [Export("autocorrectionType")]
-        public UITextAutocorrectionType AutocorrectionType => UITextAutocorrectionType.Yes;
+        public UITextAutocorrectionType AutocorrectionType =>
+            _view._options?.ShowSuggestions == false ?
+                UITextAutocorrectionType.No :
+                UITextAutocorrectionType.Yes;
 
         [Export("keyboardType")]
         public UIKeyboardType KeyboardType =>
@@ -64,7 +67,11 @@ partial class AvaloniaView
             _view._options?.ContentType is TextInputContentType.Password or TextInputContentType.Pin 
             || (_view._options?.IsSensitive ?? false);
 
-        [Export("spellCheckingType")] public UITextSpellCheckingType SpellCheckingType => UITextSpellCheckingType.Yes;
+        [Export("spellCheckingType")]
+        public UITextSpellCheckingType SpellCheckingType => 
+            _view._options?.ShowSuggestions == false ?
+                UITextSpellCheckingType.No :
+                UITextSpellCheckingType.Yes;
 
         [Export("textContentType")] public NSString TextContentType { get; set; } = new NSString("text/plain");
 

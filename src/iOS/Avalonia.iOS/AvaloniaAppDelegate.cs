@@ -89,6 +89,19 @@ namespace Avalonia.iOS
             return false;
         }
 
+        [Export("application:continueUserActivity:restorationHandler:")]
+        public bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+        {
+            if (userActivity.ActivityType == NSUserActivityType.BrowsingWeb && Uri.TryCreate(userActivity.WebPageUrl?.ToString(), UriKind.RelativeOrAbsolute, out var uri))
+            {
+                // Activation using a univeral link or web browser-to-native app Handoff
+                _onActivated?.Invoke(this, new ProtocolActivatedEventArgs(uri));
+                return true;
+            }
+
+            return false;
+        }
+
         private void OnEnteredBackground(NSNotification notification)
         {
             _onDeactivated?.Invoke(this, new ActivatedEventArgs(ActivationKind.Background));

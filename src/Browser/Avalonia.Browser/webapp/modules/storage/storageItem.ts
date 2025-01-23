@@ -107,6 +107,16 @@ export class StorageItem {
         return await ((item.handle as any).getFileHandle(name, { create: true }) as Promise<any>);
     }
 
+    public static async getFile(item: StorageItem, name: string): Promise<any | null> {
+        if (item.kind !== "directory" || !item.handle) {
+            return null;
+        }
+
+        await item.verityPermissions("read");
+
+        return await ((item.handle as any).getFileHandle(name) as Promise<any>);
+    }
+
     public static async createFolder(item: StorageItem, name: string): Promise<any | null> {
         if (item.kind !== "directory" || !item.handle) {
             throw new TypeError("Unable to create item in the requested directory");
@@ -115,6 +125,16 @@ export class StorageItem {
         await item.verityPermissions("readwrite");
 
         return await ((item.handle as any).getDirectoryHandle(name, { create: true }) as Promise<any>);
+    }
+
+    public static async getFolder(item: StorageItem, name: string): Promise<any | null> {
+        if (item.kind !== "directory" || !item.handle) {
+            return null;
+        }
+
+        await item.verityPermissions("read");
+
+        return await ((item.handle as any).getDirectoryHandle(name) as Promise<any>);
     }
 
     public static async deleteAsync(item: StorageItem): Promise<any | null> {

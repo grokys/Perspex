@@ -38,6 +38,7 @@
                  UseFloatingWatermark="True"
                  PasswordChar="*"
                  Text="Password" />
+        <TextBox Width="200" Watermark="Suggestions are hidden" TextInputOptions.ShowSuggestions="False" />
         <TextBox Width="200" Text="Left aligned text" TextAlignment="Left" AcceptsTab="True" />
         <TextBox Width="200" Text="Center aligned text" TextAlignment="Center" />
         <TextBox Width="200" Text="Right aligned text" TextAlignment="Right" />

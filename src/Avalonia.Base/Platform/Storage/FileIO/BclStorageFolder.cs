@@ -19,4 +19,10 @@ internal sealed class BclStorageFolder(DirectoryInfo directoryInfo)
 
     public Task<IStorageFolder?> CreateFolderAsync(string name) => Task.FromResult(
         (IStorageFolder?)WrapFileSystemInfo(CreateFolderCore(directoryInfo, name)));
+
+    public Task<IStorageFolder?> GetFolderAsync(string name) => Task.FromResult(
+        (IStorageFolder?)WrapFileSystemInfo(GetFolderCore(directoryInfo, name)));
+
+    public Task<IStorageFile?> GetFileAsync(string name) => Task.FromResult(
+       (IStorageFile?)WrapFileSystemInfo(GetFileCore(directoryInfo, name)));
 }

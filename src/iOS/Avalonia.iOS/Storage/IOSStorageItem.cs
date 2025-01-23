@@ -306,4 +306,36 @@ internal sealed class IOSStorageFolder : IOSStorageItem, IStorageBookmarkFolder
             SecurityScopedAncestorUrl.StopAccessingSecurityScopedResource();
         }
     }
+
+    private NSUrl? GetItem(string name, bool isDirectory)
+    {
+        try
+        {
+            SecurityScopedAncestorUrl.StartAccessingSecurityScopedResource();
+
+            var path = System.IO.Path.Combine(FilePath, name);
+            if (NSFileManager.DefaultManager.FileExists(path, ref isDirectory))
+            {
+                return new NSUrl(path, isDirectory);
+            }
+
+            return null;
+        }
+        finally
+        {
+            SecurityScopedAncestorUrl.StopAccessingSecurityScopedResource();
+        }
+    }
+
+    public Task<IStorageFolder?> GetFolderAsync(string name)
+    {
+        var url = GetItem(name, true);
+        return Task.FromResult<IStorageFolder?>(url is null ? null : new IOSStorageFolder(url));
+    }
+
+    public Task<IStorageFile?> GetFileAsync(string name)
+    {
+        var url = GetItem(name, false);
+        return Task.FromResult<IStorageFile?>(url is null ? null : new IOSStorageFile(url));
+    }
 }

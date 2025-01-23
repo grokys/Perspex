@@ -16,6 +16,8 @@ internal class BrowserStorageProvider : IStorageProvider
     internal static ReadOnlySpan<byte> BrowserBookmarkKey => "browser"u8;
     internal const string PickerCancelMessage = "The user aborted a request";
     internal const string NoPermissionsMessage = "Permissions denied";
+    internal const string FileFolderNotFoundMessage = "A requested file or directory could not be found";
+    internal const string TypeMissmatchMessage = "The path supplied exists, but was not an entry of requested type";
 
     public bool CanOpen => true;
     public bool CanSave => true;
@@ -385,4 +387,45 @@ internal class JSStorageFolder : JSStorageItem, IStorageBookmarkFolder
             throw new UnauthorizedAccessException("User denied permissions to open the file", ex);
         }
     }
+
+    public async Task<IStorageFolder?> GetFolderAsync(string name)
+    {
+        try
+        {
+            var storageFile = await StorageHelper.GetFolder(FileHandle, name);
+            if (storageFile is null)
+            {
+                return null;
+            }
+
+            return new JSStorageFolder(storageFile);
+        }
+        catch (JSException ex) when (ShouldSupressErrorOnFileAccess(ex))
+        {
+            return null;
+        }
+    }
+
+    public async Task<IStorageFile?> GetFileAsync(string name)
+    {
+        try
+        {
+            var storageFile = await StorageHelper.GetFile(FileHandle, name);
+            if (storageFile is null)
+            {
+                return null;
+            }
+
+            return new JSStorageFile(storageFile);
+        }
+        catch (JSException ex) when (ShouldSupressErrorOnFileAccess(ex))
+        {
+            return null;
+        }
+    }
+
+    private static bool ShouldSupressErrorOnFileAccess(JSException ex) =>
+        ex.Message == BrowserStorageProvider.NoPermissionsMessage ||
+        ex.Message.Contains(BrowserStorageProvider.TypeMissmatchMessage, StringComparison.Ordinal) ||
+        ex.Message.Contains(BrowserStorageProvider.FileFolderNotFoundMessage, StringComparison.Ordinal);
 }

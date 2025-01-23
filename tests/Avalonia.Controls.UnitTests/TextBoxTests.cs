@@ -1235,6 +1235,106 @@ namespace Avalonia.Controls.UnitTests
                 Assert.Equal((minLines * target.LineHeight) + textPresenterMargin.Top + textPresenterMargin.Bottom, scrollViewer.MinHeight);
             }
         }
+        
+        [Theory]
+        [InlineData(null, 1)]
+        [InlineData("", 1)]
+        [InlineData("Hello", 1)]
+        [InlineData("Hello\r\nWorld", 2)]
+        public void LineCount_Is_Correct(string? text, int lineCount)
+        {
+            using (UnitTestApplication.Start(Services))
+            {
+                var target = new TextBox
+                {
+                    Template = CreateTemplate(),
+                    Text = text,
+                    AcceptsReturn = true
+                };
+
+                var impl = CreateMockTopLevelImpl();
+                var topLevel = new TestTopLevel(impl.Object)
+                {
+                    Template = CreateTopLevelTemplate()
+                };
+                topLevel.Content = target;
+                topLevel.ApplyTemplate();
+                topLevel.LayoutManager.ExecuteInitialLayoutPass();
+
+                target.ApplyTemplate();
+                target.Measure(Size.Infinity);
+
+                Assert.Equal(lineCount, target.GetLineCount());
+            }
+        }
+
+        [Fact]
+        public void Unmeasured_TextBox_Has_Negative_LineCount()
+        {
+            var b = new TextBox();
+            Assert.Equal(-1, b.GetLineCount());
+        }
+        
+        [Fact]
+        public void LineCount_Is_Correct_After_Text_Change()
+        {
+            using (UnitTestApplication.Start(Services))
+            {
+                var target = new TextBox
+                {
+                    Template = CreateTemplate(),
+                    Text = "Hello",
+                    AcceptsReturn = true
+                };
+
+                var impl = CreateMockTopLevelImpl();
+                var topLevel = new TestTopLevel(impl.Object)
+                {
+                    Template = CreateTopLevelTemplate()
+                };
+                topLevel.Content = target;
+                topLevel.ApplyTemplate();
+                topLevel.LayoutManager.ExecuteInitialLayoutPass();
+
+                target.ApplyTemplate();
+                target.Measure(Size.Infinity);
+                
+                Assert.Equal(1, target.GetLineCount());
+
+                target.Text = "Hello\r\nWorld";
+
+                Assert.Equal(2, target.GetLineCount());
+            }
+        }
+
+        [Fact]
+        public void Visible_LineCount_DoesNot_Affect_LineCount()
+        {
+            using (UnitTestApplication.Start(Services))
+            {
+                var target = new TextBox
+                {
+                    Template = CreateTemplate(),
+                    Text = "Hello\r\nWorld\r\nHello\r\nAvalonia",
+                    AcceptsReturn = true,
+                    MaxLines = 2,
+                };
+
+                var impl = CreateMockTopLevelImpl();
+                var topLevel = new TestTopLevel(impl.Object)
+                {
+                    Template = CreateTopLevelTemplate()
+                };
+                topLevel.Content = target;
+                topLevel.ApplyTemplate();
+                topLevel.LayoutManager.ExecuteInitialLayoutPass();
+
+                target.ApplyTemplate();
+                target.Measure(Size.Infinity);
+
+                Assert.Equal(4, target.GetLineCount());
+            }
+        }
 
         [Fact]
         public void CanUndo_CanRedo_Is_False_When_Initialized()

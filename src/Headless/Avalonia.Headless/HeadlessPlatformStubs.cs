@@ -66,7 +66,17 @@ namespace Avalonia.Headless
 
         public async Task<object?> GetDataAsync(string format)
         {
-            return await Task.Run(() => _data);
+            return await Task.Run(() =>
+            {
+                if (format == DataFormats.Text)
+                    return _text;
+                if (format == DataFormats.Files && _data is not null)
+                    return _data.GetFiles();
+                if (format == DataFormats.FileNames && _data is not null)
+                    return _data.GetFileNames();
+                else
+                    return (object?)_data;
+            });
         }
     }
 

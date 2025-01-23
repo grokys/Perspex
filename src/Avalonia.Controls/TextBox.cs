@@ -824,6 +824,20 @@ namespace Avalonia.Controls
         }
 
         /// <summary>
+        /// Get the number of lines in the TextBox.
+        /// </summary>
+        /// <value>number of lines in the TextBox, or -1 if no layout information is available</value>
+        /// <remarks>
+        /// If Wrap == true, changing the width of the TextBox may change this value.
+        /// The value returned is the number of lines in the entire TextBox, regardless of how many are
+        /// currently in view.
+        /// </remarks>
+        public int GetLineCount()
+        {
+            return this._presenter?.TextLayout.TextLines.Count ?? -1;
+        }
+
+        /// <summary>
         /// Raised when content is being copied to the clipboard
         /// </summary>
         public event EventHandler<RoutedEventArgs>? CopyingToClipboard

@@ -12,7 +12,8 @@ public class TextInputOptions
             AutoCapitalization = GetAutoCapitalization(avaloniaObject),
             IsSensitive = GetIsSensitive(avaloniaObject),
             Lowercase = GetLowercase(avaloniaObject),
-            Uppercase = GetUppercase(avaloniaObject)
+            Uppercase = GetUppercase(avaloniaObject),
+            ShowSuggestions = GetShowSuggestions(avaloniaObject),
         };
 
         return result;
@@ -253,4 +254,37 @@ public class TextInputOptions
     /// Text contains sensitive data like card numbers and should not be stored  
     /// </summary>
     public bool IsSensitive { get; set; }
+    
+    /// <summary>
+    /// Defines the <see cref="ShowSuggestions"/> property.
+    /// </summary>
+    public static readonly AttachedProperty<bool?> ShowSuggestionsProperty =
+        AvaloniaProperty.RegisterAttached<TextInputOptions, StyledElement, bool?>(
+            "ShowSuggestions",
+            inherits: true);
+    
+    /// <summary>
+    /// Sets the value of the attached <see cref="ShowSuggestionsProperty"/> on a control.
+    /// </summary>
+    /// <param name="avaloniaObject">The control.</param>
+    /// <param name="value">The property value to set.</param>
+    public static void SetShowSuggestions(StyledElement avaloniaObject, bool? value)
+    {
+        avaloniaObject.SetValue(ShowSuggestionsProperty, value);
+    }
+
+    /// <summary>
+    /// Gets the value of the attached <see cref="ShowSuggestionsProperty"/>.
+    /// </summary>
+    /// <param name="avaloniaObject">The target.</param>
+    /// <returns>true if ShowSuggestions</returns>
+    public static bool? GetShowSuggestions(StyledElement avaloniaObject)
+    {
+        return avaloniaObject.GetValue(ShowSuggestionsProperty);
+    }
+    
+    /// <summary>
+    /// Show virtual keyboard suggestions
+    /// </summary>
+    public bool? ShowSuggestions { get; set; }
 }
