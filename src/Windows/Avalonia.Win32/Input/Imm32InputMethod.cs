@@ -372,6 +372,11 @@ namespace Avalonia.Win32.Input
             }
 
             var flags = (GCS)ToInt32(lParam);
+            
+            if (flags == 0)
+            {
+                CompositionChanged("");
+            }
 
             if ((flags & GCS.GCS_RESULTSTR) != 0)
             {

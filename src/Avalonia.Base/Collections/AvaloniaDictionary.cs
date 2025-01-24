@@ -35,6 +35,21 @@ namespace Avalonia.Collections
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AvaloniaDictionary{TKey, TValue}"/> class using an IDictionary.
+        /// </summary>
+        public AvaloniaDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey>? comparer = null)
+        {
+            if (dictionary != null)
+            {
+                _inner = new Dictionary<TKey, TValue>(dictionary, comparer ?? EqualityComparer<TKey>.Default);
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(dictionary));
+            }
+        }
+
+        /// <summary>
         /// Occurs when the collection changes.
         /// </summary>
         public event NotifyCollectionChangedEventHandler? CollectionChanged;

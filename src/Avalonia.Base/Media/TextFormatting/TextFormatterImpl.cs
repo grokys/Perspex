@@ -951,35 +951,14 @@ namespace Avalonia.Media.TextFormatting
                 return;
             }
 
-            var textSpan = shapedText.Text.Span;
+            var trailingWhitespaceLength = shapedText.GlyphRun.Metrics.TrailingWhitespaceLength;
 
-            if (textSpan.IsEmpty)
+            if (trailingWhitespaceLength == 0)
             {
                 return;
             }
 
-            var whitespaceCharactersCount = 0;
-
-            for (var i = textSpan.Length - 1; i >= 0; i--)
-            {
-                var isWhitespace = Codepoint.ReadAt(textSpan, i, out _).IsWhiteSpace;
-
-                if (isWhitespace)
-                {
-                    whitespaceCharactersCount++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            if (whitespaceCharactersCount == 0)
-            {
-                return;
-            }
-
-            var splitIndex = shapedText.Length - whitespaceCharactersCount;
+            var splitIndex = shapedText.Length - trailingWhitespaceLength;
 
             var (textRuns, trailingWhitespaceRuns) = SplitTextRuns([shapedText], splitIndex, objectPool);
 

@@ -32,8 +32,26 @@ namespace Avalonia.Markup.Xaml.XamlIl.CompilerExtensions.Transformers
             var pn = on.Children.OfType<XamlAstXamlPropertyValueNode>()
                 .FirstOrDefault(p => p.Property.GetClrProperty().Name == "Selector");
 
+            // Missing selector, use the object's target type if available
             if (pn == null)
+            {
+                // We already went through this node
+                if (context.ParentNodes().FirstOrDefault() is AvaloniaXamlIlTargetTypeMetadataNode metadataNode
+                    && metadataNode.Value == on)
+                {
+                    return node;
+                }
+
+                if (FindStyleParentObject(on, context) is { } parentObjectNode)
+                {
+                    return new AvaloniaXamlIlTargetTypeMetadataNode(
+                        on,
+                        new XamlAstClrTypeReference(node, parentObjectNode.Type.GetClrType(), false),
+                        AvaloniaXamlIlTargetTypeMetadataNode.ScopeTypes.Style);
+                }
+
                 return node;
+            }
 
             if (pn.Values.Count != 1)
                 throw new XamlSelectorsTransformException("Selector property should have exactly one value",
@@ -195,6 +213,20 @@ namespace Avalonia.Markup.Xaml.XamlIl.CompilerExtensions.Transformers
             pn.Values[0] = selector;
 
             var templateType = GetLastTemplateTypeFromSelector(selector);
+
+            // Empty selector, use the object's target type if available
+            if (selector == initialNode)
+            {
+                if (FindStyleParentObject(on, context) is { } parentObjectNode)
+                {
+                    return new AvaloniaXamlIlTargetTypeMetadataNode(
+                        on,
+                        new XamlAstClrTypeReference(node, parentObjectNode.Type.GetClrType(), false),
+                        AvaloniaXamlIlTargetTypeMetadataNode.ScopeTypes.Style);
+                }
+
+                return node;
+            }
             
             var styleNode = new AvaloniaXamlIlTargetTypeMetadataNode(on,
                 new XamlAstClrTypeReference(selector, selector.TargetType!, false),
@@ -207,6 +239,29 @@ namespace Avalonia.Markup.Xaml.XamlIl.CompilerExtensions.Transformers
                     new XamlAstClrTypeReference(styleNode, templateType, false),
                     AvaloniaXamlIlTargetTypeMetadataNode.ScopeTypes.ControlTemplate)
             };
+        }
+
+        private static XamlAstObjectNode? FindStyleParentObject(XamlAstNode styleNode, AstTransformationContext context)
+        {
+            var avaloniaTypes = context.GetAvaloniaTypes();
+
+            var parentNode = context
+                .ParentNodes()
+                .OfType<XamlAstObjectNode>()
+                .FirstOrDefault(n => !avaloniaTypes.Styles.IsAssignableFrom(n.Type.GetClrType()));
+
+            if (parentNode is not null)
+            {
+                var parentType = parentNode.Type.GetClrType();
+
+                if (avaloniaTypes.StyledElement.IsAssignableFrom(parentType))
+                    return parentNode;
+
+                if (avaloniaTypes.ControlTheme.IsAssignableFrom(parentType))
+                    throw new XamlTransformException("Cannot add a Style without selector to a ControlTheme.", styleNode);
+            }
+
+            return null;
         }
 
         private static IXamlType? GetLastTemplateTypeFromSelector(XamlIlSelectorNode? node)
