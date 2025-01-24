@@ -160,16 +160,16 @@ namespace Avalonia.iOS
         [Export("accessibilityActivate")]
         public bool AccessibilityActivate() 
         {
-            IInvokeProvider? invokeProvider = _peer.GetProvider<IInvokeProvider>();
             IToggleProvider? toggleProvider = _peer.GetProvider<IToggleProvider>();
-            if (invokeProvider is not null)
-            {
-                invokeProvider.Invoke();
-                return true;
-            }
-            else if (toggleProvider is not null)
+            IInvokeProvider? invokeProvider = _peer.GetProvider<IInvokeProvider>();
+            if (toggleProvider is not null)
             {
                 toggleProvider.Toggle();
+                return true;
+            }
+            else if (invokeProvider is not null)
+            {
+                invokeProvider.Invoke();
                 return true;
             }
             else
