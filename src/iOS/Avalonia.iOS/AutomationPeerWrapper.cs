@@ -79,8 +79,8 @@ namespace Avalonia.iOS
         private static void UpdateValue(AutomationPeerWrapper self)
         {
             AutomationPeer peer = self;
-            self.AccessibilityValue = 
-                peer.GetProvider<IRangeValueProvider>()?.Value.ToString("0.##") ?? 
+            self.AccessibilityValue =
+                peer.GetProvider<IRangeValueProvider>()?.Value.ToString("0.##") ??
                 peer.GetProvider<IValueProvider>()?.Value;
             UIAccessibility.PostNotification(UIAccessibilityPostNotification.Announcement, self);
         }
@@ -104,14 +104,22 @@ namespace Avalonia.iOS
             setter?.Invoke(this);
         }
 
-        public void UpdateProperties()
+        public bool UpdatePropertiesIfValid()
         {
             bool canFocusAtAll = _peer.IsContentElement() && !_peer.IsOffscreen();
             IsAccessibilityElement = canFocusAtAll;
             AccessibilityRespondsToUserInteraction =
                 canFocusAtAll && _peer.IsKeyboardFocusable();
 
-            UpdateProperties(s_propertySetters.Keys.ToArray());
+            if (canFocusAtAll)
+            {
+                UpdateProperties(s_propertySetters.Keys.ToArray());
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void UpdateTraits()
@@ -158,7 +166,7 @@ namespace Avalonia.iOS
         }
 
         [Export("accessibilityActivate")]
-        public bool AccessibilityActivate() 
+        public bool AccessibilityActivate()
         {
             IToggleProvider? toggleProvider = _peer.GetProvider<IToggleProvider>();
             IInvokeProvider? invokeProvider = _peer.GetProvider<IInvokeProvider>();

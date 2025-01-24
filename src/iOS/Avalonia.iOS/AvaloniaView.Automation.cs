@@ -7,16 +7,16 @@ using UIKit;
 namespace Avalonia.iOS
 {
     public partial class AvaloniaView : IUIAccessibilityContainer
-    {   
+    {
         private readonly List<AutomationPeer> _childrenList = new();
         private readonly Dictionary<AutomationPeer, AutomationPeerWrapper> _childrenMap = new();
 
         [Export("accessibilityContainerType")]
-        public UIAccessibilityContainerType AccessibilityContainerType { get; set; } = 
+        public UIAccessibilityContainerType AccessibilityContainerType { get; set; } =
             UIAccessibilityContainerType.SemanticGroup;
 
         [Export("accessibilityElementCount")]
-        public nint AccessibilityElementCount() 
+        public nint AccessibilityElementCount()
         {
             UpdateChildren(_accessWrapper);
             return _childrenList.Count;
@@ -27,7 +27,16 @@ namespace Avalonia.iOS
         {
             try
             {
-                return _childrenMap[_childrenList[(int)index]];
+                var wrapper = _childrenMap[_childrenList[(int)index]];
+                if (wrapper.UpdatePropertiesIfValid())
+                {
+                    return wrapper;
+                }
+                else
+                {
+                    _childrenList.Remove(wrapper);
+                    _childrenMap.Remove(wrapper);
+                }
             }
             catch (KeyNotFoundException) { }
             catch (ArgumentOutOfRangeException) { }
@@ -46,23 +55,17 @@ namespace Avalonia.iOS
         {
             foreach (AutomationPeer child in peer.GetChildren())
             {
-                if ((child.GetName().Length == 0 &&
-                    !child.IsKeyboardFocusable()) ||
-                    child.IsOffscreen())
-                {
-                    _childrenList.Remove(child);
-                    _childrenMap.Remove(child);
-                }
-                else if (!_childrenMap.TryGetValue(child, out AutomationPeerWrapper? wrapper))
+                AutomationPeerWrapper? wrapper;
+                if (!_childrenMap.TryGetValue(child, out wrapper) && 
+                    (child.GetName().Length > 0 || child.IsKeyboardFocusable()))
                 {
                     _childrenList.Add(child);
                     _childrenMap.Add(child, new(this, child));
                 }
-                else
-                {
-                    wrapper.UpdateProperties();
-                    wrapper.UpdateTraits();
-                }
+
+                wrapper?.UpdatePropertiesIfValid();
+                wrapper?.UpdateTraits();
+
                 UpdateChildren(child);
             }
         }
