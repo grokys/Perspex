@@ -16,7 +16,7 @@ namespace Avalonia.iOS
             new Dictionary<AutomationProperty, Action<AutomationPeerWrapper>>()
             {
                 { AutomationElementIdentifiers.NameProperty, UpdateName },
-                { AutomationElementIdentifiers.HelpTextProperty, UpdateHelpText },
+                { AutomationElementIdentifiers.HelpTextProperty, UpdateValue },
                 { AutomationElementIdentifiers.BoundingRectangleProperty, UpdateBoundingRectangle },
 
                 { RangeValuePatternIdentifiers.IsReadOnlyProperty, UpdateIsReadOnly },
@@ -47,12 +47,6 @@ namespace Avalonia.iOS
             self.AccessibilityLabel = peer.GetName();
         }
 
-        private static void UpdateHelpText(AutomationPeerWrapper self)
-        {
-            AutomationPeer peer = self;
-            self.AccessibilityHint = peer.GetHelpText();
-        }
-
         private static void UpdateBoundingRectangle(AutomationPeerWrapper self)
         {
             AutomationPeer peer = self;
@@ -79,10 +73,15 @@ namespace Avalonia.iOS
         private static void UpdateValue(AutomationPeerWrapper self)
         {
             AutomationPeer peer = self;
-            self.AccessibilityValue =
+            string? newValue = 
                 peer.GetProvider<IRangeValueProvider>()?.Value.ToString("0.##") ??
-                peer.GetProvider<IValueProvider>()?.Value;
-            UIAccessibility.PostNotification(UIAccessibilityPostNotification.Announcement, self);
+                peer.GetProvider<IValueProvider>()?.Value ??
+                peer.GetHelpText();
+            if (self.AccessibilityValue != newValue)
+            {
+                self.AccessibilityValue = newValue;
+                UIAccessibility.PostNotification(UIAccessibilityPostNotification.Announcement, self);
+            }
         }
 
         private void PeerChildrenChanged(object? sender, EventArgs e)
@@ -106,19 +105,14 @@ namespace Avalonia.iOS
 
         public bool UpdatePropertiesIfValid()
         {
-            bool canFocusAtAll = _peer.IsContentElement() && !_peer.IsOffscreen();
-            IsAccessibilityElement = canFocusAtAll;
-            AccessibilityRespondsToUserInteraction =
-                canFocusAtAll && _peer.IsKeyboardFocusable();
-
-            if (canFocusAtAll)
+            if (_peer.IsContentElement() && !_peer.IsOffscreen())
             {
                 UpdateProperties(s_propertySetters.Keys.ToArray());
-                return true;
+                return IsAccessibilityElement = true;
             }
             else
             {
-                return false;
+                return IsAccessibilityElement = false;
             }
         }
 
