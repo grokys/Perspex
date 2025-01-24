@@ -201,6 +201,7 @@ namespace Avalonia.Controls
         private bool _showingAsDialog;
         private bool _positionWasSet;
         private bool _wasShownBefore;
+        private IDisposable? _modalSubscription;
 
         /// <summary>
         /// Initializes static members of the <see cref="Window"/> class.
@@ -614,6 +615,8 @@ namespace Avalonia.Controls
 
                 PlatformImpl?.Hide();
                 IsVisible = false;
+
+                _modalSubscription?.Dispose();
                 _shown = false;
 
                 Owner = null;
@@ -706,7 +709,7 @@ namespace Avalonia.Controls
             using (FreezeVisibilityChangeHandling())
             {
                 EnsureStateBeforeShow();
-                
+
                 if (modal && owner == null)
                 {
                     throw new ArgumentNullException(nameof(owner));
@@ -738,14 +741,14 @@ namespace Avalonia.Controls
                 var initialSize = new Size(
                     double.IsNaN(Width) ? ClientSize.Width : Width,
                     double.IsNaN(Height) ? ClientSize.Height : Height);
-                
+
                 initialSize = new Size(
                 MathUtilities.Clamp(initialSize.Width, MinWidth, MaxWidth),
                 MathUtilities.Clamp(initialSize.Height, MinHeight, MaxHeight));
 
                 var clientSizeChanged = initialSize != ClientSize;
                 ClientSize = initialSize; // ClientSize is required for Measure and Arrange
-                
+
                 // this will call ArrangeSetBounds
                 LayoutManager.ExecuteInitialLayoutPass();
 
@@ -762,21 +765,21 @@ namespace Avalonia.Controls
                     clientSizeChanged |= initialSize != ClientSize;
                     ClientSize = initialSize;
                 }
-                
+
                 Owner = owner;
 
                 SetWindowStartupLocation(owner);
-                
+
                 DesktopScalingOverride = null;
-                
+
                 if (clientSizeChanged || ClientSize != PlatformImpl?.ClientSize)
                 {
                     // Previously it was called before ExecuteInitialLayoutPass
                     PlatformImpl?.Resize(ClientSize, WindowResizeReason.Layout);
-                    
+
                     // we do not want PlatformImpl?.Resize to trigger HandleResized yet because it will set Width and Height.
                     // So perform some important actions from HandleResized
-                    
+
                     Renderer.Resized(ClientSize);
                     OnResized(new WindowResizedEventArgs(ClientSize, WindowResizeReason.Layout));
 
@@ -788,8 +791,8 @@ namespace Avalonia.Controls
 
                 FrameSize = PlatformImpl?.FrameSize;
 
-                _canHandleResized = true; 
-                
+                _canHandleResized = true;
+
                 StartRendering();
                 PlatformImpl?.Show(ShowActivated, modal);
 
@@ -798,22 +801,32 @@ namespace Avalonia.Controls
                 {
                     var tcs = new TaskCompletionSource<TResult>();
 
-                    Observable.FromEventPattern(
+                    var disposables = new CompositeDisposable(
+                    [
+                        Observable.FromEventPattern(
                             x => Closed += x,
                             x => Closed -= x)
                         .Take(1)
                         .Subscribe(_ =>
                         {
+                            _modalSubscription?.Dispose();
+                        }),
+                        Disposable.Create(() =>
+                        {
+                            _modalSubscription = null;
                             owner!.Activate();
                             tcs.SetResult((TResult)(_dialogResult ?? default(TResult)!));
-                        });
+                        })
+                    ]);
+
+                    _modalSubscription = disposables;
                     result = tcs.Task;
                 }
 
                 OnOpened(EventArgs.Empty);
                 if (!modal)
                     _wasShownBefore = true;
-                
+
                 return result;
             }
         }
