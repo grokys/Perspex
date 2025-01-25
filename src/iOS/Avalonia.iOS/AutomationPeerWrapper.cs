@@ -44,7 +44,15 @@ namespace Avalonia.iOS
         private static void UpdateName(AutomationPeerWrapper self)
         {
             AutomationPeer peer = self;
-            self.AccessibilityLabel = peer.GetName();
+            IReadOnlyList<AutomationPeer> children = peer.GetChildren();
+            if (peer.GetName().Length == 0 && children.Count == 1)
+            {
+                self.AccessibilityLabel = children[0].GetName();
+            }
+            else
+            {
+                self.AccessibilityLabel = peer.GetName();
+            }
         }
 
         private static void UpdateBoundingRectangle(AutomationPeerWrapper self)
@@ -73,10 +81,21 @@ namespace Avalonia.iOS
         private static void UpdateValue(AutomationPeerWrapper self)
         {
             AutomationPeer peer = self;
-            string? newValue = 
+            IReadOnlyList<AutomationPeer> children = peer.GetChildren();
+
+            string helpText;
+            if (peer.GetHelpText().Length == 0 && children.Count == 1)
+            {
+                helpText = children[0].GetHelpText();
+            }
+            else
+            {
+                helpText = peer.GetHelpText();
+            }
+
+            string newValue =
                 peer.GetProvider<IRangeValueProvider>()?.Value.ToString("0.##") ??
-                peer.GetProvider<IValueProvider>()?.Value ??
-                peer.GetHelpText();
+                peer.GetProvider<IValueProvider>()?.Value ?? helpText;
             if (self.AccessibilityValue != newValue)
             {
                 self.AccessibilityValue = newValue;
@@ -189,7 +208,7 @@ namespace Avalonia.iOS
         public override void AccessibilityElementDidBecomeFocused()
         {
             base.AccessibilityElementDidBecomeFocused();
-            _peer.SetFocus();
+            _peer.BringIntoView();
         }
 
         public override void AccessibilityDecrement()
