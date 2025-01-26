@@ -16,7 +16,7 @@ namespace Avalonia.iOS
             new Dictionary<AutomationProperty, Action<AutomationPeerWrapper>>()
             {
                 { AutomationElementIdentifiers.NameProperty, UpdateName },
-                { AutomationElementIdentifiers.HelpTextProperty, UpdateValue },
+                { AutomationElementIdentifiers.HelpTextProperty, UpdateHelpText },
                 { AutomationElementIdentifiers.BoundingRectangleProperty, UpdateBoundingRectangle },
 
                 { RangeValuePatternIdentifiers.IsReadOnlyProperty, UpdateIsReadOnly },
@@ -44,15 +44,13 @@ namespace Avalonia.iOS
         private static void UpdateName(AutomationPeerWrapper self)
         {
             AutomationPeer peer = self;
-            IReadOnlyList<AutomationPeer> children = peer.GetChildren();
-            if (peer.GetName().Length == 0 && children.Count == 1)
-            {
-                self.AccessibilityLabel = children[0].GetName();
-            }
-            else
-            {
-                self.AccessibilityLabel = peer.GetName();
-            }
+            self.AccessibilityLabel = peer.GetName();
+        }
+
+        private static void UpdateHelpText(AutomationPeerWrapper self)
+        {
+            AutomationPeer peer = self;
+            self.AccessibilityHint = peer.GetHelpText();
         }
 
         private static void UpdateBoundingRectangle(AutomationPeerWrapper self)
@@ -81,21 +79,9 @@ namespace Avalonia.iOS
         private static void UpdateValue(AutomationPeerWrapper self)
         {
             AutomationPeer peer = self;
-            IReadOnlyList<AutomationPeer> children = peer.GetChildren();
-
-            string helpText;
-            if (peer.GetHelpText().Length == 0 && children.Count == 1)
-            {
-                helpText = children[0].GetHelpText();
-            }
-            else
-            {
-                helpText = peer.GetHelpText();
-            }
-
-            string newValue =
+            string? newValue =
                 peer.GetProvider<IRangeValueProvider>()?.Value.ToString("0.##") ??
-                peer.GetProvider<IValueProvider>()?.Value ?? helpText;
+                peer.GetProvider<IValueProvider>()?.Value;
             if (self.AccessibilityValue != newValue)
             {
                 self.AccessibilityValue = newValue;
@@ -103,7 +89,7 @@ namespace Avalonia.iOS
             }
         }
 
-        private void PeerChildrenChanged(object? sender, EventArgs e) => _view.UpdateChildren(_peer.GetVisualRoot()!);
+        private void PeerChildrenChanged(object? sender, EventArgs e) => _view.UpdateChildren(_peer);
 
         private void PeerPropertyChanged(object? sender, AutomationPropertyChangedEventArgs e) => UpdateProperties(e.Property);
 
