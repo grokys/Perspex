@@ -103,11 +103,7 @@ namespace Avalonia.iOS
             }
         }
 
-        private void PeerChildrenChanged(object? sender, EventArgs e)
-        {
-            _view.UpdateChildren(_peer);
-            UIAccessibility.PostNotification(UIAccessibilityPostNotification.ScreenChanged, this);
-        }
+        private void PeerChildrenChanged(object? sender, EventArgs e) => _view.UpdateChildren(_peer.GetVisualRoot()!);
 
         private void PeerPropertyChanged(object? sender, AutomationPropertyChangedEventArgs e) => UpdateProperties(e.Property);
 
