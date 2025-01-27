@@ -35,7 +35,7 @@ namespace Avalonia.Media
         /// </summary>
         public PathGeometry()
         {
-            _figures = new PathFigures();
+            Figures = new PathFigures();
         }
 
         /// <summary>
