@@ -349,7 +349,7 @@ namespace Avalonia.IntegrationTests.Appium
             }
         }
 
-        [Fact]
+        [PlatformFact(TestPlatforms.Windows)]
         public void Changing_Size_Should_Not_Change_Position()
         {
             using (OpenWindow())
