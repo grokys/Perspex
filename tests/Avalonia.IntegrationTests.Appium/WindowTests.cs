@@ -349,6 +349,24 @@ namespace Avalonia.IntegrationTests.Appium
             }
         }
 
+        [PlatformFact(TestPlatforms.Windows)]
+        public void Changing_Size_Should_Not_Change_Position()
+        {
+            using (OpenWindow())
+            {
+                var info = GetWindowInfo();
+
+                Session.FindElementByAccessibilityId("AddToWidth").SendClick();
+                Session.FindElementByAccessibilityId("AddToHeight").SendClick();
+
+                var updatedInfo = GetWindowInfo();
+                Assert.Equal(info.Position, updatedInfo.Position);
+                Assert.Equal(info.FrameSize
+                    .WithWidth(info.FrameSize.Width + 10)
+                    .WithHeight(info.FrameSize.Height + 10), updatedInfo.FrameSize);
+            }
+        }
+
         public static TheoryData<Size?, ShowWindowMode, WindowStartupLocation, bool> StartupLocationData()
         {
             var sizes = new Size?[] { null, new Size(400, 300) };
