@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\src\Avalonia.Base\Avalonia.Base.csproj" />
     <ProjectReference Include="..\..\src\Avalonia.Controls\Avalonia.Controls.csproj" />
     <ProjectReference Include="..\..\src\Avalonia.Themes.Simple\Avalonia.Themes.Simple.csproj" />
+    <ProjectReference Include="..\..\src\tools\Avalonia.Generators\Avalonia.Generators.csproj" />
     <ProjectReference Include="..\Avalonia.UnitTests\Avalonia.UnitTests.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +35,14 @@
   <ItemGroup>
     <Compile Include="..\Avalonia.IntegrationTests.Appium\PlatformFactAttribute.cs">
       <Link>PlatformFactAttribute.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Xaml\CompiledBindingsTests\TestChildControl.axaml.cs">
+      <DependentUpon>TestChildControl.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Xaml\CompiledBindingsTests\TestWindow.axaml.cs">
+      <DependentUpon>TestWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
