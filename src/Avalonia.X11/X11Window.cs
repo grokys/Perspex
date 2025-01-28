@@ -787,37 +787,11 @@ namespace Avalonia.X11
                 WindowState state = WindowState.Normal;
                 if(hasValue)
                 {
-
                     XGetWindowProperty(_x11.Display, _handle, _x11.Atoms._NET_WM_STATE, IntPtr.Zero, new IntPtr(256),
                         false, (IntPtr)Atom.XA_ATOM, out _, out _, out var nitems, out _,
                         out var prop);
-                    int maximized = 0;
                     var pitems = (IntPtr*)prop.ToPointer();
-                    for (var c = 0; c < nitems.ToInt32(); c++)
-                    {
-                        if (pitems[c] == _x11.Atoms._NET_WM_STATE_HIDDEN)
-                        {
-                            state = WindowState.Minimized;
-                            break;
-                        }
-
-                        if(pitems[c] == _x11.Atoms._NET_WM_STATE_FULLSCREEN)
-                        {
-                            state = WindowState.FullScreen;
-                            break;
-                        }
-
-                        if (pitems[c] == _x11.Atoms._NET_WM_STATE_MAXIMIZED_HORZ ||
-                            pitems[c] == _x11.Atoms._NET_WM_STATE_MAXIMIZED_VERT)
-                        {
-                            maximized++;
-                            if (maximized == 2)
-                            {
-                                state = WindowState.Maximized;
-                                break;
-                            }
-                        }
-                    }
+                    state = AtomsToWindowState(nitems, pitems);
                     XFree(prop);
                 }
                 if (_lastWindowState != state)
@@ -827,6 +801,38 @@ namespace Avalonia.X11
                 }
             }
 
+        }
+
+        private WindowState AtomsToWindowState(IntPtr nitems, IntPtr* pitems)
+        {
+            for (var c = 0; c < nitems.ToInt32(); c++)
+            {
+                if (pitems[c] == _x11.Atoms._NET_WM_STATE_HIDDEN)
+                {
+                    return WindowState.Minimized;
+                }
+            }
+            for (var c = 0; c < nitems.ToInt32(); c++)
+            {
+                if(pitems[c] == _x11.Atoms._NET_WM_STATE_FULLSCREEN)
+                {
+                    return WindowState.FullScreen;
+                }
+            }
+            int maximized = 0;
+            for (var c = 0; c < nitems.ToInt32(); c++)
+            {
+                if (pitems[c] == _x11.Atoms._NET_WM_STATE_MAXIMIZED_HORZ ||
+                    pitems[c] == _x11.Atoms._NET_WM_STATE_MAXIMIZED_VERT)
+                {
+                    maximized++;
+                    if (maximized == 2)
+                    {
+                        return WindowState.Maximized;
+                    }
+                }
+            }
+            return WindowState.Normal;
         }
 
         private static RawInputModifiers TranslateModifiers(XModifierMask state)
