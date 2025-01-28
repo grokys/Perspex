@@ -566,7 +566,7 @@ namespace Avalonia.Media.TextFormatting
             {
                 _textSourceLength = 0;
 
-                TextLine? previousLine = null;
+                TextLineImpl? previousLine = null;
 
                 var textFormatter = TextFormatter.Current;
 
@@ -599,7 +599,7 @@ namespace Avalonia.Media.TextFormatting
                         if (previousLine?.TextLineBreak != null && _textTrimming != TextTrimming.None)
                         {
                             var collapsedLine =
-                                previousLine.Collapse(GetCollapsingProperties(MaxWidth));
+                                previousLine.Collapse(GetCollapsingProperties(MaxWidth, previousLine._resolvedFlowDirection));
 
                             textLines[textLines.Count - 1] = collapsedLine;
                         }
@@ -611,7 +611,7 @@ namespace Avalonia.Media.TextFormatting
 
                     if (hasOverflowed && _textTrimming != TextTrimming.None)
                     {
-                        textLine = (TextLineImpl)textLine.Collapse(GetCollapsingProperties(MaxWidth));
+                        textLine = (TextLineImpl)textLine.Collapse(GetCollapsingProperties(MaxWidth, textLine._resolvedFlowDirection));
                     }
 
                     textLines.Add(textLine);
@@ -625,7 +625,7 @@ namespace Avalonia.Media.TextFormatting
                     {
                         if (textLine.TextLineBreak is { IsSplit: true })
                         {
-                            textLines[textLines.Count - 1] = textLine.Collapse(GetCollapsingProperties(WidthIncludingTrailingWhitespace));
+                            textLines[textLines.Count - 1] = textLine.Collapse(GetCollapsingProperties(WidthIncludingTrailingWhitespace, textLine._resolvedFlowDirection));
                         }
 
                         break;
@@ -704,8 +704,9 @@ namespace Avalonia.Media.TextFormatting
         /// Gets the <see cref="TextCollapsingProperties"/> for current text trimming mode.
         /// </summary>
         /// <param name="width">The collapsing width.</param>
+        /// <param name="resolvedFlowDirection">The resolved flow direction.</param>
         /// <returns>The <see cref="TextCollapsingProperties"/>.</returns>
-        private TextCollapsingProperties? GetCollapsingProperties(double width)
+        private TextCollapsingProperties? GetCollapsingProperties(double width, FlowDirection resolvedFlowDirection)
         {
             if (_textTrimming == TextTrimming.None)
             {
@@ -713,7 +714,7 @@ namespace Avalonia.Media.TextFormatting
             }
 
             return _textTrimming.CreateCollapsingProperties(
-                new TextCollapsingCreateInfo(width, _paragraphProperties.DefaultTextRunProperties, _paragraphProperties.FlowDirection));
+                new TextCollapsingCreateInfo(width, _paragraphProperties.DefaultTextRunProperties, resolvedFlowDirection));
         }
 
         public void Dispose()

@@ -14,7 +14,6 @@ namespace Avalonia.Media.TextFormatting
             }
 
             var runIndex = 0;
-            var currentWidth = 0.0;
             var collapsedLength = 0;
             var shapedSymbol = TextFormatter.CreateSymbol(properties.Symbol, FlowDirection.LeftToRight);
 
@@ -26,7 +25,7 @@ namespace Avalonia.Media.TextFormatting
 
             var availableWidth = properties.Width - shapedSymbol.Size.Width;
 
-            if(properties.FlowDirection== FlowDirection.LeftToRight)
+            if(properties.FlowDirection == FlowDirection.LeftToRight)
             {
                 while (runIndex < textRuns.Count)
                 {
@@ -36,9 +35,7 @@ namespace Avalonia.Media.TextFormatting
                     {
                         case ShapedTextRun shapedRun:
                             {
-                                currentWidth += shapedRun.Size.Width;
-
-                                if (currentWidth > availableWidth)
+                                if (shapedRun.Size.Width > availableWidth)
                                 {
                                     if (shapedRun.TryMeasureCharacters(availableWidth, out var measuredLength))
                                     {
@@ -82,7 +79,7 @@ namespace Avalonia.Media.TextFormatting
                         case DrawableTextRun drawableRun:
                             {
                                 //The whole run needs to fit into available space
-                                if (currentWidth + drawableRun.Size.Width > availableWidth)
+                                if (drawableRun.Size.Width > availableWidth)
                                 {
                                     return TextCollapsingProperties.CreateCollapsedRuns(textLine, collapsedLength, FlowDirection.LeftToRight, shapedSymbol);
                                 }
@@ -110,9 +107,7 @@ namespace Avalonia.Media.TextFormatting
                     {
                         case ShapedTextRun shapedRun:
                             {
-                                currentWidth += shapedRun.Size.Width;
-
-                                if (currentWidth > availableWidth)
+                                if (shapedRun.Size.Width > availableWidth)
                                 {
                                     if (shapedRun.TryMeasureCharacters(availableWidth, out var measuredLength))
                                     {
@@ -156,7 +151,7 @@ namespace Avalonia.Media.TextFormatting
                         case DrawableTextRun drawableRun:
                             {
                                 //The whole run needs to fit into available space
-                                if (currentWidth + drawableRun.Size.Width > availableWidth)
+                                if (drawableRun.Size.Width > availableWidth)
                                 {
                                     return TextCollapsingProperties.CreateCollapsedRuns(textLine, collapsedLength, FlowDirection.RightToLeft, shapedSymbol);
                                 }
