@@ -146,7 +146,7 @@ namespace Avalonia.Controls
         /// </summary>
         public void SelectAll()
         {
-            var text = Text;
+            var text = HasComplexContent ? Inlines?.Text : Text;
 
             SetCurrentValue(SelectionStartProperty, 0);
             SetCurrentValue(SelectionEndProperty, text?.Length ?? 0);
