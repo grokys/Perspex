@@ -1,5 +1,7 @@
 using Avalonia.Layout;
 using Avalonia.Metadata;
+using Avalonia.Platform;
+using Avalonia.Styling;
 
 namespace Avalonia.Controls
 {

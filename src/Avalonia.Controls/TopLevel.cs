@@ -146,6 +146,8 @@ namespace Avalonia.Controls
         static TopLevel()
         {
             KeyboardNavigation.TabNavigationProperty.OverrideDefaultValue<TopLevel>(KeyboardNavigationMode.Cycle);
+            Avalonia.Styling.Container.SizingProperty.OverrideDefaultValue<TopLevel>(ContainerSizing.WidthAndHeight);
+
             AffectsMeasure<TopLevel>(ClientSizeProperty);
 
             SystemBarColorProperty.Changed.AddClassHandler<Control>((view, e) =>
@@ -640,6 +642,7 @@ namespace Avalonia.Controls
         }
 
         private IDisposable? _insetsPaddings;
+
         private void InvalidateChildInsetsPadding()
         {
             if (Content is Control child
