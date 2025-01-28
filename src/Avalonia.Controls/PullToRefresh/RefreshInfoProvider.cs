@@ -9,8 +9,8 @@ namespace Avalonia.Controls.PullToRefresh
     {
         internal const double DefaultExecutionRatio = 0.8;
 
-        private readonly PullDirection _refreshPullDirection;
-        private readonly Size _refreshVisualizerSize;
+        private PullDirection _refreshPullDirection;
+        private Size _refreshVisualizerSize;
 
         private readonly CompositionVisual? _visual;
         private bool _isInteractingForRefresh;
@@ -29,6 +29,14 @@ namespace Avalonia.Controls.PullToRefresh
         public static readonly DirectProperty<RefreshInfoProvider, double> InteractionRatioProperty =
             AvaloniaProperty.RegisterDirect<RefreshInfoProvider, double>(nameof(InteractionRatio),
                 s => s.InteractionRatio, (s, o) => s.InteractionRatio = o);
+
+        public static readonly DirectProperty<RefreshInfoProvider, PullDirection> PullDirectionProperty =
+            AvaloniaProperty.RegisterDirect<RefreshInfoProvider, PullDirection>(nameof(PullDirection),
+                s => s.PullDirection, (s, o) => s.PullDirection = o);
+
+        public static readonly DirectProperty<RefreshInfoProvider, Size> RefreshVisualizerSizeProperty =
+            AvaloniaProperty.RegisterDirect<RefreshInfoProvider, Size>(nameof(RefreshVisualizerSize),
+                s => s.RefreshVisualizerSize, (s, o) => s.RefreshVisualizerSize = o);
 
         /// <summary>
         /// Defines the <see cref="RefreshStarted"/> event.
@@ -62,6 +70,18 @@ namespace Avalonia.Controls.PullToRefresh
         {
             get => _interactionRatio;
             set => SetAndRaise(InteractionRatioProperty, ref _interactionRatio, value);
+        }
+
+        public Size RefreshVisualizerSize
+        {
+            get => _refreshVisualizerSize;
+            set => SetAndRaise(RefreshVisualizerSizeProperty, ref _refreshVisualizerSize, value);
+        }
+
+        public PullDirection PullDirection
+        {
+            get => _refreshPullDirection;
+            set => SetAndRaise(PullDirectionProperty, ref _refreshPullDirection, value);
         }
 
         public double ExecutionRatio
