@@ -37,6 +37,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A689DEF5-D50F-4975-8B72-124C9EB54066}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		src\Shared\DebuggerHelper.cs = src\Shared\DebuggerHelper.cs
 		src\Shared\IsExternalInit.cs = src\Shared\IsExternalInit.cs
 		src\Shared\ModuleInitializer.cs = src\Shared\ModuleInitializer.cs
 		src\Shared\NullableAttributes.cs = src\Shared\NullableAttributes.cs
