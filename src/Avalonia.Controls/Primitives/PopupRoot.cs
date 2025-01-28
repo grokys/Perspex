@@ -61,6 +61,7 @@ namespace Avalonia.Controls.Primitives
         {
             ParentTopLevel = parent;
             impl.SetWindowManagerAddShadowHint(WindowManagerAddShadowHint);
+            impl.SetTopmost(Topmost);
         }
 
         /// <summary>
@@ -224,6 +225,10 @@ namespace Avalonia.Controls.Primitives
             if (change.Property == WindowManagerAddShadowHintProperty)
             {
                 PlatformImpl?.SetWindowManagerAddShadowHint(change.GetNewValue<bool>());
+            }
+            else if (change.Property == TopmostProperty)
+            {
+                PlatformImpl?.SetTopmost(Topmost);
             }
         }
     }

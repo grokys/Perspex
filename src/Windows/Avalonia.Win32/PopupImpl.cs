@@ -53,8 +53,7 @@ namespace Avalonia.Win32
                 UnmanagedMethods.WindowStyles.WS_CLIPCHILDREN;
 
             UnmanagedMethods.WindowStyles exStyle =
-                UnmanagedMethods.WindowStyles.WS_EX_TOOLWINDOW |
-                UnmanagedMethods.WindowStyles.WS_EX_TOPMOST;
+                UnmanagedMethods.WindowStyles.WS_EX_TOOLWINDOW;
 
             var result = UnmanagedMethods.CreateWindowEx(
                 (int)exStyle,
@@ -84,6 +83,10 @@ namespace Avalonia.Win32
                     _maxAutoSize = null;
                     goto default;
                 case UnmanagedMethods.WindowsMessage.WM_MOUSEACTIVATE:
+                    if (_parent?.Handle is not null)
+                    {
+                        UnmanagedMethods.SetFocus(_parent.Handle.Handle);
+                    }
                     return (IntPtr)UnmanagedMethods.MouseActivate.MA_NOACTIVATE;
                 default:
                     return base.WndProc(hWnd, msg, wParam, lParam);
