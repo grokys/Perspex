@@ -31,6 +31,8 @@ namespace Avalonia.Media.TextFormatting
 
             var currentPosition = textLine.FirstTextSourceIndex;
 
+            var whiteSpaceWidth = 0.0;
+
             for (var i = 0; i < lineImpl.TextRuns.Count; ++i)
             {
                 var textRun = lineImpl.TextRuns[i];
@@ -41,15 +43,38 @@ namespace Avalonia.Media.TextFormatting
                     continue;
                 }
 
-                var lineBreakEnumerator = new LineBreakEnumerator(text.Span);
-
-                while (lineBreakEnumerator.MoveNext(out var currentBreak))
+                if (textRun is ShapedTextRun shapedText)
                 {
-                    if (!currentBreak.Required && currentBreak.PositionWrap != textRun.Length)
+                    var glyphRun = shapedText.GlyphRun;
+                    var shapedBuffer = shapedText.ShapedBuffer;
+
+                    var lineBreakEnumerator = new LineBreakEnumerator(text.Span);
+
+                    while (lineBreakEnumerator.MoveNext(out var currentBreak))
                     {
-                        breakOportunities.Enqueue(currentPosition + currentBreak.PositionMeasure);
+                        //Ignore the break at the end
+                        if(currentPosition + currentBreak.PositionWrap == textLine.Length - TextRun.DefaultTextSourceLength)
+                        {
+                            break;
+                        }
+
+                        if (!currentBreak.Required)
+                        {
+                            breakOportunities.Enqueue(currentPosition + currentBreak.PositionWrap);
+
+                            var offset = Math.Max(0, currentPosition - glyphRun.Metrics.FirstCluster);
+
+                            var characterIndex = currentPosition - offset + currentBreak.PositionWrap - 1;
+                            var glyphIndex = glyphRun.FindGlyphIndex(characterIndex);
+                            var glyphInfo = shapedBuffer[glyphIndex];
+
+                            if (Codepoint.ReadAt(text.Span, currentBreak.PositionWrap - 1, out _).IsWhiteSpace)
+                            {
+                                whiteSpaceWidth += glyphInfo.GlyphAdvance;
+                            }
+                        }
                     }
-                }
+                }  
 
                 currentPosition += textRun.Length;
             }
@@ -59,7 +84,9 @@ namespace Avalonia.Media.TextFormatting
                 return;
             }
 
-            var remainingSpace = Math.Max(0, paragraphWidth - lineImpl.WidthIncludingTrailingWhitespace);
+            //Adjust remaining space by whiteSpace width
+            var remainingSpace = Math.Max(0, paragraphWidth - lineImpl.Width) + whiteSpaceWidth;
+
             var spacing = remainingSpace / breakOportunities.Count;
 
             currentPosition = textLine.FirstTextSourceIndex;
@@ -82,17 +109,25 @@ namespace Avalonia.Media.TextFormatting
                     {
                         var characterIndex = breakOportunities.Dequeue();
 
-                        if (characterIndex < currentPosition)
+                        var offset = Math.Max(0, currentPosition - glyphRun.Metrics.FirstCluster);
+
+                        if (characterIndex + offset < currentPosition)
                         {
                             continue;
                         }
 
-                        var offset = Math.Max(0, currentPosition - glyphRun.Metrics.FirstCluster);
-                        var glyphIndex = glyphRun.FindGlyphIndex(characterIndex - offset);
+                        var glyphIndex = glyphRun.FindGlyphIndex(characterIndex - offset - 1);
                         var glyphInfo = shapedBuffer[glyphIndex];
 
+                        var isWhitespace = Codepoint.ReadAt(text.Span, characterIndex - 1 - currentPosition, out _).IsWhiteSpace;
+
                         shapedBuffer[glyphIndex] = new GlyphInfo(glyphInfo.GlyphIndex,
-                            glyphInfo.GlyphCluster, glyphInfo.GlyphAdvance + spacing);
+                            glyphInfo.GlyphCluster, isWhitespace ? spacing : glyphInfo.GlyphAdvance + spacing);
+
+                        if (glyphIndex == shapedBuffer.Length - 1)
+                        {
+                            break;
+                        }
                     }
 
                     glyphRun.GlyphInfos = shapedBuffer;
