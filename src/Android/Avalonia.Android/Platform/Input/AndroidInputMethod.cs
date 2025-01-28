@@ -122,7 +122,7 @@ namespace Avalonia.Android.Platform.Input
 
         private void _client_SurroundingTextChanged(object? sender, EventArgs e)
         {
-            if (_inputConnection is null || _inputConnection.IsInBatchEdit)
+            if (_inputConnection is null || _inputConnection.IsInBatchEdit || _inputConnection.IsInUpdate)
                 return;
             OnSurroundingTextChanged();
         }
