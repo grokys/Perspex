@@ -100,6 +100,7 @@ namespace Avalonia.Win32
         private POINT _maxTrackSize;
         private WindowImpl? _parent;
         private ExtendClientAreaChromeHints _extendChromeHints = ExtendClientAreaChromeHints.Default;
+        private Win32WindowCornerHints _cornerHints;
         private bool _isCloseRequested;
         private bool _shown;
         private bool _hiddenWindowIsParent;
@@ -1144,6 +1145,30 @@ namespace Avalonia.Win32
             return margins;
         }
 
+        private static DwmWindowCornerPreference HintsToCornerPreference(Win32WindowCornerHints cornerHints, DwmWindowCornerPreference noHintDefault)
+        {
+            return cornerHints switch
+            {
+                Win32WindowCornerHints.NoHint => noHintDefault,
+                Win32WindowCornerHints.PlatformDefault => DwmWindowCornerPreference.DWMWCP_DEFAULT,
+                Win32WindowCornerHints.Rounded => DwmWindowCornerPreference.DWMWCP_ROUND,
+                Win32WindowCornerHints.NotRounded => DwmWindowCornerPreference.DWMWCP_DONOTROUND,
+                _ => throw new ArgumentOutOfRangeException(nameof(cornerHints), cornerHints, null)
+            };
+        }
+
+        private void UpdateWindowCornerPreference()
+        {
+            int cornerPreference = (int)HintsToCornerPreference(_cornerHints,
+                _isClientAreaExtended && WindowState != WindowState.FullScreen ?
+                    DwmWindowCornerPreference.DWMWCP_ROUND :
+                    DwmWindowCornerPreference.DWMWCP_DEFAULT);
+            unsafe
+            {
+                DwmSetWindowAttribute(_hwnd, (int)DwmWindowAttribute.DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
+            }
+        }
+
         private void ExtendClientArea()
         {
             if (!_shown)
@@ -1162,12 +1187,6 @@ namespace Avalonia.Win32
             {
                 var margins = UpdateExtendMargins();
                 DwmExtendFrameIntoClientArea(_hwnd, ref margins);
-
-                unsafe
-                {
-                    int cornerPreference = (int)DwmWindowCornerPreference.DWMWCP_ROUND;
-                    DwmSetWindowAttribute(_hwnd, (int)DwmWindowAttribute.DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
-                }
             }
             else
             {
@@ -1176,13 +1195,9 @@ namespace Avalonia.Win32
 
                 _offScreenMargin = new Thickness();
                 _extendedMargins = new Thickness();
-
-                unsafe
-                {
-                    int cornerPreference = (int)DwmWindowCornerPreference.DWMWCP_DEFAULT;
-                    DwmSetWindowAttribute(_hwnd, (int)DwmWindowAttribute.DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
-                }
             }
+
+            UpdateWindowCornerPreference();
 
             if (!_isClientAreaExtended || (_extendChromeHints.HasAllFlags(ExtendClientAreaChromeHints.SystemChrome) &&
                 !_extendChromeHints.HasAllFlags(ExtendClientAreaChromeHints.PreferSystemChrome)))
@@ -1601,6 +1616,14 @@ namespace Avalonia.Win32
             _extendTitleBarHint = titleBarHeight;
 
             ExtendClientArea();
+        }
+
+        /// <inheritdoc/>
+        public void SetWindowCornerHints(Win32WindowCornerHints hints)
+        {
+            _cornerHints = hints;
+
+            UpdateWindowCornerPreference();
         }
 
         /// <inheritdoc/>
