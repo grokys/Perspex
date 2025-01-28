@@ -5,8 +5,8 @@
     <PackageReference Condition="'$(IncludeWasmSkia)' == 'true'" Include="SkiaSharp.NativeAssets.WebAssembly" Version="2.88.9" />
   </ItemGroup>
   <ItemGroup Condition="'$(AvsIncludeSkiaSharp3)' == 'true'">
-    <PackageReference Include="SkiaSharp" Version="3.118.0-preview.1.2" />
-    <PackageReference Condition="'$(IncludeLinuxSkia)' == 'true'" Include="SkiaSharp.NativeAssets.Linux" Version="3.118.0-preview.1.2" />
-    <PackageReference Condition="'$(IncludeWasmSkia)' == 'true'" Include="SkiaSharp.NativeAssets.WebAssembly" Version="3.118.0-preview.1.2" />
+    <PackageReference Include="SkiaSharp" Version="3.118.0" />
+    <PackageReference Condition="'$(IncludeLinuxSkia)' == 'true'" Include="SkiaSharp.NativeAssets.Linux" Version="3.118.0" />
+    <PackageReference Condition="'$(IncludeWasmSkia)' == 'true'" Include="SkiaSharp.NativeAssets.WebAssembly" Version="3.118.0" />
   </ItemGroup>
 </Project>

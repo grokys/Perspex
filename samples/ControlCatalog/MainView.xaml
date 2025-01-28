@@ -202,6 +202,9 @@
       <TabItem Header="Screens">
         <pages:ScreenPage />
       </TabItem>
+      <TabItem Header="SKSLEffect">
+        <pages:SKSLEffectPage />
+      </TabItem>
       <FlyoutBase.AttachedFlyout>
         <Flyout>
           <StackPanel Width="152" Spacing="8">
