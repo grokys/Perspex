@@ -166,6 +166,11 @@ namespace Avalonia.Android.Platform
             return insets;
         }
 
+        internal void SetDefaultSystemLightMode(bool islightMode)
+        {
+            _isDefaultSystemBarLightTheme = islightMode;
+        }
+
         private void NotifySafeAreaChanged(Thickness safeAreaPadding)
         {
             Dispatcher.UIThread.Send(_ => SafeAreaChanged?.Invoke(this, new SafeAreaChangedArgs(safeAreaPadding)));
