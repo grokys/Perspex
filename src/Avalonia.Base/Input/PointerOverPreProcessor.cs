@@ -67,7 +67,9 @@ namespace Avalonia.Input
                 else if (pointerDevice.TryGetPointer(args) is { } pointer &&
                     pointer.Type != PointerType.Touch)
                 {
-                    var element = pointer.Captured ?? args.InputHitTestResult.firstEnabledAncestor;
+                    // See PointerOver_Or_Exited_Should_Ignore_Capture test.
+                    // Following UWP behavior, PointerEntered and PointerExited events should always ignore captured element. 
+                    var element = args.InputHitTestResult.firstEnabledAncestor;
 
                     SetPointerOver(pointer, args.Root, element, args.Timestamp, args.Position,
                         new PointerPointProperties(args.InputModifiers, args.Type.ToUpdateKind()),
@@ -84,7 +86,7 @@ namespace Avalonia.Input
 
                 if (dirtyRect.Contains(clientPoint))
                 {
-                    var element = pointer.Captured ?? _inputRoot.InputHitTest(clientPoint);
+                    var element = _inputRoot.InputHitTest(clientPoint);
                     SetPointerOver(pointer, _inputRoot, element, 0, clientPoint, PointerPointProperties.None, KeyModifiers.None);
                 }
                 else if (!((Visual)_inputRoot).Bounds.Contains(clientPoint))

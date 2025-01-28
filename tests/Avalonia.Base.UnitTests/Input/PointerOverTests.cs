@@ -117,42 +117,6 @@ namespace Avalonia.Base.UnitTests.Input
         }
 
         [Fact]
-        public void HitTest_Should_Be_Ignored_If_Element_Captured()
-        {
-            using var app = UnitTestApplication.Start(new TestServices(inputManager: new InputManager()));
-
-            var renderer = new Mock<IHitTester>();
-            var pointer = new Mock<IPointer>();
-            var device = CreatePointerDeviceMock(pointer.Object).Object;
-            var impl = CreateTopLevelImplMock();
-
-            Canvas canvas;
-            Border border;
-            Decorator decorator;
-
-            var root = CreateInputRoot(impl.Object, new Panel
-            {
-                Children =
-                {
-                    (canvas = new Canvas()),
-                    (border = new Border
-                    {
-                        Child = decorator = new Decorator(),
-                    })
-                }
-            }, renderer.Object);
-
-            SetHit(renderer, canvas);
-            pointer.SetupGet(p => p.Captured).Returns(decorator);
-            impl.Object.Input!(CreateRawPointerMovedArgs(device, root));
-
-            Assert.True(decorator.IsPointerOver);
-            Assert.True(border.IsPointerOver);
-            Assert.False(canvas.IsPointerOver);
-            Assert.True(root.IsPointerOver);
-        }
-
-        [Fact]
         public void IsPointerOver_Should_Be_Updated_When_Child_Sets_Handled_True()
         {
             using var app = UnitTestApplication.Start(new TestServices(inputManager: new InputManager()));
@@ -492,16 +456,63 @@ namespace Avalonia.Base.UnitTests.Input
                 result);
         }
 
-        private static void AddEnteredExitedHandlers(
-            EventHandler<PointerEventArgs> handler,
-            params IInputElement[] controls)
+        // https://github.com/AvaloniaUI/Avalonia/issues/15293
+        [Fact]
+        public void PointerOver_Or_Exited_Should_Ignore_Capture()
         {
-            foreach (var c in controls)
+            using var app = UnitTestApplication.Start(new TestServices(inputManager: new InputManager()));
+
+            var renderer = new Mock<IHitTester>();
+            var device = new MouseDevice();
+            var impl = CreateTopLevelImplMock();
+
+            var result = new List<(object, string, object?, bool)>();
+
+            Canvas canvas;
+
+            var root = CreateInputRoot(impl.Object, new Panel
             {
-                c.PointerEntered += handler;
-                c.PointerExited += handler;
-                c.PointerMoved += handler;
+                Children =
+                {
+                    (canvas = new Canvas())
+                }
+            }, renderer.Object);
+
+            void HandleEvent(object? sender, PointerEventArgs e)
+            {
+                result.Add((sender!, e.RoutedEvent!.Name, e.Pointer.Captured, canvas.IsPointerOver));
             }
+
+            AddEnteredExitedHandlers(HandleEvent, canvas);
+            AddPressedReleasedHandlers(HandleEvent, canvas);
+
+            // Init pointer over.
+            SetHit(renderer, canvas);
+            impl.Object.Input!(CreateRawPointerArgs(device, root, RawPointerEventType.Move));
+
+            // Init capture.
+            impl.Object.Input!(CreateRawPointerArgs(device, root, RawPointerEventType.LeftButtonDown));
+
+            // Leave the control, still captured.
+            impl.Object.Input!(CreateRawPointerArgs(device, root, RawPointerEventType.Move));
+            SetHit(renderer, null);
+            impl.Object.Input!(CreateRawPointerArgs(device, root, RawPointerEventType.Move));
+
+            // Release capture.
+            impl.Object.Input!(CreateRawPointerArgs(device, root, RawPointerEventType.LeftButtonUp));
+
+            Assert.Equal(
+                new[]
+                {
+                    ((object)canvas, nameof(InputElement.PointerEntered), (object?)null, true),
+                    (canvas, nameof(InputElement.PointerMoved), null, true),
+                    (canvas, nameof(InputElement.PointerPressed), canvas, true),
+                    (canvas, nameof(InputElement.PointerMoved), canvas, true),
+                    (canvas, nameof(InputElement.PointerExited), canvas, false),
+                    (canvas, nameof(InputElement.PointerMoved), canvas, false),
+                    (canvas, nameof(InputElement.PointerReleased), canvas, false)
+                },
+                result);
         }
     }
 }

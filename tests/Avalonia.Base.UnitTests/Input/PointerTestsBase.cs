@@ -106,4 +106,27 @@ public abstract class PointerTestsBase : ScopedTestBase
 
         return pointerDevice;
     }
+    
+    protected static void AddEnteredExitedHandlers(
+        EventHandler<PointerEventArgs> handler,
+        params IInputElement[] controls)
+    {
+        foreach (var c in controls)
+        {
+            c.PointerEntered += handler;
+            c.PointerExited += handler;
+            c.PointerMoved += handler;
+        }
+    }
+
+    protected static void AddPressedReleasedHandlers(
+        EventHandler<PointerEventArgs> handler,
+        params IInputElement[] controls)
+    {
+        foreach (var c in controls)
+        {
+            c.PointerPressed += (s, a) => handler(s, a);
+            c.PointerReleased += (s, a) => handler(s, a);
+        }
+    }
 }
