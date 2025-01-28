@@ -661,14 +661,20 @@ public partial class Dispatcher
     }
 
     /// <summary>
-    /// Returns a task awaitable that would invoke continuation on specified dispatcher priority
+    /// Returns a task that would invoke continuation on specified dispatcher priority
     /// </summary>
-    public DispatcherPriorityAwaitable AwaitWithPriority(Task task, DispatcherPriority priority) =>
-        new(this, task, priority);
+    public async Task AwaitWithPriority(Task task, DispatcherPriority priority)
+    {
+        await Resume(priority);
+        await task;
+    }
     
     /// <summary>
-    /// Returns a task awaitable that would invoke continuation on specified dispatcher priority
+    /// Returns a task that would invoke continuation on specified dispatcher priority
     /// </summary>
-    public DispatcherPriorityAwaitable<T> AwaitWithPriority<T>(Task<T> task, DispatcherPriority priority) =>
-        new(this, task, priority);
+    public async Task<T> AwaitWithPriority<T>(Task<T> task, DispatcherPriority priority)
+    {
+        await Resume(priority);
+        return await task;
+    }
 }
