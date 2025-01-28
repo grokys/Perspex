@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Data;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Reactive;
+using Avalonia.Threading;
 
 namespace Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings
 {
@@ -29,7 +30,7 @@ namespace Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings
                     var subject = new LightweightSubject<object?>();
                     task.ContinueWith(
                             _ => HandleCompleted(task).Subscribe(subject),
-                            TaskScheduler.FromCurrentSynchronizationContext())
+                            DispatcherTaskScheduler.UIThread)
                         .ConfigureAwait(false);
                     return subject;
             }
