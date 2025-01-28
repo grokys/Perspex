@@ -15,19 +15,20 @@ namespace Avalonia.Automation.Peers
 
         protected override string? GetNameCore()
         {
-            var result = base.GetNameCore();
+            Control? childControl = Owner.Presenter?.Child;
+            AutomationPeer? childPeer = childControl is null ? null :
+                CreatePeerForElement(childControl);
+            return base.GetNameCore() ?? (childControl as TextBlock)?.Text ?? 
+                childPeer?.GetName() ?? Owner.Content?.ToString();
+        }
 
-            if (result is null && Owner.Presenter?.Child is TextBlock text)
-            {
-                result = text.Text;
-            }
-
-            if (result is null)
-            {
-                result = Owner.Content?.ToString();
-            }
-
-            return result;
+        protected override string? GetHelpTextCore()
+        {
+            Control? childControl = Owner.Presenter?.Child;
+            AutomationPeer? childPeer = childControl is null ? null :
+                CreatePeerForElement(childControl);
+            return base.GetHelpTextCore() ?? 
+                childPeer?.GetHelpText();
         }
 
         protected override bool IsContentElementCore() => false;
