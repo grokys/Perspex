@@ -30,4 +30,6 @@ public interface IVulkanExternalSemaphore : IDisposable
 public interface IVulkanExternalImage : IDisposable
 {
     VulkanImageInfo Info { get; }
+
+    void SubmitKeyedMutex(uint acquireIndex, uint releaseIndex);
 }

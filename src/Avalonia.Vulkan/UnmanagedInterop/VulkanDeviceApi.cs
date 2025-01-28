@@ -149,6 +149,7 @@ internal unsafe partial class VulkanDeviceApi
     [GetProcAddress("vkImportSemaphoreWin32HandleKHR", true)]
     public partial VkResult ImportSemaphoreWin32HandleKHR(VkDevice device,
         VkImportSemaphoreWin32HandleInfoKHR* pImportSemaphoreWin32HandleInfo);
-    
-    
+
+    [GetProcAddress("vkGetMemoryWin32HandlePropertiesKHR")]
+    public partial VkResult GetMemoryWin32HandlePropertiesKHR(VkDevice device, VkExternalMemoryHandleTypeFlagBits handleType, nint handle, VkMemoryWin32HandlePropertiesKHR* pMemoryWin32HandleProperties);
 }

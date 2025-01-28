@@ -17,7 +17,7 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
         "VK_KHR_external_semaphore_capabilities"
     };
 
-    
+
     private static string[] s_requiredCommonDeviceExtensions =
     {
         "VK_KHR_external_memory",
@@ -41,7 +41,7 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
     public static string[] RequiredDeviceExtensions = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
         ? s_requiredWin32DeviceExtensions
         : s_requiredLinuxDeviceExtensions;
-    
+
     private readonly VulkanContext _context;
     private readonly VulkanCommandBufferPool _pool;
 
@@ -55,6 +55,7 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
             {
                 KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaqueNtHandle,
                 KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaqueKmtHandle,
+                KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle,
             };
             SupportedSemaphoreTypes = new[]
             {
@@ -78,7 +79,7 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
         {
             sType = VkStructureType.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES
         };
-        
+
         var physicalDeviceProperties2 = new VkPhysicalDeviceProperties2()
         {
             sType = VkStructureType.VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
@@ -94,19 +95,19 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
             DeviceUuid = uuid;
         _pool = new VulkanCommandBufferPool(_context, true);
     }
-    
+
     public IReadOnlyList<string> SupportedImageHandleTypes { get; }
     public IReadOnlyList<string> SupportedSemaphoreTypes { get; }
     public byte[]? DeviceUuid { get; }
     public byte[]? DeviceLuid { get; }
-    
-    
+
+
     public CompositionGpuImportedImageSynchronizationCapabilities GetSynchronizationCapabilities(string imageHandleType)
     {
         if (!SupportedImageHandleTypes.Contains(imageHandleType))
             throw new ArgumentException();
-        //TODO: keyed muted
-        return CompositionGpuImportedImageSynchronizationCapabilities.Semaphores;
+        
+        return CompositionGpuImportedImageSynchronizationCapabilities.Semaphores | CompositionGpuImportedImageSynchronizationCapabilities.KeyedMutex;
     }
 
     public IVulkanExternalImage ImportImage(IPlatformHandle handle, PlatformGraphicsExternalImageProperties properties)
@@ -179,7 +180,7 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
             _pool = pool;
             _sem = sem;
         }
-        
+
         public void Dispose()
         {
             _sem?.Dispose();
@@ -203,7 +204,7 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
                 IntPtr.Zero,
                 0,
                 null);
-            
+
             buf.EndRecording();
             buf.Submit(wait != null ? new[] { wait }.AsSpan() : default,
                 new[] { VkPipelineStageFlags.VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT },
@@ -249,6 +250,8 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
                     VkExternalMemoryHandleTypeFlagBits.VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT,
                 KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaqueNtHandle =>
                     VkExternalMemoryHandleTypeFlagBits.VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_BIT,
+                KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle =>
+                VkExternalMemoryHandleTypeFlagBits.VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_BIT,
                 _ => throw new NotSupportedException()
             };
             var externalAlloc = new VkExternalMemoryImageCreateInfo
@@ -265,22 +268,41 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
         {
             var handle = _importHandle;
 
-            if (_properties.MemoryOffset != 0 || _properties.MemorySize != size)
-                throw new Exception("Invalid memory size");
-            
+            if (_typeBit == VkExternalMemoryHandleTypeFlagBits.VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_BIT)
+            {
+                // Bind the Vulkan Memory Allocation to the exported D3D11 Image Resource Handle.
+                VkMemoryWin32HandlePropertiesKHR vkImportedHandleProperties = new()
+                {
+                    sType = VkStructureType.VK_STRUCTURE_TYPE_MEMORY_WIN32_HANDLE_PROPERTIES_KHR
+                };
+
+                _context.DeviceApi.GetMemoryWin32HandlePropertiesKHR(
+                    _context.DeviceHandle, 
+                    VkExternalMemoryHandleTypeFlagBits.VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_BIT,
+                    handle.Handle, 
+                    &vkImportedHandleProperties).ThrowOnError("vkGetMemoryWin32HandlePropertiesKHR");
+
+                memoryTypeBits = vkImportedHandleProperties.memoryTypeBits;
+            }
+            else
+            {
+                if (_properties.MemoryOffset != 0 || _properties.MemorySize != size)
+                    throw new Exception("Invalid memory size");
+            }
+
             var dedicated = new VkMemoryDedicatedAllocateInfo()
             {
-                image = image,
                 sType = VkStructureType.VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO,
+                image = image,
             };
-            
+
             var isPosixHandle = handle.HandleDescriptor ==
                                 KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaquePosixFileDescriptor;
             var win32Info = new VkImportMemoryWin32HandleInfoKHR
             {
                 sType = VkStructureType.VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_KHR,
-                handle = handle.Handle,
                 handleType = _typeBit,
+                handle = handle.Handle,
                 pNext = &dedicated
             };
             var posixInfo = new VkImportMemoryFdInfoKHR()
@@ -290,15 +312,15 @@ internal unsafe class VulkanExternalObjectsFeature : IVulkanContextExternalObjec
                 fd = isPosixHandle ? handle.Handle.ToInt32() : 0,
                 pNext = &dedicated
             };
-        
+
             var memoryAllocateInfo = new VkMemoryAllocateInfo
             {
-                pNext =  new IntPtr(isPosixHandle ? &posixInfo : &win32Info),
                 sType = VkStructureType.VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                pNext = new IntPtr(isPosixHandle ? &posixInfo : &win32Info),
                 allocationSize = size,
                 memoryTypeIndex = (uint)VulkanMemoryHelper.FindSuitableMemoryTypeIndex(_context,
                     memoryTypeBits,
-                    VkMemoryPropertyFlags.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT),
+                    VkMemoryPropertyFlags.VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
             };
 
             _context.DeviceApi.AllocateMemory(_context.DeviceHandle, ref memoryAllocateInfo, IntPtr.Zero,

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Avalonia.Vulkan.Interop;
 using Avalonia.Vulkan.UnmanagedInterop;
+using static Avalonia.Vulkan.Interop.VulkanCommandBuffer;
 
 namespace Avalonia.Vulkan;
 
@@ -183,6 +184,37 @@ internal class VulkanImageBase : IDisposable
             api.FreeMemory(d, _imageMemory, IntPtr.Zero);
             _imageMemory = default;
         }
+    }
+
+    public unsafe void SubmitKeyedMutex(uint acquireIndex, uint releaseIndex)
+    {
+        var keyedMutex = new KeyedMutexSubmitInfo()
+        {
+            AcquireKey = acquireIndex,
+            ReleaseKey = releaseIndex,
+            DeviceMemory = _imageMemory
+        };
+
+        var buf = _commandBufferPool!.CreateCommandBuffer();
+        buf.BeginRecording();
+        _context.DeviceApi.CmdPipelineBarrier(
+            buf.Handle,
+            VkPipelineStageFlags.VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VkPipelineStageFlags.VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            0,
+            0,
+            IntPtr.Zero,
+            0,
+            IntPtr.Zero,
+            0,
+            null);
+
+        buf.EndRecording();
+        buf.Submit(default,
+            [VkPipelineStageFlags.VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT],
+            default,
+            fence: default,
+            keyedMutex);
     }
 }
 
