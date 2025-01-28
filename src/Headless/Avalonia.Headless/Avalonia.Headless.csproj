@@ -7,6 +7,10 @@
     <ProjectReference Include="..\..\..\packages\Avalonia\Avalonia.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+    <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="8.0.1" />
+  </ItemGroup>
+
   <Import Project="..\..\..\build\DevAnalyzers.props" />
   <Import Project="..\..\..\build\TrimmingEnable.props" />
   <Import Project="..\..\..\build\NullableEnable.props" />
