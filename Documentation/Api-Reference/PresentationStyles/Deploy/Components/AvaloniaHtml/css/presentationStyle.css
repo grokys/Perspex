@@ -1,0 +1,421 @@
+﻿/* Fixed layout settings.  Disabled for now.  If enabled, the In This Article section doesn't stick to the top.
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.fixedLayout {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fixedHeader, .fixedFooter {
+    flex: 0;
+}
+
+.fixedContent {
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/ * Disabled the fixed layout in mobile * /
+@media screen and (max-width: 768px) {
+    html, body {
+        height: 100%;
+        overflow: auto;
+    }
+
+
+    .fixedLayout {
+        height: 100%;
+        display: block;
+        flex: 0 1 auto;
+    }
+
+    .fixedHeader, .fixedFooter {
+        flex: 0 1 auto;
+    }
+
+    .fixedContent {
+        overflow-x: hidden;
+        overflow-y: hidden;
+        flex: 0 1 auto;
+    }
+}
+*/
+
+/* Hide the TOC and In This Article columns when printed */
+@media print {
+    #ShowHideTOCColumn, #TOCColumn, #InThisArticleColumn {
+        display: none;
+    }
+
+    #TopicContent {
+        flex: none;
+        width: 100%;
+    }
+}
+
+/* Additional styles for SHFB documentation websites */
+.sticky {
+    position: sticky;
+    top: 10px;
+}
+
+.border-top {
+    border-block-start: 1px solid #e6e6e6;
+}
+
+.border-bottom {
+    border-block-end: 1px solid #e6e6e6;
+    padding-bottom: 10px;
+}
+
+.pageHeader {
+    background-color: #333333;
+    color: #d0d0d0;
+}
+
+.is-active-quickLink {
+    border-left: 5px solid #dbdbdb;
+}
+
+/* Shrink the margin on the header just below the notes div */
+.content div#Notes + h2:not(:first-child) {
+    margin-top: 5px;
+}
+
+/* Add a top margin when there is no title in a section */
+.noTitle {
+    margin-top: 1em;
+}
+
+/* Allow centering of basic div elements */
+div.is-centered {
+    display: flex;
+    justify-content: center;
+}
+
+/* Fix spacing on non-clickable breadcrumb items without a link */
+.breadcrumb p {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 0.75em;
+}
+
+/* Underline content, footer, and breadcrumb anchors when hovered */
+.content a:hover, .footer a:hover, .breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* Add an outer border to tables */
+.content table {
+    border: 1px solid #dbdbdb;
+}
+
+/* MAML and XML comments element styles */
+.content h4 {
+    margin-top: 0.8em;
+    margin-bottom: .5em;
+}
+
+.content #seeAlsoSection h4 {
+    margin-bottom: 0;
+}
+
+.content hr {
+    background-color: lightgrey;
+}
+
+.content div.caption {
+    font-style: italic;
+    padding-top: 0.75em;
+    padding-bottom: 0.75em;
+}
+
+.content dt {
+    font-weight: 600;
+}
+
+.content dd {
+    margin-bottom: 1em;
+}
+
+.content q {
+    font-style: italic;
+}
+
+.content .mediaInline {
+    padding-left: .25em;
+    padding-right: .25em;
+    vertical-align: top;
+}
+
+.content .mediaNear {
+    text-align: left;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.content .mediaCenter {
+    text-align: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.content .mediaFar {
+    text-align: right;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.content span.code, span.command, span.parameter {
+    font-family: Consolas, Courier, monospace;
+    color: #000066;
+    background-color: #f4f4f4;
+}
+
+.content span.selflink {
+    font-family: Consolas, Courier, monospace;
+    color: #000066;
+}
+
+span.keyword {
+    font-family: Consolas, Courier, monospace;
+    color: #0000ff;
+}
+
+.content span.literal {
+    color: #cc0000;
+}
+
+.content ul.noBullet {
+    list-style-type: none;
+    margin-left: 1em;
+}
+
+.content ul ul.noBullet {
+    list-style-type: none;
+    margin-left: 1em;
+}
+
+.content ul ul ul.noBullet {
+    list-style-type: none;
+    margin-left: 1em;
+}
+
+.content li ul {
+    margin-bottom: 1em;
+}
+
+.content thead th {
+    background-color: #ededed;
+    text-align: left;
+}
+
+.missing {
+    color: #dc143c;
+    font-weight: bold;
+}
+
+/* Inheritance hierarchy styles */
+.inheritanceHierarchy, .implementsList {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+    .inheritanceHierarchy dd, .implementsList dd {
+        margin-left: 1em;
+        margin-bottom: 0;
+    }
+
+/* Code block styles */
+.codeHeader {
+    background-color: #e6e6e6;
+    box-sizing: content-box;
+    color: #171717;
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-right: 0.2em;
+}
+
+    .codeHeader a:hover {
+        text-decoration: none;
+    }
+
+    .codeHeader .button {
+        padding-top: 0.1em;
+        padding-bottom: 0.1em;
+    }
+
+.codeHeaderTitle {
+    font-weight: 600;
+    margin: .3em;
+    margin-left: 1em;
+    flex-grow: 2;
+}
+
+.codePanel {
+    border: 1px solid lightgrey;
+    padding: 1em;
+    margin-bottom: 1em;
+    flex: 1;
+}
+
+    .codePanel pre {
+        padding: 0em;
+        line-height: 1.37;
+    }
+
+.codeWithNumbers {
+    display: flex;
+}
+
+    .codeWithNumbers .lineNumbers {
+        border: 1px solid lightgrey;
+        flex-shrink: 1;
+        text-align: right;
+        margin-bottom: 1em;
+    }
+
+        .codeWithNumbers .lineNumbers pre {
+            background: transparent;
+            padding-left: 0.50em;
+            padding-right: 0.50em;
+            line-height: 1.37
+        }
+
+    .codeWithNumbers .numbered {
+        flex: 1;
+        overflow-x: auto;
+    }
+
+/* Glossary styles */
+div.glossaryDiv {
+}
+
+div.glossaryLetterBar {
+}
+
+hr.glossaryRule {
+}
+
+h3.glossaryGroupHeading {
+    color: #808080;
+}
+
+div.glossaryGroup {
+}
+
+dl.glossaryGroupList {
+    margin: 0;
+    color: Black;
+}
+
+dt.glossaryEntry {
+    margin-left: 2em;
+}
+
+dd.glossaryEntry {
+    margin-left: 2em;
+    margin-bottom: 2em;
+}
+
+div.relatedEntry {
+    margin-bottom: 4px;
+}
+
+/* Bibliography styles */
+span.bibliographyAuthor {
+    font-weight: bold;
+}
+
+span.bibliographyTitle {
+    font-style: italic;
+}
+
+span.bibliographyPublisher {
+}
+
+sup.citation a:link a:visited a:active {
+    text-decoration: none;
+}
+
+/* Expand/collapse toggles */
+.toggle {
+    transition: transform .35s ease;
+    transform-origin: center;
+    cursor: pointer;
+}
+
+.toggleSection {
+    transition: transform .35s ease;
+    transform-origin: center;
+    margin-right: 0.25em;
+    cursor: pointer;
+}
+
+.toggleExpanded {
+    transform: rotate(90deg)
+}
+
+.toggleCollapsed {
+    transform: rotate(-90deg)
+}
+
+/* Table of contents styles */
+.toc {
+    font-size: 1rem;
+}
+
+.toc-menu {
+    line-height: 2em;
+}
+
+    .toc-menu a {
+        border-radius: 2px;
+        color: #4a4a4a;
+        display: block;
+        padding-left: 0.75em;
+    }
+
+        .toc-menu a:hover {
+            background-color: whitesmoke;
+            color: #363636;
+        }
+
+        .toc-menu a.is-active {
+            font-weight: bold;
+        }
+
+    .toc-menu li ul {
+        padding-left: 1em;
+    }
+
+    .toc-menu li a.has-submenu {
+        margin-left: -1.75em;
+    }
+
+/* Resizable TOC styles */
+.toc-resizable {
+    flex-basis: initial;
+    flex-grow: 0.25;
+}
+
+.toc-resizer {
+    cursor: ew-resize;
+    width: 5px;
+    background: #e6e6e6;
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.toc-resizable-content {
+    flex-grow: 1;
+}

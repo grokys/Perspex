@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="{@Locale}">
+<!-- This is HTML but it is loaded as XML so it must be well formed with proper self-closing elements and it
+		 cannot contain any entities not recognized by the parser (e.g. use &#160; instead of &nbsp;). -->
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- Substitution tags will be replaced by the transformation. -->
+	<link rel="shortcut icon" href="{@IconPath}favicon.ico" />
+	<link rel="stylesheet" href="{@StyleSheetPath}bulma.css" />
+	<link rel="stylesheet" href="{@StyleSheetPath}font-awesome.min.css" />
+	<link rel="stylesheet" href="{@StyleSheetPath}presentationStyle.css" />
+	<link rel="stylesheet" href="{@StyleSheetPath}vs.min.css" />
+	{@LocaleSpecificStyleSheet}
+	<script src="{@ScriptPath}jquery-3.5.1.min.js"></script>
+	<script src="{@ScriptPath}clipboard.min.js"></script>
+	<script src="{@ScriptPath}highlight.min.js"></script>
+	<script src="{@ScriptPath}presentationStyle.js"></script>
+	<!-- Other metadata will be added by the presentation style transformation -->
+</head>
+<body>
+	<!-- IMPORTANT: All IDs should remain unchanged.  You are free to move things around though. -->
+	<div class="fixedLayout">
+		<div id="Header" class="fixedHeader">
+			<!-- The logo will be inserted based on the transformation arguments. -->
+			<!-- Logo above, left example
+      <div class="pageHeader pt-0 px-2">
+        <img alt="Test logo" style="height: 16px; width: 800px;" src="../icons/Sandcastle.jpg" />
+      </div> -->
+			<!--Logo above, center example
+			<div class="pageHeader is-centered mb-0 pt-0">
+        <img alt="Test logo" style="height: 16px; width: 800px;" src="../icons/Sandcastle.jpg" />
+			</div> -->
+			<!-- Logo above, right example
+			<div class="pageHeader level mb-0 pt-0 px-2">
+				<div class="level-left">&#160;</div>
+				<div class="level-right">
+					<div class="level-item">
+            <img alt="Test logo" style="height: 16px; width: 800px;" src="../icons/Sandcastle.jpg" />
+					</div>
+				</div>
+			</div> -->
+			<div class="pageHeader level mb-0 py-2 px-4">
+				<div id="TitleContainer" class="level-left">
+					<!-- Logo left example
+					<div class="level-item">
+						<img class="image" style="height: 32px;" src="Sandcastle.jpg" />
+					</div> -->
+					<div id="DocumentationTitle" class="level-item">
+						<include item="documentationTitle" />
+					</div>
+				</div>
+				<div id="LangFilterSearchContainer" class="level-right">
+					<div class="level-item">
+						<div class="dropdown is-hoverable">
+							<div class="dropdown-trigger">
+								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+									<span id="CurrentLanguage"></span>
+									<span class="icon is-small">
+										<i class="fa fa-angle-down" aria-hidden="true"></i>
+									</span>
+								</button>
+							</div>
+							<div class="dropdown-menu" role="menu">
+								<div id="LanguageSelections" class="dropdown-content">
+									<!-- These are added by the transformation when the topic is rendered based on the user
+											 selected syntax generators.
+									<a class="dropdown-item" data-languageId="cs">C#</a>
+									<a class="dropdown-item" data-languageId="vb">VB</a>
+									<a class="dropdown-item" data-languageId="cpp">C++</a>
+									<a class="dropdown-item" data-languageId="fs">F#</a> -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="level-item">
+						<form id="SearchForm" action="#" onsubmit="TransferToSearchPage(); return false;">
+							<div class="field">
+								<div class="control has-icons-left">
+									<input id="SearchTerms" class="input" type="text" maxlength="200">
+										<includeAttribute name="placeholder" item="searchPlaceHolder" />
+									</input>
+									<span class="icon is-small is-left">
+										<i class="fa fa-search"></i>
+									</span>
+									<button id="SearchButton" type="submit" class="is-hidden"></button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!-- Logo right example
+					<div class="level-item">
+							<img class="image" style="height: 32px;" src="Sandcastle.jpg" />
+					</div>-->
+				</div>
+			</div>
+		</div>
+
+		<div class="fixedContent">
+			<!-- This will be removed if there is no header text and it is not preliminary.  The header text or
+				   preliminary text container will be removed separately if one is used but not the other. -->
+			<div id="HeaderPrelimContainer" class="level my-1 px-2">
+				<div id="HeaderTextContainer" class="level-left">
+					<div class="level-item">
+						<span class="has-text-grey-light"><include item="headerText" /></span>
+					</div>
+				</div>
+				<div id="PreliminaryContainer" class="level-left">
+					<div class="level-item">
+						<span class="tag is-warning is-medium"><include item="preliminaryDocs" /></span>
+					</div>
+				</div>
+			</div>
+
+			<nav class="breadcrumb my-1 px-2 border-bottom" role="navigation">
+				<ul id="TopicBreadcrumbs">
+					<!-- Breadcrumb links will be added client-side from the TOC fragment file -->
+				</ul>
+			</nav>
+
+			<div id="ContentContainer" class="columns pl-5 pr-5 fixedContent">
+				<div id="ShowHideTOCColumn" class="column is-hidden-tablet">
+					<a id="ShowHideTOC"><include item="showHideTOC" /></a>
+				</div>
+
+				<div id="TOCColumn" class="column is-hidden-mobile{@ResizableTocStyle}">
+					<nav class="toc">
+						<ul id="TableOfContents" class="toc-menu">
+							<!-- TOC entries will be added client-side from the TOC fragment file -->
+						</ul>
+					</nav>
+				</div>
+
+				<div id="Resizer" class="{@ResizerStyle}"></div>
+				
+				<div id="TopicContent" class="column content is-7{@ResizableContentStyle}">
+					<!-- Topic content will go here -->
+				</div>
+
+				<div id="InThisArticleColumn" class="column is-hidden-mobile">
+					<!-- Hidden by default.  It will only be shown if it contains usable links -->
+					<nav class="menu sticky is-hidden">
+						<p class="menu-label"><strong><include item="inThisArticle" /></strong></p>
+						<ul id="InThisArticleMenu" class="menu-list">
+							<!-- Links to sections will go here -->
+						</ul>
+					</nav>
+				</div>
+
+			</div>
+
+		</div>
+
+		<footer id="PageFooter" class="footer border-top py-3 fixedFooter">
+			<!-- Footer content will go here -->
+			<div class="columns">
+				<div id="FooterContent" class="column">
+					<include item="footer_content" />&#160;
+				</div>
+				<div id="AdContent" class="column">
+					<include item="websiteAdContent" />&#160;
+				</div>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>

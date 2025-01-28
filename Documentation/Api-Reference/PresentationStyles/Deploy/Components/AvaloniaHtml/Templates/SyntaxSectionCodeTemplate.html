@@ -1,0 +1,36 @@
+<div class="codeSnippet">
+	<!-- IMPORTANT: The ID names must remain the same as must the class name on the root element and the copyCode
+			 class on the Copy Code link.  IDs are only used to locate content and will be removed when rendered.  The
+			 View Source and Request Example links can be removed if not wanted. -->
+	<div class="codeHeader">
+		<span id="Title" class="codeHeaderTitle"></span>
+		<span class="buttons">
+			<button class="button is-small is-light copyCode">
+				<includeAttribute name="title" item="copyCode" />
+				<span class="icon is-small">
+					<i class="fa fa-copy"></i>
+				</span>
+				<span><include item="copyCode" /></span>
+			</button>
+			<a id="ViewSourceLink" href="#" target="_blank" rel="noopener noreferrer" class="button is-small is-light">
+				<includeAttribute name="title" item="sourceCodeLinkTitle" />
+				<span class="icon is-small">
+					<i class="fa fa-file-code"></i>
+				</span>
+				<span><include item="sourceCodeLinkText" /></span>
+			</a>
+			<a id="RequestExampleLink" href="#" target="_blank" rel="noopener noreferrer" class="button is-small is-light requestExampleLink">
+				<includeAttribute name="title" item="requestExampleLinkTitle" />
+				<span class="icon is-small">
+					<i class="fa fa-comment-dots"></i>
+				</span>
+				<span><include item="requestExampleLinkText" /></span>
+			</a>
+		</span>
+	</div>
+	<div class="codePanel hljs">
+		<!-- Whitespace must be preserved or it can get lost when the topic is saved.  It's XML at this point, not HTML. -->
+		<pre id="CodeBlock" xml:space="preserve">
+		</pre>
+	</div>
+</div>

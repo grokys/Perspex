@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<SignAssembly>false</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\SandcastleTools.snk</AssemblyOriginatorKeyFile>
+		<GenerateAssemblyTitleAttribute>False</GenerateAssemblyTitleAttribute>
+		<GenerateAssemblyVersionAttribute>False</GenerateAssemblyVersionAttribute>
+		<GenerateAssemblyFileVersionAttribute>False</GenerateAssemblyFileVersionAttribute>
+		<GenerateAssemblyInformationalVersionAttribute>False</GenerateAssemblyInformationalVersionAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+		<AssemblyName>Avalonia.Sandcastle.PresentationStyles</AssemblyName>
+		<RootNamespace>Avalonia.Sandcastle.PresentationStyles</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+		<OutputPath>Deploy\Components\</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+		<OutputPath>Deploy\Components\</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="AvaloniaHtml\Templates\LanguageAlertTemplate.html" />
+		<None Remove="AvaloniaHtml\Templates\ToDoAlertTemplate.html" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Colorizer\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="AvaloniaHtml\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Shared\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="AvaloniaHtml\**\*.cs" />
+		<Content Remove="Shared\**\*.cs" />
+	</ItemGroup>
+  
+	<ItemGroup>
+	  <Content Update="AvaloniaHtml\RootWebsiteContent\SearchHelp.aspx">
+	    <SubType>ASPXCodeBehind</SubType>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="AvaloniaHtml\webfonts\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="EWSoftware.Sandcastle.Core" Version="2024.2.18" />
+	</ItemGroup>
+
+</Project>

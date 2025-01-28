@@ -1,0 +1,445 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!-- Translations provided by Sergey Zhurikhin -->
+
+  <!-- Header and footer -->
+  <item id="tocTitle">{0}</item>
+	<item id="documentationTitle">{@HtmlEncHelpTitle}</item>
+	<item id="headerText">{@HeaderText}</item>
+	<item id="feedback_body">Ваш отзыв будет использован для улучшения качества документации и продукта в целом. Адрес вашей электронной почты не будет использован для других целей и будет удалён, после того как ваш отзыв будет обработан. До окончания работ по обработке вашего отзыва, вы можете связаться с автором для получения дополнительной информации. После его обработки, вы можете получить сообщение об окончании работ по вашему отзыву на указанный адрес электронной почты.</item>
+	<item id="footer_content">{@FooterText}{@Copyright}{@Comments}</item>
+	<!-- This should remain empty unless overridden by the website content file -->
+	<item id="websiteAdContent"></item>
+
+	<item id="comments"><div class="feedbackLink">Отправить комментарий по этой теме в
+        <a id="HT_MailLink" href="mailto:{@UrlEncFeedbackEMailAddress}?Subject={@UrlEncHelpTitle}">{@HtmlEncFeedbackEMailAddress}</a></div>
+        <script type="text/javascript">
+        var HT_mailLink = document.getElementById("HT_MailLink");
+        HT_mailLink.href += ": " + document.title + "\u0026body=" + encodeURIComponent("<include item='feedback_body' />");
+        </script></item>
+
+	<!-- Code/syntax section -->
+	<item id="copyCode">Копировать</item>
+	<item id="sourceCodeLinkText">View Source</item>
+	<item id="sourceCodeLinkTitle">View the source code</item>
+	<item id="requestExampleLinkText">Request Example</item>
+	<item id="requestExampleLinkTitle">Request an example for this topic</item>
+	<item id="requestExampleScript">
+		$(".requestExampleLink").each(function ()
+		{{
+			if(this.href.substring(0, 4).toLowerCase() === "http")
+				this.href += "?title=";
+			else
+				this.href += "?subject={@UrlEncHelpTitle}: ";
+
+			this.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+				encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+				"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		}});
+	</item>
+	
+	<!-- VS2013 presentation style items -->
+	<item id="requestExample"><a id="HT_RequestExampleLink" href="{0}" target="_blank" rel="noopener noreferrer" class="{1}"
+		title="Request an example for this topic">Request Example</a>
+		<script type="text/javascript">
+		var HT_requestExampleLink = document.getElementById("HT_RequestExampleLink");
+				
+		if(HT_requestExampleLink.href.substring(0, 4).toLowerCase() == "http")
+			HT_requestExampleLink.href += "?title=";
+		else
+			HT_requestExampleLink.href += "?subject={@UrlEncHelpTitle}: ";
+
+		HT_requestExampleLink.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+			encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+			"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		</script></item>
+	<item id="resizeToolTip">Для изменения размера нажмите или перетащите</item>
+
+	<!-- Section titles -->
+  <item id="bibliographyTitle">Библиография</item>
+  <item id="title_appliesTo">Применимо к</item>
+	<item id="title_attributes">Атрибуты</item>
+  <item id="title_attributesAndElements">Атрибуты и элементы</item>
+  <item id="title_background">Предпосылки</item>
+	<item id="title_buildInstructions">Компиляция кода</item>
+  <item id="title_changeHistory">История изменений</item>
+	<item id="title_childElement">Дочерние элементы</item>
+	<item id="title_conclusion">Выводы</item>
+  <item id="title_definition">Definition</item>
+	<item id="title_delegateValue">Возвращаемое значение</item>
+	<item id="title_demonstrates">Демонстрация</item>
+  <item id="title_dotNetFrameworkEquivalent">Эквивалент в платформе .NET Framework</item>
+	<item id="title_elementInformation">Сведения об элементе</item>
+  <item id="title_errorMessage">Сообщение об ошибке</item>
+  <item id="title_events">События</item>
+  <item id="title_example">Пример</item>
+	<item id="title_examples">Примеры</item>
+  <item id="title_exceptions">Исключения</item>
+  <item id="title_extensionUsage">Примечание об использовании</item>
+	<item id="title_externalResources">Внешние ресурсы</item>
+	<item id="title_family">Иерархия наследования</item>
+	<item id="title_fieldValue">Значение поля</item>
+  <item id="title_implements">Реализации</item>
+	<item id="title_inThisSection">В этом подразделе</item>
+  <item id="title_languageReferenceRemarks">Заметки</item>
+	<item id="title_methodValue">Возвращаемое значение</item>
+	<item id="title_namespaces">Пространства имён</item>
+	<item id="title_nextSteps">Следующие шаги</item>
+	<item id="title_parameters">Параметры</item>
+	<item id="title_parentElement">Родительские элементы</item>
+	<item id="title_permissions">Безопасность платформы .NET Framework</item> 
+	<item id="title_platforms">Платформы</item>
+  <item id="title_prerequisites">Предварительные условия</item>
+	<item id="title_propertyValue">Значение свойства</item>
+  <item id="title_reference">Ссылки</item>
+	<item id="title_relatedSections">Связанные разделы</item>
+  <item id="title_relatedTopics">См. также</item>
+  <item id="title_remarks">Заметки</item>
+	<item id="title_requirements">Требования</item>
+	<item id="title_returns">Возвращаемое значение</item>
+	<item id="title_returnValue">Возвращаемое значение</item>
+  <item id="title_revisionHistory">История редакций</item>
+  <item id="title_robustProgramming">Отказоустойчивость</item>
+	<item id="title_securitySection">Безопасность</item>
+  <item id="title_seeAlso_concepts">Основные понятия</item>
+  <item id="title_seeAlso_otherResources">Другие ресурсы</item>
+  <item id="title_seeAlso_reference">Ссылки</item>
+  <item id="title_seeAlso_tasks">Задачи</item>
+	<item id="title_syntax">Синтаксис</item>
+	<item id="title_templates">Параметры типа</item>
+  <item id="title_textValue">Текстовое значение</item>
+	<item id="title_threadSafety">Потокобезопасность</item>
+	<item id="title_value">Значение</item>
+	<item id="title_versions">Сведения о версии</item>
+	<item id="title_whatsNew">Что нового</item>
+	
+	<!-- Topic titles -->
+	<item id="topicTitle_root">{@RootNamespaceTitle}</item>
+	<!-- This is used when a title is not specified in the project -->
+  <item id="rootTopicTitleLocalized">Пространства имён</item>
+	<item id="topicTitle_attachedEvent">{0} - вложенное событие</item>
+ 	<item id="topicTitle_attachedEvents">{0} - вложенные события</item>
+	<item id="topicTitle_attachedProperties">{0} - вложенные свойства</item>
+	<item id="topicTitle_attachedProperty">{0} - вложенное свойство</item>
+	<item id="topicTitle_class">{0} - класс</item>
+	<item id="topicTitle_constructor">{0}{1} - конструктор</item>
+	<item id="topicTitle_constructors">{0} - конструкторы</item>
+	<item id="topicTitle_delegate">{0} - делегат</item>
+	<item id="topicTitle_enumeration">{0} - перечисление</item>
+	<item id="topicTitle_enumMembers">Члены</item>
+	<item id="topicTitle_event">{0} - событие</item>
+	<item id="topicTitle_events">{0} - события</item>
+	<item id="topicTitle_field">{0} - поле</item>
+	<item id="topicTitle_fields">{0} - поля</item>
+	<item id="topicTitle_interface">{0} - интерфейс</item>
+	<item id="topicTitle_method">{0}{1} - метод</item>
+	<item id="topicTitle_methods">{0} - методы</item>
+	<item id="topicTitle_namespace">{0} - пространство имён</item>
+	<item id="topicTitle_namespaceGroup">{0} - пространства имён</item>
+	<item id="topicTitle_properties">{0} - свойства</item>
+	<item id="topicTitle_property">{0}{1} - свойство</item>
+	<item id="topicTitle_structure">{0} - структура</item>
+  <!-- Title for operator members -->
+	<item id="topicTitle_operator">{0}{1} - оператор</item>
+  <!-- Title for op_explicit and op_implicit members -->
+  <item id="topicTitle_typeConversion">{0} - преобразование {1}</item>
+  <!-- Title for overload op_explicit and op_implicit topics -->
+  <item id="topicTitle_conversionOperator">{0} - операторы преобразования</item>
+  <!-- Title for operator list topic that has [operators + no type conversions] -->
+  <item id="topicTitle_operators">{0} - операторы</item>
+  <!-- Title for operator list topic that has [operators + type conversions] -->
+  <item id="topicTitle_operatorsAndTypeConversions">{0}  - операторы и преобразования типов</item>
+  <!-- Title for operator list topic that has [no operators + type conversions] -->
+  <item id="topicTitle_typeConversions">{0} - преобразования типов</item>
+
+	<!-- Table of contents simple titles -->
+ 	<item id="tocTitle_AttachedEvents">вложенные события</item>
+	<item id="tocTitle_AttachedProperties">вложенные свойства</item>
+	<item id="tocTitle_Constructor">конструктор</item>
+	<item id="tocTitle_Constructors">конструкторы</item>
+	<item id="tocTitle_Events">события</item>
+	<item id="tocTitle_Fields">поля</item>
+	<item id="tocTitle_Methods">методы</item>
+	<item id="tocTitle_Operators">операторы</item>
+	<item id="tocTitle_Properties">свойства</item>
+
+  <!-- Member list table titles -->
+  <item id="tableTitle_attachedEvent">Вложенные события</item>
+  <item id="tableTitle_attachedProperty">Вложенные свойства</item>
+	<item id="tableTitle_class">Классы</item>
+  <item id="tableTitle_constructor">Конструкторы</item>
+	<item id="tableTitle_delegate">Делегаты</item>
+	<item id="tableTitle_enumeration">Перечисления</item>
+  <item id="tableTitle_event">События</item>
+  <item id="tableTitle_explicitInterfaceImplementation">Явные&#160;реализации&#160;интерфейсов</item>
+  <item id="tableTitle_extension">Методы&#160;расширения</item>
+  <item id="tableTitle_field">Поля</item>
+	<item id="tableTitle_interface">Интерфейсы</item>
+  <item id="tableTitle_method">Методы</item>
+  <item id="tableTitle_namespace">Пространства имён</item>
+  <item id="tableTitle_operator">Операторы</item>
+	<item id="tableTitle_overload">Список&#160;перегрузок</item>
+  <item id="tableTitle_property">Свойства</item>
+	<item id="tableTitle_structure">Структуры</item>
+
+	<!-- Table column headers -->
+  <item id="header_className">Класс</item>
+  <item id="header_delegateName">Делегат</item>
+  <item id="header_enumerationName">Перечисление</item>
+	<item id="header_eventReason">Причина события</item>
+	<item id="header_eventType">Тип события</item>
+	<item id="header_exceptionCondition">Условие</item>
+	<item id="header_exceptionName">Исключение</item>
+  <item id="header_interfaceName">Интерфейс</item>
+	<item id="header_memberDescription">Описание</item>
+	<item id="header_memberName">Имя члена</item>
+	<item id="header_memberValue">Значение</item>
+	<item id="header_namespaceDescription">Описание</item>
+	<item id="header_namespaceName">Пространство имён</item>
+	<item id="header_permissionDescription">Описание</item>
+	<item id="header_permissionName">Разрешение</item>
+	<item id="header_revHistoryDate">Дата</item>
+	<item id="header_revHistoryDescription">Описание</item>
+	<item id="header_revHistoryVersion">Версия</item>
+  <item id="header_structureName">Структура</item>
+	<item id="header_typeDescription">Описание</item>
+	<item id="header_typeName">Имя</item>
+
+	<!-- Miscellaneous page text -->
+  <item id="defaultNamespace">(пространство имён по-умолчанию)</item>
+  <item id="definedBy">(Определяется {0})</item>
+  <item id="exposedMembersTableText">Тип {0} предоставляет следующие члены.</item>	
+	<item id="inheritedFrom">(Унаследован от {0})</item>
+	<item id="noCodeExample">В настоящее время язык не поддерживается либо пример кода отсутствует.</item>
+	<item id="overridesMember">(Переопределяет {0})</item>
+	<item id="preliminaryDocs">Это предварительная версия документации. API может измениться в будущем.</item>
+  <item id="preliminaryApi">Это предварительная документация, которая в будущем может измениться.</item>
+	<item id="preliminaryShort">Preliminary</item>
+  <item id="text_extensionUsage">В Visual Basic и C# этот метод можно вызывать как метод экземпляра для любого объекта типа {0}. При вызове метода для экземпляра следует опускать первый параметр. Дополнительные сведения см. в разделе <a href="https://docs.microsoft.com/dotnet/visual-basic/programming-guide/language-features/procedures/extension-methods" target="_blank" rel="noopener noreferrer">Методы расширения (Visual Basic)</a> или <a href="https://docs.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/extension-methods" target="_blank" rel="noopener noreferrer">Методы расширения (Руководство по программированию в C#)</a>.</item>
+	<item id="text_inheritance">Inheritance</item>
+	<item id="text_derived">Derived</item>
+	<item id="text_implements">Implements</item>
+	<item id="text_moreInheritance">Подробнее</item>
+	<item id="text_lessInheritance">Less</item>
+  <item id="text_relatedEntries">См. также</item>
+  <item id="top">В начало страницы</item>
+	<item id="optionalText">(Optional)</item>
+	<item id="inThisArticle">In This Article</item>
+	<item id="showHideTOC">Show/Hide TOC</item>
+	<item id="searchPlaceHolder">Search</item>
+
+	<!-- Requirements section info -->
+	<item id="assemblyNameAndModule">{0} (в {1}.{2}) Версия: {3}</item>
+  <item id="boilerplate_requirementsAssemblies">Сборки:</item>
+  <item id="boilerplate_requirementsAssemblyLabel">Сборка:</item>
+  <item id="boilerplate_requirementsNamespace">Пространство имён:</item>
+  <item id="boilerplate_unmappedXamlXmlns">не имеет соответствия в xmlns.</item>
+  <item id="boilerplate_xamlXmlnsRequirements">XMLNS для XAML:</item>
+
+  <!-- Auto-outline text -->
+  <item id="boilerplate_autoOutlineTopLevelIntro">Эта тема содержит следующие разделы:</item>
+	<item id="boilerplate_autoOutlineSubsectionIntro">В этом разделе содержатся следующие подразделы:</item>
+
+  <!-- Copyright notice. {0} = Copyright text, {1} = Year(s), {2} = Holder(s) -->
+  <item id="boilerplate_copyrightNotice">{0} &#169;{1}{2}. Все права защищены.</item>
+
+	<!-- To format the copyright HREF and/or copyright text into a message of your choosing, you can specify
+			 @HtmlEncCopyrightHref and/or @HtmlEncCopyrightText in braces -->
+	<item id="copyright">{@HtmlEncCopyrightInfo}</item>
+	
+	<!-- Obsolete API text -->
+  <item id="boilerplate_obsoleteShort">Устарело.</item>
+  <item id="boilerplate_obsoleteLong">Примечание: Данный API устарел.</item>
+	
+	<!-- See Also section text-->
+  <item id="boilerplate_seeAlsoNamespaceLink">{0} - пространство имён</item>
+  <item id="boilerplate_seeAlsoOverloadLink">{0} - перегрузка</item>
+  <item id="boilerplate_seeAlsoTypeLink">{0} - <include item="text_{1}Lower"/></item>
+  <item id="text_classUpper">Класс</item>
+  <item id="text_structureUpper">Структура</item>
+  <item id="text_interfaceUpper">Интерфейс</item>
+  <item id="text_delegateUpper">Делегат</item>
+  <item id="text_enumerationUpper">Перечисление</item>
+	
+  <!-- Thread safety section text -->
+  <item id="boilerplate_threadSafety">Любые открытые члены этого типа, объявленные как <include item="devlang_staticKeyword"/>, являются потокобезопасными. Потокобезопасность членов экземпляров не гарантируется.</item>
+  <item id="text_staticThreadSafe">Статические члены этого типа, являются безопасными для многопоточных операций. </item>
+  <item id="text_staticNotThreadSafe">Статические члены этого типа, являются небезопасными для многопоточных операций. </item>
+  <item id="text_instanceThreadSafe">Члены экземпляра этого типа, являются безопасными для многопоточных операций. </item>
+  <item id="text_instanceNotThreadSafe">Члены экземпляра этого типа, являются небезопасными для многопоточных операций. </item>
+	
+	<!-- Development language and code snippet titles for languages without a syntax generator -->
+	<item id="devlang_batch">Batch Script</item>
+	<item id="devlang_HTML">HTML</item>
+	<item id="devlang_PShell">PowerShell</item>
+	<item id="devlang_Python">Python</item>
+	<item id="devlang_SQL">SQL</item>
+	<item id="devlang_VBScript">Visual Basic Script</item>
+	<item id="devlang_VisualBasicAndCSharp">VB и C#</item>
+	<item id="devlang_XML">XML</item>
+
+  <!-- Language keywords -->
+  <item id="devlang_nullKeyword"><span class="keyword">null</span> (<span class="keyword">Nothing</span> в Visual Basic)</item>
+  <item id="devlang_staticKeyword"><span class="keyword">static</span> (<span class="keyword">Shared</span> в Visual Basic)</item>
+  <item id="devlang_virtualKeyword"><span class="keyword">virtual</span> (<span class="keyword">Overridable</span> в Visual Basic)</item>
+  <item id="devlang_trueKeyword"><span class="keyword">true</span> (<span class="keyword">True</span> в Visual Basic)</item>
+  <item id="devlang_falseKeyword"><span class="keyword">false</span> (<span class="keyword">False</span> в Visual Basic)</item>
+  <item id="devlang_abstractKeyword"><span class="keyword">abstract</span> (<span class="keyword">MustInherit</span> в Visual Basic)</item>
+  <item id="devlang_sealedKeyword"><span class="keyword">sealed</span> (<span class="keyword">NotInheritable</span> в Visual Basic)</item>
+  <item id="devlang_asyncKeyword"><span class="keyword">async</span> (<span class="keyword">Async</span> в Visual Basic)</item>
+  <item id="devlang_awaitKeyword"><span class="keyword">await</span> (<span class="keyword">Await</span> в Visual Basic)</item>
+  <item id="devlang_asyncAwaitKeyword"><span class="keyword">async</span>/<span class="keyword">await</span> (<span class="keyword">Async</span>/<span class="keyword">Await</span> в Visual Basic)</item>
+  
+	<!-- Development language metadata values for languages without a syntax generator -->
+	<item id="metaLang_batch">Batch Script</item>
+	<item id="metaLang_HTML">HTML</item>
+	<item id="metaLang_PShell">PowerShell</item>
+	<item id="metaLang_Python">Python</item>
+	<item id="metaLang_SQL">SQL</item>
+	<item id="metaLang_VBScript">VBScript</item>
+	<item id="metaLang_VisualBasicAndCSharp">VB and C#</item>
+	<item id="metaLang_XML">XML</item>
+
+	<!-- Alt text for images -->
+  <item id="altText_CodeExample">Пример кода</item>
+  <item id="altText_ExplicitInterface">Явные реализации интерфейса</item>
+  <item id="altText_privAttachedEvent">Закрытое вложенное событие</item>
+  <item id="altText_privClass">Закрытый класс</item>
+  <item id="altText_privConstructor">Закрытый конструктор</item>
+  <item id="altText_privDelegate">Закрытый делегат</item>
+  <item id="altText_privEnumeration">Закрытое перечисление</item>
+  <item id="altText_privEvent">Закрытое событие</item>
+  <item id="altText_privExtension">Закрытый метод расширения</item>
+  <item id="altText_privField">Закрытое поле</item>
+  <item id="altText_privInterface">Закрытый интерфейс</item>
+  <item id="altText_privMethod">Закрытый метод</item>
+  <item id="altText_privOperator">Закрытый оператор</item>
+  <item id="altText_privProperty">Закрытое свойство</item>
+  <item id="altText_privStructure">Закрытая структура</item>
+  <item id="altText_privAttachedProperty">Закрытое вложенное свойство</item>
+  <item id="altText_protAttachedEvent">Защищённое вложенное событие</item>
+  <item id="altText_protAttachedProperty">Защищённое вложенное свойство</item>
+  <item id="altText_protClass">Защищённый класс</item>
+  <item id="altText_protConstructor">Защищённый конструктор</item>
+  <item id="altText_protDelegate">Защищённый делегат</item>
+  <item id="altText_protEnumeration">Защищённое перечисление</item>
+  <item id="altText_protEvent">Защищённое событие</item>
+  <item id="altText_protExtension">Защищённый метод расширения</item>
+  <item id="altText_protField">Защищённое поле</item>
+  <item id="altText_protInterface">Защищённый интерфейс</item>
+  <item id="altText_protMethod">Защищённый метод</item>
+  <item id="altText_protOperator">Защищённый оператор</item>
+  <item id="altText_protProperty">Защищённое свойство</item>
+  <item id="altText_protStructure">Защищённая структура</item>
+  <item id="altText_pubAttachedEvent">Открытое вложенное событие</item>
+  <item id="altText_pubAttachedProperty">Открытое вложенное свойство</item>
+  <item id="altText_pubClass">Открытый класс</item>
+  <item id="altText_pubConstructor">Открытый конструктор</item>
+  <item id="altText_pubDelegate">Открытый делегат</item>
+  <item id="altText_pubEnumeration">Открытое перечисление</item>
+  <item id="altText_pubEvent">Открытое событие</item>
+  <item id="altText_pubExtension">Открытый метод расширения</item>
+  <item id="altText_pubField">Открытое поле</item>
+  <item id="altText_pubInterface">Открытый интерфейс</item>
+  <item id="altText_pubMethod">Открытый метод</item>
+  <item id="altText_pubOperator">Открытый оператор</item>
+  <item id="altText_pubProperty">Открытое свойство</item>
+  <item id="altText_pubStructure">Открытая структура</item>
+  <item id="altText_Static">Статический член</item>
+	
+	<!-- Alert titles -->
+	<item id="alert_title_tip">Подсказка</item>
+	<item id="alert_title_caution">Внимание</item>
+	<item id="alert_title_security">Примечание по безопасности</item>
+	<item id="alert_title_note">Примечание</item>
+	<item id="alert_title_important">Важно</item>
+	<item id="alert_title_visualBasic">Примечание для Visual Basic</item>
+	<item id="alert_title_visualC#">Примечание для C#</item>
+	<item id="alert_title_visualC++">Примечание для C++</item>
+	<item id="alert_title_visualJ#">Примечание для J#</item>
+	<item id="alert_title_todo">To Do</item>
+	<item id="text_NotesForImplementers">Примечания для реализующих объектов</item>
+	<item id="text_NotesForCallers">Примечания для вызывающих объектов</item>
+	<item id="text_NotesForInheritors">Примечания для наследников</item>
+
+	<!-- Alert alt text -->
+	<item id="alert_altText_tip">Подсказка</item>
+	<item id="alert_altText_caution">Внимание</item>
+	<item id="alert_altText_security">Примечание по безопасности</item>
+	<item id="alert_altText_note">Примечание</item>
+	<item id="alert_altText_important">Важно</item>
+	<item id="alert_altText_visualBasic">Примечание для Visual Basic</item>
+	<item id="alert_altText_visualC#">Примечание для C#</item>
+	<item id="alert_altText_visualC++">Примечание для C++</item>
+	<item id="alert_altText_visualJ#">Примечание для J#</item>
+	<item id="alert_altText_todo">To Do</item>
+
+	<!-- Index metadata entries -->
+	<item id="indexEntry_root">Пространства имён</item>
+  <item id="indexEntry_namespace">{0} - пространство имён</item>
+  <item id="indexEntry_class">{0} - класс</item>
+	<item id="indexEntry_structure">{0} - структура</item>
+	<item id="indexEntry_interface">{0} - интерфейс</item>
+	<item id="indexEntry_delegate">{0} - делегат</item>
+	<item id="indexEntry_enumeration">{0} - перечисление</item>
+  <item id="indexEntry_enumerationMember">{0} - член перечисления</item>
+  <item id="indexEntry_members">{0}, все члены</item>
+  <item id="indexEntry_methods">{0}, методы</item>
+  <!-- Index entry for operator list topic that has [operators + no type conversions] -->
+  <item id="indexEntry_operators">{0}, операторы</item>
+  <!-- Index entry for operator list topic that has [operators + type conversions] -->
+  <item id="indexEntry_operatorsAndTypeConversions">{0}, операторы и преобразования типов</item>
+  <!-- Index entry for operator list topic that has [no operators + type conversions] -->
+  <item id="indexEntry_typeConversions">{0}, преобразования типов</item>
+  <!-- Index entries for op_explicit and op_implicit members -->
+  <item id="indexEntry_conversionOperator">{0} преобразования</item>
+  <item id="indexEntry_properties">{0}, свойства</item>
+  <item id="indexEntry_fields">{0}, поля</item>
+  <item id="indexEntry_events">{0}, события</item>
+  <item id="indexEntry_attachedProperties">{0}, вложенные свойства</item>
+  <item id="indexEntry_attachedEvents">{0}, вложенные события</item>
+	<item id="indexEntry_constructors">{0}, конструкторы</item>
+	<item id="indexEntry_constructor">{0}, конструктор</item>
+	<item id="indexEntry_constructorType">{0} конструктор</item>
+  <item id="indexEntry_method">{0} метод</item>
+	<item id="indexEntry_property">{0} свойство</item>
+	<item id="indexEntry_event">{0} событие</item>
+	<item id="indexEntry_field">{0} поле</item>
+	<item id="indexEntry_operator">{0} оператор</item>
+	<item id="indexEntry_attachedProperty">{0} вложенное свойство</item>
+	<item id="indexEntry_attachedEvent">{0} вложенное событие</item>
+	<item id="indexEntry_methodExplicit">{0} явно реализованный метод</item>
+	<item id="indexEntry_propertyExplicit">{0} явно реализованное свойство</item>
+	<item id="indexEntry_eventExplicit">{0} явно реализованное событие</item>
+	<item id="indexEntry_fieldExplicit">{0} явно реализованное поле</item>
+
+  <!-- Versions section (version builder plug-in) -->
+  <item id="supportedIn_1">Поддерживается в: {0}</item>
+  <item id="supportedIn_2">Поддерживается в: {0}, {1}</item>
+  <item id="supportedIn_3">Поддерживается в: {0}, {1}, {2}</item>
+  <item id="supportedIn_4">Поддерживается в: {0}, {1}, {2}, {3}</item>
+  <item id="supportedIn_5">Поддерживается в: {0}, {1}, {2}, {3}, {4}</item>
+  <item id="supportedIn_6">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}</item>
+  <item id="supportedIn_7">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}</item>
+  <item id="supportedIn_8">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}</item>
+  <item id="supportedIn_9">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}</item>
+  <item id="supportedIn_10">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}</item>
+  <item id="supportedIn_11">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}</item>
+  <item id="supportedIn_12">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}</item>
+  <item id="supportedIn_13">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}</item>
+  <item id="supportedIn_14">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}</item>
+  <item id="supportedIn_15">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}</item>
+  <item id="supportedIn_16">Поддерживается в: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}</item>
+  <item id="obsoleteWarning">Устарело (предупреждение компилятора) в {0}</item>
+  <item id="obsoleteError">Устарело (не компилируется) в {0} и более поздних версиях</item>
+	
+  <!-- Show Missing Component messages -->
+  <item id="SMCAutoDocConstructor">Инициализирует новый экземпляр класса <referenceLink target="T:{0}" /></item>
+  <item id="SMCAutoDocStaticConstructor">Инициализирует статические члены класса <referenceLink target="T:{0}" /></item>
+  <item id="SMCAutoDocDispose">Освобождает все ресурсы, используемые объектом <referenceLink target="T:{0}" /></item>
+  <item id="SMCAutoDocDisposeBool">Освобождает неуправляемые ресурсы, используемые объектом <referenceLink target="T:{0}" />, а при необходимости освобождает также управляемые ресурсы</item>
+  <item id="SMCAutoDocDisposeParam">Значение true позволяет освободить управляемые и неуправляемые ресурсы; значение false позволяет освободить только неуправляемые ресурсы.</item>
+  <item id="SMCMissingTag"><p class="missing">[&lt;{0}&gt; отсутствует в документации для "{1}"]</p></item>
+  <item id="SMCMissingParamTag"><p class="missing">[&lt;{0} name="{1}"/&gt; отсутствует в документации для "{2}"]</p></item>
+  <item id="SMCMissingIncludeTarget"><p class="missing">[&lt;include&gt; отсутствует в '{0}'.  Файл: '{1}' Путь: '{2}']</p></item>
+</content>

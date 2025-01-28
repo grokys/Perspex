@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<!-- See the help topic https://ewsoftware.github.io/SHFB/html/d7b0528c-c75a-477b-9445-db6d2c55dbcb.htm
+			 for information on why conditional target frameworks are used. -->
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
+		<!-- Use the full framework for debugging -->
+		<TargetFramework>net481</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<!-- Use .NET Standard for release builds -->
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<!-- Only use an unconditional target framework if you have a UI project within the solution that can be
+				 used to start debugging.
+		<TargetFramework>netstandard2.0</TargetFramework> -->
+		<GenerateAssemblyVersionAttribute>False</GenerateAssemblyVersionAttribute>
+		<GenerateAssemblyFileVersionAttribute>False</GenerateAssemblyFileVersionAttribute>
+		<GenerateAssemblyInformationalVersionAttribute>False</GenerateAssemblyInformationalVersionAttribute>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+		<RootNamespace>SpecialAttributeRendererPlugin</RootNamespace>
+		<AssemblyName>SpecialAttributeRendererPlugin</AssemblyName>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Product>SpecialAttributeRendererPlugin</Product>
+		<Title>SpecialAttributeRendererPlugin Plug-In</Title>
+		<Description>A Sandcastle Help File Builder plug-in</Description>
+		<Version>1.0.0.0</Version>
+		<Authors>Uniewski</Authors>
+		<Company>Uniewski</Company>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageIcon></PackageIcon>
+		<RepositoryUrl></RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>SpecialAttributeRendererPlugin SHFB sandcastle plug-in</PackageTags>
+		<PackageProjectUrl></PackageProjectUrl>
+		<PackageLicenseExpression>MS-PL</PackageLicenseExpression>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<IsTool>true</IsTool>
+		<NoWarn>$(NoWarn);NU5128</NoWarn>
+		<ContentTargetFolders>tools\</ContentTargetFolders>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="build\SpecialAttributeRendererPlugin.props">
+			<Pack>true</Pack>
+			<PackagePath>build\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
+		<PackageReference Include="EWSoftware.Sandcastle.Core" Version="2024.2.18.0" />
+		<PackageReference Include="EWSoftware.SandcastleBuilder.Utils" Version="2024.2.18.0" />
+	</ItemGroup>
+
+	<!-- TODO: If you have a project with configuration forms, you can include it in this package by
+						 manually adding the assemblies needed for them here.  This keeps the platform-specific UI elements
+						 isolated and allows the component to work with MSBuild and dotnet build.
+	<ItemGroup>
+		<None Include="..\SpecialAttributeRendererPluginUI\bin\$(Configuration)\net472\SpecialAttributeRendererPluginUI.dll">
+			<Pack>true</Pack>
+			<PackagePath>tools\</PackagePath>
+			<Visible>false</Visible>
+		</None>
+	</ItemGroup>
+	-->
+</Project>

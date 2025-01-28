@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+
+	<!-- Header and footer text -->
+  <item id="tocTitle">{0}</item>
+	<item id="documentationTitle">{@HtmlEncHelpTitle}</item>
+	<item id="headerText">{@HeaderText}</item>
+	<item id="feedback_body">Your feedback is used to improve the documentation and the product. Your e-mail address will not be used for any other purpose and is disposed of after the issue you report is resolved. While working to resolve the issue that you report, you may be contacted via e-mail to get further details or clarification on the feedback you sent. After the issue you report has been addressed, you may receive an e-mail to let you know that your feedback has been addressed.</item>
+	<item id="footer_content">{@FooterText}{@Copyright}{@Comments}</item>
+	<!-- This should remain empty unless overridden by the website content file -->
+	<item id="websiteAdContent"></item>
+
+	<item id="comments"><div class="feedbackLink">내용에 문의사항이 있는 경우 우측의 메일 주소로 연락 바랍니다.
+        <a id="HT_MailLink" href="mailto:{@UrlEncFeedbackEMailAddress}?Subject={@UrlEncHelpTitle}">{@HtmlEncFeedbackEMailAddress}</a></div>
+        <script type="text/javascript">
+        var HT_mailLink = document.getElementById("HT_MailLink");
+        HT_mailLink.href += ": " + document.title + "\u0026body=" + encodeURIComponent("<include item='feedback_body' />");
+        </script></item>
+
+	<!-- Code/syntax section -->
+	<item id="copyCode">Copy</item>
+	<item id="sourceCodeLinkText">View Source</item>
+	<item id="sourceCodeLinkTitle">View the source code</item>
+	<item id="requestExampleLinkText">Request Example</item>
+	<item id="requestExampleLinkTitle">Request an example for this topic</item>
+	<item id="requestExampleScript">
+		$(".requestExampleLink").each(function ()
+		{{
+			if(this.href.substring(0, 4).toLowerCase() === "http")
+				this.href += "?title=";
+			else
+				this.href += "?subject={@UrlEncHelpTitle}: ";
+
+			this.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+				encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+				"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		}});
+	</item>
+	
+	<!-- VS2013 presentation style items -->
+	<item id="requestExample"><a id="HT_RequestExampleLink" href="{0}" target="_blank" rel="noopener noreferrer" class="{1}"
+		title="Request an example for this topic">Request Example</a>
+		<script type="text/javascript">
+		var HT_requestExampleLink = document.getElementById("HT_RequestExampleLink");
+				
+		if(HT_requestExampleLink.href.substring(0, 4).toLowerCase() == "http")
+			HT_requestExampleLink.href += "?title=";
+		else
+			HT_requestExampleLink.href += "?subject={@UrlEncHelpTitle}: ";
+
+		HT_requestExampleLink.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+			encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+			"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		</script></item>
+	<item id="resizeToolTip">Click or drag to resize</item>
+	
+	<!-- Section titles -->
+	<item id="bibliographyTitle">Bibliography</item>
+  <item id="title_appliesTo">Applies To</item>
+	<item id="title_attributes">Attributes</item>
+  <item id="title_attributesAndElements">Attributes and Elements</item>
+  <item id="title_background">Background</item>
+	<item id="title_buildInstructions">Compiling the Code</item>
+	<item id="title_changeHistory">Change History</item>
+	<item id="title_childElement">Child Elements</item>
+	<item id="title_conclusion">Conclusion</item>
+  <item id="title_definition">Definition</item>
+	<item id="title_delegateValue">Return Value</item>
+	<item id="title_demonstrates">Demonstrates</item>
+  <item id="title_dotNetFrameworkEquivalent">.NET Framework Equivalent</item>
+	<item id="title_elementInformation">Element Information</item>
+  <item id="title_errorMessage">Error Message</item>
+	<item id="title_events">Events</item>
+  <item id="title_example">Example</item>
+	<item id="title_examples">Examples</item>
+	<item id="title_exceptions">Exceptions</item>
+	<item id="title_extensionUsage">Usage Note</item>
+	<item id="title_externalResources">External Resources</item>
+	<item id="title_family">Inheritance Hierarchy</item>
+	<item id="title_fieldValue">Field Value</item>
+	<item id="title_implements">Implements</item>
+	<item id="title_inThisSection">In This Section</item>
+  <item id="title_languageReferenceRemarks">Remarks</item>
+	<item id="title_methodValue">Return Value</item>
+	<item id="title_namespaces">Namespaces</item>
+	<item id="title_nextSteps">Next Steps</item>
+	<item id="title_parameters">Parameters</item>
+	<item id="title_parentElement">Parent Elements</item>
+	<item id="title_permissions">.NET Framework Security</item>
+	<item id="title_platforms">Platforms</item>
+  <item id="title_prerequisites">Prerequisites</item>
+	<item id="title_propertyValue">Property Value</item>
+  <item id="title_reference">Reference</item>
+	<item id="title_relatedSections">Related Sections</item>
+	<item id="title_relatedTopics">See Also</item>
+	<item id="title_remarks">Remarks</item>
+	<item id="title_requirements">Requirements</item>
+	<item id="title_returns">Return Value</item>
+	<item id="title_returnValue">Return Value</item>
+	<item id="title_revisionHistory">Revision History</item>
+  <item id="title_robustProgramming">Robust Programming</item>
+	<item id="title_security">Security</item>
+	<item id="title_seeAlso_concepts">Concepts</item>
+	<item id="title_seeAlso_otherResources">Other Resources</item>
+	<item id="title_seeAlso_reference">Reference</item>
+	<item id="title_seeAlso_tasks">Tasks</item>
+	<item id="title_syntax">Syntax</item>
+	<item id="title_templates">Type Parameters</item>
+  <item id="title_textValue">Text Value</item>
+	<item id="title_threadSafety">Thread Safety</item>
+	<item id="title_value">Value</item>
+	<item id="title_versions">Version Information</item>
+	<item id="title_whatsNew">What's New</item>
+	
+  <!-- Topic titles -->
+	<item id="topicTitle_root">{@RootNamespaceTitle}</item>
+	<!-- This is used when a title is not specified in the project -->
+  <item id="rootTopicTitleLocalized">네임스페이스</item>
+	<item id="topicTitle_attachedEvent">{0} Attached Event</item>
+ 	<item id="topicTitle_attachedEvents">{0} Attached Events</item>
+	<item id="topicTitle_attachedProperties">{0} Attached Properties</item>
+	<item id="topicTitle_attachedProperty">{0} Attached Property</item>
+	<item id="topicTitle_class">{0} Class</item>
+	<item id="topicTitle_constructor">{0}{1} Constructor</item>
+	<item id="topicTitle_constructors">{0} Constructors</item>
+	<item id="topicTitle_delegate">{0} Delegate</item>
+	<item id="topicTitle_enumeration">{0} Enumeration</item>
+	<item id="topicTitle_enumMembers">Members</item>
+	<item id="topicTitle_event">{0} Event</item>
+	<item id="topicTitle_events">{0} Events</item>
+	<item id="topicTitle_field">{0} Field</item>
+	<item id="topicTitle_fields">{0} Fields</item>
+	<item id="topicTitle_interface">{0} Interface</item>
+	<item id="topicTitle_method">{0}{1} Method</item>
+	<item id="topicTitle_methods">{0} Methods</item>
+	<item id="topicTitle_namespace">{0} Namespace</item>
+	<item id="topicTitle_namespaceGroup">{0} Namespaces</item>
+	<item id="topicTitle_properties">{0} Properties</item>
+	<item id="topicTitle_property">{0}{1} Property</item>
+	<item id="topicTitle_structure">{0} Structure</item>
+  <!-- Title for operator members -->
+	<item id="topicTitle_operator">{0}{1} Operator</item>
+  <!-- Title for op_explicit and op_implicit members -->
+  <item id="topicTitle_typeConversion">{0} Conversion {1}</item>
+  <!-- Title for overload op_explicit and op_implicit topics -->
+  <item id="topicTitle_conversionOperator">{0} Conversion Operators</item>
+  <!-- Title for operator list topic that has [operators + no type conversions] -->
+  <item id="topicTitle_operators">{0} Operators</item>
+  <!-- Title for operator list topic that has [operators + type conversions] -->
+  <item id="topicTitle_operatorsAndTypeConversions">{0} Operators and Type Conversions</item>
+  <!-- Title for operator list topic that has [no operators + type conversions] -->
+  <item id="topicTitle_typeConversions">{0} Type Conversions</item>
+
+	<!-- Table of contents simple titles -->
+ 	<item id="tocTitle_AttachedEvents">Attached Events</item>
+	<item id="tocTitle_AttachedProperties">Attached Properties</item>
+	<item id="tocTitle_Constructor">Constructor</item>
+	<item id="tocTitle_Constructors">Constructors</item>
+	<item id="tocTitle_Events">Events</item>
+	<item id="tocTitle_Fields">Fields</item>
+	<item id="tocTitle_Methods">Methods</item>
+	<item id="tocTitle_Operators">Operators</item>
+	<item id="tocTitle_Properties">Properties</item>
+
+  <!-- Member list table titles -->
+  <item id="tableTitle_attachedEvent">Attached Events</item>
+  <item id="tableTitle_attachedProperty">Attached Properties</item>
+	<item id="tableTitle_class">Classes</item>
+  <item id="tableTitle_constructor">Constructors</item>
+	<item id="tableTitle_delegate">Delegates</item>
+	<item id="tableTitle_enumeration">Enumerations</item>
+  <item id="tableTitle_event">Events</item>
+  <item id="tableTitle_explicitInterfaceImplementation">Explicit&#160;Interface&#160;Implementations</item>
+  <item id="tableTitle_extension">Extension&#160;Methods</item>
+  <item id="tableTitle_field">Fields</item>
+	<item id="tableTitle_interface">Interfaces</item>
+  <item id="tableTitle_method">Methods</item>
+  <item id="tableTitle_namespace">Namespaces</item>
+  <item id="tableTitle_operator">Operators</item>
+	<item id="tableTitle_overload">Overload&#160;List</item>
+  <item id="tableTitle_property">Properties</item>
+	<item id="tableTitle_structure">Structures</item>
+
+	<!-- Table column headers -->
+  <item id="header_className">Class</item>
+  <item id="header_delegateName">Delegate</item>
+  <item id="header_enumerationName">Enumeration</item>
+	<item id="header_eventReason">Reason</item>
+	<item id="header_eventType">Event Type</item>
+	<item id="header_exceptionCondition">Condition</item>
+	<item id="header_exceptionName">Exception</item>
+  <item id="header_interfaceName">Interface</item>
+	<item id="header_memberDescription">Description</item>
+	<item id="header_memberName">Member name</item>
+	<item id="header_memberValue">Value</item>
+	<item id="header_namespaceDescription">Description</item>
+	<item id="header_namespaceName">Namespace</item>
+	<item id="header_permissionDescription">Description</item>
+	<item id="header_permissionName">Permission</item>
+	<item id="header_revHistoryDate">Date</item>
+	<item id="header_revHistoryDescription">Description</item>
+	<item id="header_revHistoryVersion">Version</item>
+  <item id="header_structureName">Structure</item>
+	<item id="header_typeDescription">Description</item>
+	<item id="header_typeName">Name</item>
+
+	<!-- Miscellaneous page text -->
+  <item id="defaultNamespace">( Default Namespace )</item>
+  <item id="definedBy">(Defined by {0})</item>
+  <item id="exposedMembersTableText">The {0} type exposes the following members.</item>	
+	<item id="inheritedFrom">(Inherited from {0})</item>
+	<item id="noCodeExample">No code example is currently available or this language may not be supported.</item>
+	<item id="overridesMember">(Overrides {0})</item>
+	<item id="preliminaryDocs">This is preliminary documentation and is subject to change.</item>
+  <item id="preliminaryApi">This API is preliminary and subject to change.</item>
+	<item id="preliminaryShort">Preliminary</item>
+	<item id="text_extensionUsage">In Visual Basic and C#, you can call this method as an instance method on any object of type {0}. When you use instance method syntax to call this method, omit the first parameter. For more information, see <a href="https://docs.microsoft.com/dotnet/visual-basic/programming-guide/language-features/procedures/extension-methods" target="_blank" rel="noopener noreferrer">Extension Methods (Visual Basic)</a> or <a href="https://docs.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/extension-methods" target="_blank" rel="noopener noreferrer">Extension Methods (C# Programming Guide)</a>.</item>
+	<item id="text_inheritance">Inheritance</item>
+	<item id="text_derived">Derived</item>
+	<item id="text_implements">Implements</item>
+	<item id="text_moreInheritance">More</item>
+	<item id="text_lessInheritance">Less</item>
+  <item id="text_relatedEntries">See Also:</item>
+	<item id="top">Top</item>
+	<item id="optionalText">(Optional)</item>
+	<item id="inThisArticle">In This Article</item>
+	<item id="showHideTOC">Show/Hide TOC</item>
+	<item id="searchPlaceHolder">Search</item>
+
+	<!-- Requirements section info -->
+	<item id="assemblyNameAndModule">{0} (in {1}.{2}) Version: {3}</item>
+  <item id="boilerplate_requirementsAssemblies">Assemblies:</item>
+  <item id="boilerplate_requirementsAssemblyLabel">Assembly:</item>
+  <item id="boilerplate_requirementsNamespace">Namespace:</item>
+  <item id="boilerplate_unmappedXamlXmlns">Not mapped to an xmlns.</item>
+  <item id="boilerplate_xamlXmlnsRequirements">XMLNS for XAML:</item>
+	
+  <!-- Auto-outline text -->
+  <item id="boilerplate_autoOutlineTopLevelIntro">This topic contains the following sections:</item>
+	<item id="boilerplate_autoOutlineSubsectionIntro">This section contains the following subsections:</item>
+	
+  <!-- Copyright notice. {0} = Copyright text, {1} = Year(s), {2} = Holder(s) -->
+  <item id="boilerplate_copyrightNotice">{0} &#169;{1}{2}. All rights reserved.</item>
+	
+	<!-- To format the copyright HREF and/or copyright text into a message of your choosing, you can specify
+			 @HtmlEncCopyrightHref and/or @HtmlEncCopyrightText in braces -->
+	<item id="copyright">{@HtmlEncCopyrightInfo}</item>
+	
+	<!-- Obsolete API text -->
+  <item id="boilerplate_obsoleteShort">Obsolete.</item>
+  <item id="boilerplate_obsoleteLong">Note: This API is now obsolete.</item>
+	
+	<!-- See Also section text-->
+  <item id="boilerplate_seeAlsoNamespaceLink">{0} Namespace</item>
+  <item id="boilerplate_seeAlsoOverloadLink">{0} Overload</item>
+  <item id="boilerplate_seeAlsoTypeLink">{0} <include item="text_{1}Upper"/></item>
+  <item id="text_classUpper">Class</item>
+  <item id="text_structureUpper">Structure</item>
+  <item id="text_interfaceUpper">Interface</item>
+  <item id="text_delegateUpper">Delegate</item>
+  <item id="text_enumerationUpper">Enumeration</item>
+	
+  <!-- Thread safety section text -->
+  <item id="boilerplate_threadSafety">Any public <include item="devlang_staticKeyword"/>  members of this type are thread safe. Any instance members are not guaranteed to be thread safe.</item>
+  <item id="text_staticThreadSafe">Static members of this type are safe for multi-threaded operations. </item>
+  <item id="text_staticNotThreadSafe">Static members of this type are not safe for multi-threaded operations. </item>
+  <item id="text_instanceThreadSafe">Instance members of this type are safe for multi-threaded operations. </item>
+  <item id="text_instanceNotThreadSafe">Instance members of this type are not safe for multi-threaded operations. </item>
+
+	<!-- Development language and code snippet titles for languages without a syntax generator -->
+	<item id="devlang_batch">Batch Script</item>
+	<item id="devlang_HTML">HTML</item>
+	<item id="devlang_PShell">PowerShell</item>
+	<item id="devlang_Python">Python</item>
+	<item id="devlang_SQL">SQL</item>
+	<item id="devlang_VBScript">Visual Basic Script</item>
+	<item id="devlang_VisualBasicAndCSharp">Visual Basic and C#</item>
+	<item id="devlang_XML">XML</item>
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">a null reference (<span class="keyword">Nothing</span> in Visual Basic)</item>
+	<item id="devlang_staticKeyword"><span class="keyword">static</span> (<span class="keyword">Shared</span> in Visual Basic)</item>
+	<item id="devlang_virtualKeyword"><span class="keyword">virtual</span> (<span class="keyword">Overridable</span> in Visual Basic)</item>
+	<item id="devlang_trueKeyword"><span class="keyword">true</span> (<span class="keyword">True</span> in Visual Basic)</item>
+	<item id="devlang_falseKeyword"><span class="keyword">false</span> (<span class="keyword">False</span> in Visual Basic)</item>
+	<item id="devlang_abstractKeyword"><span class="keyword">abstract</span> (<span class="keyword">MustInherit</span> in Visual Basic)</item>
+	<item id="devlang_sealedKeyword"><span class="keyword">sealed</span> (<span class="keyword">NotInheritable</span> in Visual Basic)</item>
+	<item id="devlang_asyncKeyword"><span class="keyword">async</span> (<span class="keyword">Async</span> in Visual Basic)</item>
+	<item id="devlang_awaitKeyword"><span class="keyword">await</span> (<span class="keyword">Await</span> in Visual Basic)</item>
+	<item id="devlang_asyncAwaitKeyword"><span class="keyword">async</span>/<span class="keyword">await</span> (<span class="keyword">Async</span>/<span class="keyword">Await</span> in Visual Basic)</item>
+
+	<!-- Development language metadata values for languages without a syntax generator -->
+	<item id="metaLang_batch">Batch Script</item>
+	<item id="metaLang_HTML">HTML</item>
+	<item id="metaLang_PShell">PowerShell</item>
+	<item id="metaLang_Python">Python</item>
+	<item id="metaLang_SQL">SQL</item>
+	<item id="metaLang_VBScript">VBScript</item>
+	<item id="metaLang_VisualBasicAndCSharp">VB and C#</item>
+	<item id="metaLang_XML">XML</item>
+
+	<!-- Alt text for images -->
+  <item id="altText_CodeExample">Code example</item>
+  <item id="altText_ExplicitInterface">Explicit interface implementation</item>
+	<item id="altText_privAttachedEvent">Private attached event</item>
+	<item id="altText_privClass">Private class</item>
+	<item id="altText_privConstructor">Private constructor</item>
+	<item id="altText_privDelegate">Private delegate</item>
+	<item id="altText_privEnumeration">Private enumeration</item>
+	<item id="altText_privEvent">Private event</item>
+	<item id="altText_privExtension">Private Extension Method</item>
+	<item id="altText_privField">Private field</item>
+	<item id="altText_privInterface">Private interface</item>
+	<item id="altText_privMethod">Private method</item>
+	<item id="altText_privOperator">Private operator</item>
+	<item id="altText_privProperty">Private property</item>
+	<item id="altText_privStructure">Private structure</item>
+	<item id="altText_privAttachedProperty">Private attached property</item>
+	<item id="altText_protAttachedEvent">Protected attached event</item>
+	<item id="altText_protAttachedProperty">Protected attached property</item>
+	<item id="altText_protClass">Protected class</item>
+	<item id="altText_protConstructor">Protected constructor</item>
+	<item id="altText_protDelegate">Protected delegate</item>
+	<item id="altText_protEnumeration">Protected enumeration</item>
+	<item id="altText_protEvent">Protected event</item>
+	<item id="altText_protExtension">Protected Extension Method</item>
+	<item id="altText_protField">Protected field</item>
+	<item id="altText_protInterface">Protected interface</item>
+	<item id="altText_protMethod">Protected method</item>
+	<item id="altText_protOperator">Protected operator</item>
+	<item id="altText_protProperty">Protected property</item>
+	<item id="altText_protStructure">Protected structure</item>
+	<item id="altText_pubAttachedEvent">Public attached event</item>
+	<item id="altText_pubAttachedProperty">Public attached property</item>
+	<item id="altText_pubClass">Public class</item>
+	<item id="altText_pubConstructor">Public constructor</item>
+	<item id="altText_pubDelegate">Public delegate</item>
+	<item id="altText_pubEnumeration">Public enumeration</item>
+	<item id="altText_pubEvent">Public event</item>
+	<item id="altText_pubExtension">Public Extension Method</item>
+	<item id="altText_pubField">Public field</item>
+	<item id="altText_pubInterface">Public interface</item>
+	<item id="altText_pubMethod">Public method</item>
+	<item id="altText_pubOperator">Public operator</item>
+	<item id="altText_pubProperty">Public property</item>
+	<item id="altText_pubStructure">Public structure</item>
+	<item id="altText_Static">Static member</item>
+	
+	<!-- Alert titles -->
+	<item id="alert_title_tip">Tip</item>
+	<item id="alert_title_caution">Caution</item>
+	<item id="alert_title_security">Security Note</item>
+	<item id="alert_title_note">Note</item>
+	<item id="alert_title_important">Important</item>
+	<item id="alert_title_visualBasic">Visual Basic Note</item>
+	<item id="alert_title_visualC#">C# Note</item>
+	<item id="alert_title_visualC++">C++ Note</item>
+	<item id="alert_title_visualJ#">J# Note</item>
+	<item id="alert_title_todo">To Do</item>
+	<item id="text_NotesForImplementers">Notes to Implementers</item>
+	<item id="text_NotesForCallers">Notes to Callers</item>
+	<item id="text_NotesForInheritors">Notes to Inheritors</item>
+
+	<!-- Alert alt text -->
+	<item id="alert_altText_tip">Tip</item>
+	<item id="alert_altText_caution">Caution note</item>
+	<item id="alert_altText_security">Security note</item>
+	<item id="alert_altText_note">Note</item>
+	<item id="alert_altText_important">Important note</item>
+	<item id="alert_altText_visualBasic">Visual Basic note</item>
+	<item id="alert_altText_visualC#">C# note</item>
+	<item id="alert_altText_visualC++">C++ note</item>
+	<item id="alert_altText_visualJ#">J# note</item>	
+	<item id="alert_altText_todo">To Do</item>
+
+	<!-- Index metadata entries -->
+	<item id="indexEntry_root">namespaces</item>
+  <item id="indexEntry_namespace">{0} namespace</item>
+  <item id="indexEntry_class">{0} class</item>
+	<item id="indexEntry_structure">{0} structure</item>
+	<item id="indexEntry_interface">{0} interface</item>
+	<item id="indexEntry_delegate">{0} delegate</item>
+	<item id="indexEntry_enumeration">{0} enumeration</item>
+  <item id="indexEntry_enumerationMember">{0} enumeration member</item>
+  <item id="indexEntry_members">{0}, all members</item>
+  <item id="indexEntry_methods">{0}, methods</item>
+  <!-- Index entry for operator list topic that has [operators + no type conversions] -->
+  <item id="indexEntry_operators">{0}, operators</item>
+  <!-- Index entry for operator list topic that has [operators + type conversions] -->
+  <item id="indexEntry_operatorsAndTypeConversions">{0}, operators and type conversions</item>
+  <!-- Index entry for operator list topic that has [no operators + type conversions] -->
+  <item id="indexEntry_typeConversions">{0}, type conversions</item>
+  <!-- Index entries for op_explicit and op_implicit members -->
+  <item id="indexEntry_conversionOperator">{0} conversion</item>
+  <item id="indexEntry_properties">{0}, properties</item>
+  <item id="indexEntry_fields">{0}, fields</item>
+  <item id="indexEntry_events">{0}, events</item>
+  <item id="indexEntry_attachedProperties">{0}, attached properties</item>
+  <item id="indexEntry_attachedEvents">{0}, attached events</item>
+	<item id="indexEntry_constructors">{0}, constructors</item>
+	<item id="indexEntry_constructor">{0}, constructor</item>
+	<item id="indexEntry_constructorType">{0} constructor</item>
+  <item id="indexEntry_method">{0} method</item>
+	<item id="indexEntry_property">{0} property</item>
+	<item id="indexEntry_event">{0} event</item>
+	<item id="indexEntry_field">{0} field</item>
+	<item id="indexEntry_operator">{0} operator</item>
+	<item id="indexEntry_attachedProperty">{0} attached property</item>
+	<item id="indexEntry_attachedEvent">{0} attached event</item>
+	<item id="indexEntry_methodExplicit">{0} explicitly implemented method</item>
+	<item id="indexEntry_propertyExplicit">{0} explicitly implemented property</item>
+	<item id="indexEntry_eventExplicit">{0} explicitly implemented event</item>
+	<item id="indexEntry_fieldExplicit">{0} explicitly implemented field</item>
+	
+  <!-- Versions section (version builder plug-in) -->
+  <item id="supportedIn_1">Supported in: {0}</item>
+  <item id="supportedIn_2">Supported in: {0}, {1}</item>
+  <item id="supportedIn_3">Supported in: {0}, {1}, {2}</item>
+  <item id="supportedIn_4">Supported in: {0}, {1}, {2}, {3}</item>
+  <item id="supportedIn_5">Supported in: {0}, {1}, {2}, {3}, {4}</item>
+  <item id="supportedIn_6">Supported in: {0}, {1}, {2}, {3}, {4}, {5}</item>
+  <item id="supportedIn_7">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}</item>
+  <item id="supportedIn_8">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}</item>
+  <item id="supportedIn_9">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}</item>
+  <item id="supportedIn_10">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}</item>
+  <item id="supportedIn_11">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}</item>
+  <item id="supportedIn_12">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}</item>
+  <item id="supportedIn_13">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}</item>
+  <item id="supportedIn_14">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}</item>
+  <item id="supportedIn_15">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}</item>
+  <item id="supportedIn_16">Supported in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}</item>
+  <item id="obsoleteWarning">Obsolete (compiler warning) in {0}</item>
+  <item id="obsoleteError">Obsolete (does not compile) in {0} and later</item>
+	
+  <!-- Show Missing Component messages -->
+  <item id="SMCAutoDocConstructor">Initializes a new instance of the <referenceLink target="T:{0}" /> class</item>
+  <item id="SMCAutoDocStaticConstructor">Initializes the static fields of the <referenceLink target="T:{0}" /> class</item>
+  <item id="SMCAutoDocDispose">Releases all resources used by the <referenceLink target="T:{0}" /></item>
+  <item id="SMCAutoDocDisposeBool">Releases the unmanaged resources used by the <referenceLink target="T:{0}" /> and optionally releases the managed resources</item>
+  <item id="SMCAutoDocDisposeParam">True to release both managed and unmanaged resources; false to release only unmanaged resources</item>
+  <item id="SMCMissingTag"><p class="missing">[Missing &lt;{0}&gt; documentation for "{1}"]</p></item>
+  <item id="SMCMissingParamTag"><p class="missing">[Missing &lt;{0} name="{1}"/&gt; documentation for "{2}"]</p></item>
+  <item id="SMCMissingIncludeTarget"><p class="missing">[Missing &lt;include&gt; target documentation in '{0}'.  File: '{1}' Path: '{2}']</p></item>
+</content>

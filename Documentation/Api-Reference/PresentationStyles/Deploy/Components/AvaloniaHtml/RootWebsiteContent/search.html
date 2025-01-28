@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="shortcut icon" href="icons/favicon.ico" />
+	<link rel="stylesheet" href="css/bulma.css" />
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/presentationStyle.css" />
+	<script src="scripts/jquery-3.5.1.min.js"></script>
+	<script src="scripts/presentationStyle.js"></script>
+	<title>{@HtmlEncHelpTitle} - Search</title>
+</head>
+
+<body>
+	<section id="MainSection" class="section p-0">
+		<div class="pageHeader level mb-2 pt-2 pb-2 pl-5 pr-5">
+			<div id="TitleContainer" class="level-left">
+				<div id="DocumentationTitle" class="level-item">
+					{@HtmlEncHelpTitle} - Search
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="columns">
+		<div id="SearchContainer" class="content column is-centered">
+			<form id="SearchForm" action="#" onsubmit=PerformSearch(); return false;">
+				<div class="field">
+					<div class="control has-icons-left">
+						<input id="txtSearchText" class="input" type="text" size="50" maxlength="200" placeholder="Search" />
+						<span class="icon is-small is-left">
+							<i class="fa fa-search"></i>
+						</span>
+						<button id="SearchButton" type="submit" class="is-hidden"></button>
+					</div>
+				</div>
+				<div class="field">
+					<div class="control">
+						<input id="chkSortByTitle" type="checkbox" onclick="PerformSearch();" />
+						<label for="chkSortByTitle">Sort by title</label>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="columns">
+		<div class="content column is-centered">
+			<br />
+			<div id="searchResults">
+			</div>
+		</div>
+	</div>
+
+	<div class="columns">
+		<div class="content column is-centered">
+			<p>
+				<a href="{@WebDefaultTopic}">Back</a>
+			</p>
+		</div>
+	</div>
+
+	<script>
+		OnSearchPageLoad();
+	</script>
+</body>
+</html>

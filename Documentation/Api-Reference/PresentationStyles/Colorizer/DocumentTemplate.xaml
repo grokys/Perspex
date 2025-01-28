@@ -1,0 +1,76 @@
+﻿<FlowDocument
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<FlowDocument.Resources>
+		<!-- This represents the style of the containing section and paragraph.  These settings should match
+         the style of the target document. -->
+		<Style TargetType="{x:Type Section}">
+			<Setter Property="FontFamily" Value="Consolas, Courier New, Courier"/>
+			<Setter Property="FontSize" Value="12.0"/>
+			<Setter Property="BorderBrush" Value="#939393"/>
+			<Setter Property="BorderThickness" Value="0.5"/>
+			<Setter Property="Margin" Value="0, 0, 0, 10"/>
+			<Setter Property="Padding" Value="5"/>
+			<Style.Resources>
+				<Style TargetType="{x:Type Paragraph}">
+					<Setter Property="Margin" Value="0"/>
+				</Style>
+			</Style.Resources>
+		</Style>
+		<!-- These represent the styles of the span elements -->
+		<Style x:Key="HighlightComment">
+			<Setter Property="TextElement.Foreground" Value="#006633" />
+		</Style>
+		<Style x:Key="HighlightLiteral">
+			<Setter Property="TextElement.Foreground" Value="#CC0000" />
+		</Style>
+		<Style x:Key="HighlightNumber">
+			<Setter Property="TextElement.Foreground" Value="#009966" />
+		</Style>
+		<Style x:Key="HighlightKeyword">
+			<Setter Property="TextElement.Foreground" Value="#0000FF" />
+		</Style>
+		<Style x:Key="HighlightPreprocessor">
+			<Setter Property="TextElement.Foreground" Value="#996666" />
+		</Style>
+		<Style x:Key="HighlightXmlTag">
+			<Setter Property="TextElement.Foreground" Value="#AA4400" />
+		</Style>
+		<Style x:Key="HighlightXmlBracket">
+			<Setter Property="TextElement.Foreground" Value="#0000FF" />
+		</Style>
+		<Style x:Key="HighlightXmlBracketInline">
+			<Setter Property="TextElement.Background" Value="#FFFF66" />
+			<Setter Property="TextElement.Foreground" Value="#000000" />
+		</Style>
+		<Style x:Key="HighlightXmlComment">
+			<Setter Property="TextElement.Foreground" Value="#006633" />
+		</Style>
+		<Style x:Key="HighlightXmlCData">
+			<Setter Property="TextElement.Foreground" Value="#AA0088" />
+		</Style>
+		<Style x:Key="HighlightXmlAttributeName">
+			<Setter Property="TextElement.Foreground" Value="#0000FF" />
+		</Style>
+		<Style x:Key="HighlightXmlAttributeEqual">
+			<Setter Property="TextElement.Foreground" Value="#000000" />
+		</Style>
+		<Style x:Key="HighlightXmlAttributeValue">
+			<Setter Property="TextElement.Foreground" Value="#CC0000" />
+		</Style>
+		<Style x:Key="HighlightPowerShellCmdLet">
+			<Setter Property="TextElement.Foreground" Value="#5A9EA5" />
+			<Setter Property="TextElement.FontWeight" Value="Bold" />
+		</Style>
+		<Style x:Key="HighlightNamespace">
+			<Setter Property="TextElement.Foreground" Value="#008284" />
+		</Style>
+		<Style x:Key="HighlightLineNo">
+			<Setter Property="TextElement.FontSize" Value="10" />
+		</Style>
+	</FlowDocument.Resources>
+	<!-- The colorized flow document element text can be inserted by replacing the marker text with it. -->
+	<Section>
+		<Paragraph xml:space="preserve">@CONTENT@</Paragraph>
+	</Section>
+</FlowDocument>

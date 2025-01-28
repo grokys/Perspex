@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics>
+  <Topic id="9d5e6c91-4ff0-4044-afb7-cd85faad1986" visible="True" isDefault="true" apiParentMode="InsertAfter" title="Welcome to the Avalonia API-Reference" tocTitle="Avalonia API-Reference" linkText="Avalonia API-Reference">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="Welcome" />
+    </HelpKeywords>
+  </Topic>
+  <Topic id="db6826c2-9ece-41a8-b32e-8b86b14fe01c" visible="False" isExpanded="true" title="Version History">
+    <HelpKeywords>
+      <HelpKeyword index="K" term="version, history" />
+    </HelpKeywords>
+    <Topic id="2ca9c974-0a3e-4b91-aba8-a0b700721b3e" visible="False" isSelected="true" title="Version 1.0.0.0">
+      <HelpKeywords>
+        <HelpKeyword index="K" term="version, 1.0.0.0" />
+      </HelpKeywords>
+    </Topic>
+  </Topic>
+</Topics>

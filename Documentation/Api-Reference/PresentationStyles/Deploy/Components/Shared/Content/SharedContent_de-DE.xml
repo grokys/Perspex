@@ -1,0 +1,445 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!-- Translations provided by Michael Buchner -->
+
+	<!-- Header and footer text -->
+  <item id="tocTitle">{0}</item>
+	<item id="documentationTitle">{@HtmlEncHelpTitle}</item>
+	<item id="headerText">{@HeaderText}</item>
+	<item id="feedback_body">Ihre Rückmeldung wird für die Verbesserung der Dokumentation und des Produktes genutzt. Ihre Email-Adresse wird zu keinem anderen Zweck benutzt und wird nach der Behebung des gemeldeten Problems gelöscht. Während der Arbeit an dem Problem kann es sein dass Sie per Email kontaktiert werden für weitergehende Details oder Abklärung zur Rückmeldung von Ihnen. Nachdem das Problem eingegrenzt worden ist kann es sein dass Sie eine Email erhalten zur Problembehebung.</item>
+	<item id="footer_content">{@FooterText}{@Copyright}{@Comments}</item>
+	<!-- This should remain empty unless overridden by the website content file -->
+	<item id="websiteAdContent"></item>
+	
+	<item id="comments"><div class="feedbackLink">Senden Sie Kommentare zu diesem Feature an
+        <a id="HT_MailLink" href="mailto:{@UrlEncFeedbackEMailAddress}?Subject={@UrlEncHelpTitle}">{@HtmlEncFeedbackEMailAddress}</a></div>
+        <script type="text/javascript">
+        var HT_mailLink = document.getElementById("HT_MailLink");
+        HT_mailLink.href += ": " + document.title + "\u0026body=" + encodeURIComponent("<include item='feedback_body' />");
+        </script></item>
+
+	<!-- Code/syntax section -->
+	<item id="copyCode">Copy</item>
+	<item id="sourceCodeLinkText">View Source</item>
+	<item id="sourceCodeLinkTitle">View the source code</item>
+	<item id="requestExampleLinkText">Beispiel anfordern</item>
+	<item id="requestExampleLinkTitle">Beispiel für dieses Thema anfordern</item>
+	<item id="requestExampleScript">
+		$(".requestExampleLink").each(function ()
+		{{
+			if(this.href.substring(0, 4).toLowerCase() === "http")
+				this.href += "?title=";
+			else
+				this.href += "?subject={@UrlEncHelpTitle}: ";
+
+			this.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+				encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+				"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		}});
+	</item>
+	
+	<!-- VS2013 presentation style items -->
+	<item id="requestExample"><a id="HT_RequestExampleLink" href="{0}" target="_blank" rel="noopener noreferrer" class="{1}"
+		title="Beispiel für dieses Thema anfordern">Beispiel anfordern</a>
+		<script type="text/javascript">
+		var HT_requestExampleLink = document.getElementById("HT_RequestExampleLink");
+				
+		if(HT_requestExampleLink.href.substring(0, 4).toLowerCase() == "http")
+			HT_requestExampleLink.href += "?title=";
+		else
+			HT_requestExampleLink.href += "?subject={@UrlEncHelpTitle}: ";
+
+		HT_requestExampleLink.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+			encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+			"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		</script></item>
+	<item id="resizeToolTip">Click or drag to resize</item>
+
+  <!-- Section titles -->
+  <item id="bibliographyTitle">Quellenverzeichnis</item>
+  <item id="title_appliesTo">Trifft zu auf</item>
+	<item id="title_attributes">Attribute</item>
+  <item id="title_attributesAndElements">Attribute und Elemente</item>
+  <item id="title_background">Hintergrund</item>
+	<item id="title_buildInstructions">Code-Kompilierung</item>
+  <item id="title_changeHistory">Änderungshistorie</item>
+	<item id="title_childElement">Kindelemente</item>
+	<item id="title_conclusion">Schlussfolgerung</item>
+  <item id="title_definition">Definition</item>
+	<item id="title_delegateValue">Rückgabewert</item>
+	<item id="title_demonstrates">Zeigt</item>
+  <item id="title_dotNetFrameworkEquivalent">.NET Framework Equivalent</item>
+	<item id="title_elementInformation">Elementinformation</item>
+  <item id="title_errorMessage">Fehlermeldung</item>
+  <item id="title_events">Ereignisse</item>
+  <item id="title_example">Beispiel</item>
+	<item id="title_examples">Beispiele</item>
+  <item id="title_exceptions">Ausnahmen</item>
+	<item id="title_extensionUsage">Verwendungshinweise</item>
+	<item id="title_externalResources">Externe Ressourcen</item>
+	<item id="title_family">Vererbungshierarchie</item>
+	<item id="title_fieldValue">Feldwert</item>
+	<item id="title_implements">Implementiert</item>
+	<item id="title_inThisSection">In diesem Abschnitt</item>
+  <item id="title_languageReferenceRemarks">Anmerkungen</item>
+	<item id="title_methodValue">Rückgabewert</item>
+	<item id="title_namespaces">Namensräume</item>
+	<item id="title_nextSteps">Nächste Schritte</item>
+	<item id="title_parameters">Parameter</item>
+	<item id="title_parentElement">Elternelemente</item>
+	<item id="title_permissions">.NET Framework Security</item>
+	<item id="title_platforms">Plattformen</item>
+  <item id="title_prerequisites">Voraussetzungen</item>
+	<item id="title_propertyValue">Eigenschaftswert</item>
+  <item id="title_reference">Referenz</item>
+	<item id="title_relatedSections">Verwandte Abschnitte</item>
+	<item id="title_relatedTopics">Siehe auch</item>
+  <item id="title_remarks">Anmerkungen</item>
+	<item id="title_requirements">Voraussetzungen</item>
+	<item id="title_returns">Rückgabewert</item>
+	<item id="title_returnValue">Rückgabewert</item>
+  <item id="title_revisionHistory">Revision History</item>
+  <item id="title_robustProgramming">Robuste Programmierung</item>
+	<item id="title_security">Sicherheit</item>
+  <item id="title_seeAlso_concepts">Konzepte</item>
+  <item id="title_seeAlso_otherResources">Andere Ressourcen</item>
+  <item id="title_seeAlso_reference">Referenz</item>
+  <item id="title_seeAlso_tasks">Aufgaben</item>
+	<item id="title_syntax">Syntax</item>
+	<item id="title_templates">Typenparameter</item>
+  <item id="title_textValue">Textwert</item>
+	<item id="title_threadSafety">Threadsicherheit</item>
+	<item id="title_value">Wert</item>
+	<item id="title_versions">Versionsinformation</item>
+	<item id="title_whatsNew">Was ist neu</item>
+
+  <!-- Topic titles -->
+	<item id="topicTitle_root">{@RootNamespaceTitle}</item>
+  <!-- This is used when a title is not specified in the project -->
+  <item id="rootTopicTitleLocalized">Namensräume</item>
+	<item id="topicTitle_attachedEvent">{0} Angefügte Ereignisse</item>
+ 	<item id="topicTitle_attachedEvents">{0} Angefügte Ereignisse</item>
+	<item id="topicTitle_attachedProperties">{0} Angefügte Eigenschaften</item>
+	<item id="topicTitle_attachedProperty">{0} Angefügte Eigenschaften</item>
+	<item id="topicTitle_class">{0} Klasse</item>
+	<item id="topicTitle_constructor">{0}{1} Konstruktor</item>
+	<item id="topicTitle_constructors">{0} Konstruktoren</item>
+	<item id="topicTitle_delegate">{0} Delegat</item>
+	<item id="topicTitle_enumeration">{0} Enumeration</item>
+	<item id="topicTitle_enumMembers">Member</item>
+	<item id="topicTitle_event">{0} Ereignis</item>
+	<item id="topicTitle_events">{0} Ereignisse</item>
+	<item id="topicTitle_field">{0} Feld</item>
+	<item id="topicTitle_fields">{0} Felder</item>
+	<item id="topicTitle_interface">{0} Schnittstelle</item>
+	<item id="topicTitle_method">{0}{1} Methode</item>
+	<item id="topicTitle_methods">{0} Methoden</item>
+	<item id="topicTitle_namespace">{0} Namensraum</item>
+	<item id="topicTitle_namespaceGroup">{0} Namensräume</item>
+	<item id="topicTitle_properties">{0} Eigenschaften</item>
+	<item id="topicTitle_property">{0}{1} Eigenschaft</item>
+	<item id="topicTitle_structure">{0} Struktur</item>
+  <!-- Title for operator members -->
+	<item id="topicTitle_operator">{0}{1} Operator</item>
+  <!-- Title for op_explicit and op_implicit members -->
+  <item id="topicTitle_typeConversion">{0} Konvertierung {1}</item>
+  <!-- Title for overload op_explicit and op_implicit topics -->
+  <item id="topicTitle_conversionOperator">{0} Konvertierungsoperatoren</item>
+  <!-- Title for operator list topic that has [operators + no type conversions] -->
+  <item id="topicTitle_operators">{0} Operatoren</item>
+  <!-- Title for operator list topic that has [operators + type conversions] -->
+  <item id="topicTitle_operatorsAndTypeConversions">{0} Operatoren and Typenkonvertierungen</item>
+  <!-- Title for operator list topic that has [no operators + type conversions] -->
+  <item id="topicTitle_typeConversions">{0} Typenkonvertierungen</item>
+
+	<!-- Table of contents simple titles -->
+ 	<item id="tocTitle_AttachedEvents">Angefügte Ereignisse</item>
+	<item id="tocTitle_AttachedProperties">Angefügte Eigenschaften</item>
+	<item id="tocTitle_Constructor">Konstruktor</item>
+	<item id="tocTitle_Constructors">Konstruktoren</item>
+	<item id="tocTitle_Events">Ereignisse</item>
+	<item id="tocTitle_Fields">Felder</item>
+	<item id="tocTitle_Methods">Methoden</item>
+	<item id="tocTitle_Operators">Operatoren</item>
+	<item id="tocTitle_Properties">Eigenschaften</item>
+	
+  <!-- Member list table titles -->
+  <item id="tableTitle_attachedEvent">Angefügte Ereignisse</item>
+  <item id="tableTitle_attachedProperty">Angefügte Eigenschaften</item>
+	<item id="tableTitle_class">Klassen</item>
+  <item id="tableTitle_constructor">Konstruktoren</item>
+	<item id="tableTitle_delegate">Delegat</item>
+	<item id="tableTitle_enumeration">Enumerationen</item>
+  <item id="tableTitle_event">Ereignisse</item>
+  <item id="tableTitle_explicitInterfaceImplementation">Explizite&#160;Schnittstellen&#160;implementierungen</item>
+  <item id="tableTitle_extension">Erweiterungsmethoden</item>
+  <item id="tableTitle_field">Felder</item>
+	<item id="tableTitle_interface">Schnittstellen</item>
+  <item id="tableTitle_method">Methoden</item>
+  <item id="tableTitle_namespace">Namespaces</item>
+  <item id="tableTitle_operator">Operatoren</item>
+	<item id="tableTitle_overload">Liste&#160;der&#160;Überladungen</item>
+  <item id="tableTitle_property">Eigenschaften</item>
+	<item id="tableTitle_structure">Strukturen</item>
+
+	<!-- Table column headers -->
+  <item id="header_className">Klasse</item>
+  <item id="header_delegateName">Delegat</item>
+  <item id="header_enumerationName">Enumeration</item>
+	<item id="header_eventReason">Grund</item>
+	<item id="header_eventType">Ereignistyp</item>
+	<item id="header_exceptionCondition">Bedingung</item>
+	<item id="header_exceptionName">Ausnahme</item>
+  <item id="header_interfaceName">Schnittstelle</item>
+	<item id="header_memberDescription">Beschreibung</item>
+	<item id="header_memberName">Membername</item>
+	<item id="header_memberValue">Wert</item>
+	<item id="header_namespaceDescription">Beschreibung</item>
+	<item id="header_namespaceName">Namensraum</item>
+	<item id="header_permissionDescription">Beschreibung</item>
+	<item id="header_permissionName">Berechtigung</item>
+	<item id="header_revHistoryDate">Date</item>
+	<item id="header_revHistoryDescription">Description</item>
+	<item id="header_revHistoryVersion">Version</item>
+  <item id="header_structureName">Struktur</item>
+	<item id="header_typeDescription">Beschreibung</item>
+	<item id="header_typeName">Name</item>
+
+	<!-- Miscellaneous page text -->
+  <item id="defaultNamespace">( Standardnamensraum )</item>
+  <item id="definedBy">(Definiert von {0})</item>
+  <item id="exposedMembersTableText">Der {0} Typ exponiert die folgenden Member.</item>	
+	<item id="inheritedFrom">(Vererbt von {0})</item>
+	<item id="noCodeExample">No code example is currently available or this language may not be supported.</item>
+	<item id="overridesMember">(Überschreibt {0})</item>
+	<item id="preliminaryDocs">Diese Seite ist eine Vorabausgabe der Dokumentation und kann in zukünftigen Ausgaben geändert werden. Leere Seiten sind als Platzhalter eingefügt.</item>
+  <item id="preliminaryApi">Diese API-Dokumentation befindet sich im Entwurf und kann sich noch ändern.</item>
+	<item id="preliminaryShort">Preliminary</item>
+	<item id="text_extensionUsage">In Visual Basic und C# können Sie diese Methode als Instanzmethode eines beliebigen Objektes vom Typ {0} aufrufen. Wenn Sie die Instanzmethodensyntax beim Methodenaufruf anwenden, lassen Sie den ersten Parameter weg. Für weitere Informationen siehe <a href="https://docs.microsoft.com/dotnet/visual-basic/programming-guide/language-features/procedures/extension-methods" target="_blank" rel="noopener noreferrer">Extension Methods (Visual Basic)</a> or <a href="https://docs.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/extension-methods" target="_blank" rel="noopener noreferrer">Erweiterungsmethoden (C# Programmierhandbuch)</a>.</item>
+	<item id="text_inheritance">Inheritance</item>
+	<item id="text_derived">Derived</item>
+	<item id="text_implements">Implements</item>
+	<item id="text_moreInheritance">More</item>
+	<item id="text_lessInheritance">Less</item>
+  <item id="text_relatedEntries">Verwandte Themen:</item>
+  <item id="top">Zurück nach oben</item>
+ 	<item id="optionalText">(Optional)</item>
+	<item id="inThisArticle">In This Article</item>
+	<item id="showHideTOC">Show/Hide TOC</item>
+	<item id="searchPlaceHolder">Search</item>
+
+	<!-- Requirements section info -->	
+	<item id="assemblyNameAndModule">{0} (in {1}.{2}) Version: {3}</item>
+  <item id="boilerplate_requirementsAssemblies">Assemblys:</item>
+  <item id="boilerplate_requirementsAssemblyLabel">Assembly:</item>
+  <item id="boilerplate_requirementsNamespace">Namensraum:</item>
+  <item id="boilerplate_unmappedXamlXmlns">Nicht einem xmlns zugeordnet.</item>
+  <item id="boilerplate_xamlXmlnsRequirements">XMLNS für XAML:</item>
+
+  <!-- Auto-outline text -->
+  <item id="boilerplate_autoOutlineTopLevelIntro">Dieses Thema enthält die folgenden Abschnitte:</item>
+	<item id="boilerplate_autoOutlineSubsectionIntro">Dieser Abschnitt enthält die folgenden Unterabschnitte:</item>
+
+  <!-- Copyright notice. {0} = Copyright text, {1} = Year(s), {2} = Holder(s) -->
+  <item id="boilerplate_copyrightNotice">{0} &#169;{1}{2}. Alle Rechte vorbehalten.</item>
+	
+	<!-- To format the copyright HREF and/or copyright text into a message of your choosing, you can specify
+			 @HtmlEncCopyrightHref and/or @HtmlEncCopyrightText in braces -->
+	<item id="copyright">{@HtmlEncCopyrightInfo}</item>
+
+	<!-- Obsolete API text -->
+  <item id="boilerplate_obsoleteShort">Obsolet.</item>
+  <item id="boilerplate_obsoleteLong">Hinweis: Die API ist nun obsolet.</item>
+	
+	<!-- See Also section text-->
+  <item id="boilerplate_seeAlsoNamespaceLink">{0} Namensraum</item>
+  <item id="boilerplate_seeAlsoOverloadLink">{0} Überladung</item>
+  <item id="boilerplate_seeAlsoTypeLink">{0} <include item="text_{1}Upper"/></item>
+  <item id="text_classUpper">Klasse</item>
+  <item id="text_structureUpper">Struktur</item>
+  <item id="text_interfaceUpper">Schnittstelle</item>
+  <item id="text_delegateUpper">Delegat</item>
+  <item id="text_enumerationUpper">Enumeration</item>
+	
+	<!-- Thread safety section text -->
+  <item id="boilerplate_threadSafety">Jeder öffentliche <include item="devlang_staticKeyword"/> Member dieses Typs ist threadsicher. Instanzmember sind nicht generell threadsicher.</item>
+  <item id="text_staticThreadSafe">Statische Member dieses Typs sind threadsicher. </item>
+  <item id="text_staticNotThreadSafe">Statische Member dieses Typs sind nicht threadsicher. </item>
+  <item id="text_instanceThreadSafe">Instanzmember dieses Typs sind threadsicher. </item>
+  <item id="text_instanceNotThreadSafe">Instanzmember dieses Typs sind nicht threadsicher. </item>
+	
+	<!-- Development language and code snippet titles for languages without a syntax generator -->
+	<item id="devlang_batch">Batch Script</item>
+	<item id="devlang_HTML">HTML</item>
+	<item id="devlang_PShell">PowerShell</item>
+	<item id="devlang_Python">Python</item>
+	<item id="devlang_SQL">SQL</item>
+	<item id="devlang_VBScript">Visual Basic Script</item>
+	<item id="devlang_VisualBasicAndCSharp">Visual Basic und C#</item>
+	<item id="devlang_XML">XML</item>
+
+  <!-- Language keywords -->
+  <item id="devlang_nullKeyword">eine Null Referenz (<span class="keyword">Nothing</span> in Visual Basic)</item>
+  <item id="devlang_staticKeyword"><span class="keyword">static</span> (<span class="keyword">Shared</span> in Visual Basic)</item>
+  <item id="devlang_virtualKeyword"><span class="keyword">virtual</span> (<span class="keyword">Overridable</span> in Visual Basic)</item>
+  <item id="devlang_trueKeyword"><span class="keyword">true</span> (<span class="keyword">True</span> in Visual Basic)</item>
+  <item id="devlang_falseKeyword"><span class="keyword">false</span> (<span class="keyword">False</span> in Visual Basic)</item>
+  <item id="devlang_abstractKeyword"><span class="keyword">abstract</span> (<span class="keyword">MustInherit</span> in Visual Basic)</item>
+  <item id="devlang_sealedKeyword"><span class="keyword">sealed</span> (<span class="keyword">NotInheritable</span> in Visual Basic)</item>
+  <item id="devlang_asyncKeyword"><span class="keyword">async</span> (<span class="keyword">Async</span> in Visual Basic)</item>
+  <item id="devlang_awaitKeyword"><span class="keyword">await</span> (<span class="keyword">Await</span> in Visual Basic)</item>
+  <item id="devlang_asyncAwaitKeyword"><span class="keyword">async</span>/<span class="keyword">await</span> (<span class="keyword">Async</span>/<span class="keyword">Await</span> in Visual Basic)</item>
+  
+	<!-- Development language metadata values for languages without a syntax generator -->
+	<item id="metaLang_batch">Batch Script</item>
+	<item id="metaLang_HTML">HTML</item>
+	<item id="metaLang_PShell">PowerShell</item>
+	<item id="metaLang_Python">Python</item>
+	<item id="metaLang_SQL">SQL</item>
+	<item id="metaLang_VBScript">VBScript</item>
+	<item id="metaLang_VisualBasicAndCSharp">VB and C#</item>
+	<item id="metaLang_XML">XML</item>
+
+	<!-- Alt text for images -->
+  <item id="altText_CodeExample">Code example</item>
+  <item id="altText_ExplicitInterface">Explizite Schnittstellenimplementierung</item>
+	<item id="altText_privAttachedEvent">Private angefügtes Ereignis</item>
+	<item id="altText_privClass">Private Klasse</item>
+	<item id="altText_privConstructor">Private Konstruktor</item>
+	<item id="altText_privDelegate">Private Delegat</item>
+	<item id="altText_privEnumeration">Private Enumeration</item>
+	<item id="altText_privEvent">Private Ereignis</item>
+	<item id="altText_privExtension">Private Erweiterungsmethode</item>
+	<item id="altText_privField">Private Feld</item>
+	<item id="altText_privInterface">Private Schnittstelle</item>
+	<item id="altText_privMethod">Private Methode</item>
+	<item id="altText_privOperator">Private Operator</item>
+	<item id="altText_privProperty">Private Eigenschaft</item>
+	<item id="altText_privStructure">Private Struktur</item>
+	<item id="altText_privAttachedProperty">Private angefügte Eigenschaft</item>
+	<item id="altText_protAttachedEvent">Protected angefügtes Ereignis</item>
+	<item id="altText_protAttachedProperty">Protected angefügte Eigenschaft</item>
+	<item id="altText_protClass">Protected Klasse</item>
+	<item id="altText_protConstructor">Protected Konstruktor</item>
+	<item id="altText_protDelegate">Protected Delegat</item>
+	<item id="altText_protEnumeration">Protected Enumeration</item>
+	<item id="altText_protEvent">Protected Ereignis</item>
+	<item id="altText_protExtension">Protected Erweiterungsmethode</item>
+	<item id="altText_protField">Protected Feld</item>
+	<item id="altText_protInterface">Protected Schnittstelle</item>
+	<item id="altText_protMethod">Protected Methode</item>
+	<item id="altText_protOperator">Protected Operator</item>
+	<item id="altText_protProperty">Protected Eigenschaft</item>
+	<item id="altText_protStructure">Protected Struktur</item>
+	<item id="altText_pubAttachedEvent">Public angefügtes Ereignis</item>
+	<item id="altText_pubAttachedProperty">Public angefügte Eigenschaft</item>
+	<item id="altText_pubClass">Public Klasse</item>
+	<item id="altText_pubConstructor">Public Konstruktor</item>
+	<item id="altText_pubDelegate">Public Delegat</item>
+	<item id="altText_pubEnumeration">Public Enumeration</item>
+	<item id="altText_pubEvent">Public Ereignis</item>
+	<item id="altText_pubExtension">Public Erweiterungsmethode</item>
+	<item id="altText_pubField">Public Feld</item>
+	<item id="altText_pubInterface">Public Schnittstelle</item>
+	<item id="altText_pubMethod">Public Methode</item>
+	<item id="altText_pubOperator">Public Operator</item>
+	<item id="altText_pubProperty">Public Eigenschaft</item>
+	<item id="altText_pubStructure">Public Struktur</item>
+	<item id="altText_Static">Static Member</item>
+	
+	<!-- Alert titles -->
+	<item id="alert_title_tip">Tipp</item>
+	<item id="alert_title_caution">Achtung</item>
+	<item id="alert_title_security">Sicherheitshinweis</item>
+	<item id="alert_title_note">Hinweis</item>
+	<item id="alert_title_important">Wichtig</item>
+	<item id="alert_title_visualBasic">Visual Basic Hinweis</item>
+	<item id="alert_title_visualC#">C# Hinweis</item>
+	<item id="alert_title_visualC++">C++ Hinweis</item>
+	<item id="alert_title_visualJ#">J# Hinweis</item>
+	<item id="alert_title_todo">To Do</item>
+	<item id="text_NotesForImplementers">Hinweise an Implementierer</item>
+	<item id="text_NotesForCallers">Hinweise an Anrufer</item>
+	<item id="text_NotesForInheritors">Hinweise an Erben</item>
+
+	<!-- Alert alt text -->
+	<item id="alert_altText_tip">Tipp</item>
+	<item id="alert_altText_caution">Achtung</item>
+	<item id="alert_altText_security">Sicherheitshinweis</item>
+	<item id="alert_altText_note">Hinweis</item>
+	<item id="alert_altText_important">Wichtig</item>
+	<item id="alert_altText_visualBasic">Visual Basic Hinweis</item>
+	<item id="alert_altText_visualC#">C# Hinweis</item>
+	<item id="alert_altText_visualC++">C++ Hinweis</item>
+	<item id="alert_altText_visualJ#">J# Hinweis</item>	
+	<item id="alert_altText_todo">To Do</item>
+
+	<!-- Index metadata entries -->
+	<item id="indexEntry_root">Namensräume</item>
+  <item id="indexEntry_namespace">{0} Namensraum</item>
+  <item id="indexEntry_class">{0} Klasse</item>
+	<item id="indexEntry_structure">{0} Struktur</item>
+	<item id="indexEntry_interface">{0} Schnittstelle</item>
+	<item id="indexEntry_delegate">{0} Delegat</item>
+	<item id="indexEntry_enumeration">{0} Enumeration</item>
+  <item id="indexEntry_enumerationMember">{0} Enumerationsmember</item>
+  <item id="indexEntry_members">{0}, Alle Member</item>
+  <item id="indexEntry_methods">{0}, Methoden</item>
+  <!-- Index entry for operator list topic that has [operators + no type conversions] -->
+  <item id="indexEntry_operators">{0}, Operatoren</item>
+  <!-- Index entry for operator list topic that has [operators + type conversions] -->
+  <item id="indexEntry_operatorsAndTypeConversions">{0}, Operationen und Typkonvertierungen</item>
+  <!-- Index entry for operator list topic that has [no operators + type conversions] -->
+  <item id="indexEntry_typeConversions">{0}, Typkonvertierungen</item>
+  <!-- Index entries for op_explicit and op_implicit members -->
+  <item id="indexEntry_conversionOperator">{0} Konvertierungen</item>
+  <item id="indexEntry_properties">{0}, Eigenschaften</item>
+  <item id="indexEntry_fields">{0}, Felder</item>
+  <item id="indexEntry_events">{0}, Ereignisse</item>
+  <item id="indexEntry_attachedProperties">{0}, Angefügte Eigenschaften</item>
+  <item id="indexEntry_attachedEvents">{0}, Angefügte Ereignisse</item>
+	<item id="indexEntry_constructors">{0}, Konstruktoren</item>
+	<item id="indexEntry_constructor">{0}, Konstruktor</item>
+	<item id="indexEntry_constructorType">{0} Konstruktor</item>
+  <item id="indexEntry_method">{0} Methode</item>
+	<item id="indexEntry_property">{0} Eigenschaft</item>
+	<item id="indexEntry_event">{0} Ereignis</item>
+	<item id="indexEntry_field">{0} Feld</item>
+	<item id="indexEntry_operator">{0} Operator</item>
+	<item id="indexEntry_attachedProperty">{0} Angefügte Eigenschaften</item>
+	<item id="indexEntry_attachedEvent">{0} Angefügte Ereignisse</item>
+	<item id="indexEntry_methodExplicit">{0} Explizit implementierte Methode</item>
+	<item id="indexEntry_propertyExplicit">{0} Explizit implementierte Eigenschaft</item>
+	<item id="indexEntry_eventExplicit">{0} Explizit implementiertes Ereignis</item>
+	<item id="indexEntry_fieldExplicit">{0} Explizit implementiertes Feld</item>
+
+  <!-- Versions section (version builder plug-in) -->
+  <item id="supportedIn_1">Unterstützt in: {0}</item>
+  <item id="supportedIn_2">Unterstützt in: {0}, {1}</item>
+  <item id="supportedIn_3">Unterstützt in: {0}, {1}, {2}</item>
+  <item id="supportedIn_4">Unterstützt in: {0}, {1}, {2}, {3}</item>
+  <item id="supportedIn_5">Unterstützt in: {0}, {1}, {2}, {3}, {4}</item>
+  <item id="supportedIn_6">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}</item>
+  <item id="supportedIn_7">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}</item>
+  <item id="supportedIn_8">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}</item>
+  <item id="supportedIn_9">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}</item>
+  <item id="supportedIn_10">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}</item>
+  <item id="supportedIn_11">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}</item>
+  <item id="supportedIn_12">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}</item>
+  <item id="supportedIn_13">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}</item>
+  <item id="supportedIn_14">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}</item>
+  <item id="supportedIn_15">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}</item>
+  <item id="supportedIn_16">Unterstützt in: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}</item>
+  <item id="obsoleteWarning">Obsolet (Compilerwarnung) in {0}</item>
+  <item id="obsoleteError">Obsolet (compiliert nicht) in {0} und später</item>
+  	
+  <!-- Show Missing Component messages -->
+  <item id="SMCAutoDocConstructor">Initializes a new instance of the <referenceLink target="T:{0}" /> class</item>
+  <item id="SMCAutoDocStaticConstructor">Initializes the static fields of the <referenceLink target="T:{0}" /> class</item>
+  <item id="SMCAutoDocDispose">Releases all resources used by the <referenceLink target="T:{0}" /></item>
+  <item id="SMCAutoDocDisposeBool">Releases the unmanaged resources used by the <referenceLink target="T:{0}" /> and optionally releases the managed resources</item>
+  <item id="SMCAutoDocDisposeParam">True to release both managed and unmanaged resources; false to release only unmanaged resources</item>
+  <item id="SMCMissingTag"><p class="missing">[Missing &lt;{0}&gt; documentation for "{1}"]</p></item>
+  <item id="SMCMissingParamTag"><p class="missing">[Missing &lt;{0} name="{1}"/&gt; documentation for "{2}"]</p></item>
+  <item id="SMCMissingIncludeTarget"><p class="missing">[Missing &lt;include&gt; target documentation in '{0}'.  File: '{1}' Path: '{2}']</p></item>
+</content>
