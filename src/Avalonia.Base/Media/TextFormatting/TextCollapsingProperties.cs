@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Avalonia.Media.TextFormatting
+﻿namespace Avalonia.Media.TextFormatting
 {
     /// <summary>
     /// Properties of text collapsing.
@@ -28,6 +26,7 @@ namespace Avalonia.Media.TextFormatting
         /// <param name="textLine">Text line to collapse.</param>
         public abstract TextRun[]? Collapse(TextLine textLine);
 
+        // TODO12: Remove the flowDirection parameter
         /// <summary>
         /// Creates a list of runs for given collapsed length which includes specified symbol at the end.
         /// </summary>
@@ -36,44 +35,50 @@ namespace Avalonia.Media.TextFormatting
         /// <param name="flowDirection">The flow direction.</param>
         /// <param name="shapedSymbol">The symbol.</param>
         /// <returns>List of remaining runs.</returns>
-        public static TextRun[] CreateCollapsedRuns(TextLine textLine, int collapsedLength,
-            FlowDirection flowDirection, TextRun shapedSymbol)
+        public static TextRun[] CreateCollapsedRuns(TextLine textLine, int collapsedLength, FlowDirection flowDirection, TextRun shapedSymbol)
         {
-            var textRuns = textLine.TextRuns;
-
             if (collapsedLength <= 0)
             {
-                return new[] { shapedSymbol };
-            }
-
-            if (flowDirection == FlowDirection.RightToLeft)
-            {
-                collapsedLength = textLine.Length - collapsedLength;
+                return [shapedSymbol];
             }
 
             var objectPool = FormattingObjectPool.Instance;
 
-            var (preSplitRuns, postSplitRuns) = TextFormatterImpl.SplitTextRuns(textRuns, collapsedLength, objectPool);
+            FormattingObjectPool.RentedList<TextRun>? preSplitRuns = null;
+            FormattingObjectPool.RentedList<TextRun>? postSplitRuns = null;
+
+            var textRuns = objectPool.TextRunLists.Rent();
 
             try
             {
-                if (flowDirection == FlowDirection.RightToLeft)
+                var textRunEnumerator = new LogicalTextRunEnumerator(textLine);
+
+                var textRunsLength = 0;
+
+                while (textRunEnumerator.MoveNext(out var textRun))
                 {
-                    var collapsedRuns = new TextRun[postSplitRuns!.Count + 1];
-                    postSplitRuns.CopyTo(collapsedRuns, 1);
-                    collapsedRuns[0] = shapedSymbol;
-                    return collapsedRuns;
+                    if (textRunsLength >= collapsedLength)
+                    {
+                        break;
+                    }
+
+                    textRunsLength += textRun.Length;
+
+                    textRuns.Add(textRun);
                 }
-                else
-                {
-                    var collapsedRuns = new TextRun[preSplitRuns!.Count + 1];
-                    preSplitRuns.CopyTo(collapsedRuns);
-                    collapsedRuns[collapsedRuns.Length - 1] = shapedSymbol;
-                    return collapsedRuns;
-                }
+
+                (preSplitRuns, postSplitRuns) = TextFormatterImpl.SplitTextRuns(textRuns, collapsedLength, objectPool);
+
+                var collapsedRuns = new TextRun[preSplitRuns!.Count + 1];
+
+                preSplitRuns.CopyTo(collapsedRuns);
+                collapsedRuns[collapsedRuns.Length - 1] = shapedSymbol;
+
+                return collapsedRuns;
             }
             finally
             {
+                objectPool.TextRunLists.Return(ref textRuns);
                 objectPool.TextRunLists.Return(ref preSplitRuns);
                 objectPool.TextRunLists.Return(ref postSplitRuns);
             }

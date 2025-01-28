@@ -51,14 +51,9 @@ namespace Avalonia.Media.TextFormatting
         {
             var textRuns = textLine.TextRuns;
 
-            if (textRuns.Count == 0)
-            {
-                return null;
-            }
-
             var runIndex = 0;
             var currentWidth = 0.0;
-            var shapedSymbol = TextFormatterImpl.CreateSymbol(Symbol, FlowDirection.LeftToRight);
+            var shapedSymbol = TextFormatter.CreateSymbol(Symbol, FlowDirection.LeftToRight);
 
             if (Width < shapedSymbol.GlyphRun.Bounds.Width)
             {
