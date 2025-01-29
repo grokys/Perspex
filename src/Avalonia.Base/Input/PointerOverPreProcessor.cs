@@ -29,9 +29,15 @@ namespace Avalonia.Input
 
         public void OnNext(RawInputEventArgs value)
         {
-            if (value is RawPointerEventArgs args
-                && args.Root == _inputRoot
-                && value.Device is IPointerDevice pointerDevice)
+            if (value is RawDragEvent dragArgs) // Handle drag events
+            {
+                Point position = dragArgs.Location; 
+                _lastKnownPosition = ((Visual)_inputRoot).PointToScreen(position); // update lastKnownPosition on drag n drop events
+            }
+
+            else if (value is RawPointerEventArgs args
+                     && args.Root == _inputRoot
+                     && value.Device is IPointerDevice pointerDevice)
             {
                 if (pointerDevice != _lastActivePointerDevice)
                 {
@@ -52,6 +58,7 @@ namespace Avalonia.Input
                             args.InputModifiers.ToKeyModifiers());
                     }
                 }
+                
                 else if (args.Type is RawPointerEventType.TouchBegin or RawPointerEventType.TouchUpdate && args.Root is Visual visual)
                 {
                     _lastKnownPosition = visual.PointToScreen(args.Position);
