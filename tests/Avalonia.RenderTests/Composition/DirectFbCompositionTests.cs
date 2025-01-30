@@ -48,7 +48,7 @@ public class DirectFbCompositionTests : TestBase
     {
         var timer = new ManualRenderTimer();
         var compositor = new Compositor(new RenderLoop(timer), null, true,
-            new DispatcherCompositorScheduler(), true, Dispatcher.UIThread, new CompositionOptions
+            new DispatcherCompositorScheduler(), true, Dispatcher.UIThread, null, new CompositionOptions
             {
                 UseRegionDirtyRectClipping = true
             });

@@ -14,6 +14,7 @@ public class TestApplication : Application
         .UseSkia()
         .UseHeadless(new AvaloniaHeadlessPlatformOptions
         {
-            UseHeadlessDrawing = false
+            UseHeadlessDrawing = false,
+            UseRealtimeTimeProvider = false
         });
 }

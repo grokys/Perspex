@@ -10,8 +10,7 @@ internal partial class MediaContext
 {
     private readonly MediaContextClock _clock;
     public IGlobalClock Clock => _clock;
-    private readonly Stopwatch _time = Stopwatch.StartNew();
-    
+
     class MediaContextClock : IGlobalClock
     {
         private readonly MediaContext _parent;

@@ -6,6 +6,7 @@ using Avalonia.Rendering;
 using Avalonia.Rendering.Composition;
 using Avalonia.Rendering.Composition.Transport;
 using Avalonia.Threading;
+using Avalonia.Utilities;
 
 namespace Avalonia.Media;
 
@@ -13,7 +14,7 @@ internal partial class MediaContext : ICompositorScheduler
 {
     private DispatcherOperation? _nextRenderOp;
     private DispatcherOperation? _inputMarkerOp;
-    private TimeSpan _inputMarkerAddedAt;
+    private long _inputMarkerAddedAtInMs;
     private bool _isRendering;
     private bool _animationsAreWaitingForComposition;
     private readonly double MaxSecondsWithoutInput;
@@ -92,9 +93,9 @@ internal partial class MediaContext : ICompositorScheduler
         if (_inputMarkerOp == null)
         {
             _inputMarkerOp = _dispatcher.InvokeAsync(_inputMarkerHandler, DispatcherPriority.Input);
-            _inputMarkerAddedAt = _time.Elapsed;
+            _inputMarkerAddedAtInMs = _dispatcher.Now;
         }
-        else if (!now && (_time.Elapsed - _inputMarkerAddedAt).TotalSeconds > MaxSecondsWithoutInput)
+        else if (!now && TimeSpan.FromMilliseconds(_dispatcher.Now - _inputMarkerAddedAtInMs).TotalSeconds > MaxSecondsWithoutInput)
         {
             priority = DispatcherPriority.Input;
         }
@@ -131,7 +132,7 @@ internal partial class MediaContext : ICompositorScheduler
     
     private void RenderCore()
     {
-        var now = _time.Elapsed;
+        var now = TimeSpan.FromMilliseconds(_dispatcher.Now);
         if (!_animationsAreWaitingForComposition)
             _clock.Pulse(now);
 

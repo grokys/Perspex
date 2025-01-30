@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using Avalonia.Compatibility;
 using Avalonia.Logging;
 using Avalonia.Platform;
 using Avalonia.Rendering.Composition.Animations;
@@ -25,12 +26,13 @@ namespace Avalonia.Rendering.Composition.Server
         private readonly Queue<Action> _receivedJobQueue = new();
         private readonly Queue<Action> _receivedPostTargetJobQueue = new();
         public long LastBatchId { get; private set; }
-        public Stopwatch Clock { get; } = Stopwatch.StartNew();
+        public IAvnTimeProvider TimeProvider { get; }
         public TimeSpan ServerNow { get; private set; }
         private readonly List<ServerCompositionTarget> _activeTargets = new();
         internal BatchStreamObjectPool<object?> BatchObjectPool;
         internal BatchStreamMemoryPool BatchMemoryPool;
         private readonly object _lock = new object();
+        private readonly long _serverStartedAt;
         private Thread? _safeThread;
         private bool _uiThreadIsInsideRender;
         public PlatformRenderInterfaceContextManager RenderInterface { get; }
@@ -44,7 +46,8 @@ namespace Avalonia.Rendering.Composition.Server
 
         public ServerCompositor(IRenderLoop renderLoop, IPlatformGraphics? platformGraphics,
             CompositionOptions options,
-            BatchStreamObjectPool<object?> batchObjectPool, BatchStreamMemoryPool batchMemoryPool)
+            BatchStreamObjectPool<object?> batchObjectPool, BatchStreamMemoryPool batchMemoryPool,
+            IAvnTimeProvider timeProvider)
         {
             Options = options;
             Animations = new();
@@ -54,6 +57,8 @@ namespace Avalonia.Rendering.Composition.Server
             RenderInterface.ContextCreated += RT_OnContextCreated;
             BatchObjectPool = batchObjectPool;
             BatchMemoryPool = batchMemoryPool;
+            TimeProvider = timeProvider;
+            _serverStartedAt = TimeProvider.GetTimestamp();
             _renderLoop.Add(this);
         }
 
@@ -63,10 +68,12 @@ namespace Avalonia.Rendering.Composition.Server
                 _batches.Enqueue(batch);
         }
 
-        internal void UpdateServerTime() => ServerNow = Clock.Elapsed;
+        internal void UpdateServerTime() => ServerNow = TimeSpan.FromMilliseconds(
+            TimeProvider.GetElapsedMilliseconds(_serverStartedAt, TimeProvider.GetTimestamp()));
 
         readonly List<CompositionBatch> _reusableToNotifyProcessedList = new();
         readonly List<CompositionBatch> _reusableToNotifyRenderedList = new();
+
         void ApplyPendingBatches()
         {
             while (true)
