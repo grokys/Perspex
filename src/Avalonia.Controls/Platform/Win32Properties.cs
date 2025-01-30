@@ -17,6 +17,12 @@ namespace Avalonia.Controls
     /// </summary>
     public static class Win32Properties
     {
+        public static readonly AttachedProperty<Win32WindowCornerHints> WindowCornerHintProperty =
+            AvaloniaProperty.RegisterAttached<Window, Win32WindowCornerHints>("WindowCornerHint", typeof(Win32Properties));
+
+        public static void SetWindowCornerHint(Window obj, Win32WindowCornerHints value) => obj.SetValue(WindowCornerHintProperty, value);
+        public static Win32WindowCornerHints GetWindowCornerHint(Window obj) => obj.GetValue(WindowCornerHintProperty);
+
         public delegate (uint style, uint exStyle) CustomWindowStylesCallback(uint style, uint exStyle);
         public delegate IntPtr CustomWndProcHookCallback(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam, ref bool handled);
 
@@ -98,6 +104,17 @@ namespace Avalonia.Controls
             BottomLeft = 16,
             BottomRight = 17,
             Close = 20,
+        }
+
+        static Win32Properties()
+        {
+            WindowCornerHintProperty.Changed.AddClassHandler<Window>((window, e) =>
+            {
+                if (window.PlatformImpl is IWin32OptionsTopLevelImpl toplevelImpl)
+                {
+                    toplevelImpl.SetWindowCornerHints(e.GetNewValue<Win32WindowCornerHints>());
+                }
+            });
         }
     }
 }
