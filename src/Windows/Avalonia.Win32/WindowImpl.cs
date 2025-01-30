@@ -608,12 +608,6 @@ namespace Avalonia.Win32
                     return;
                 }
             }
-            else
-            {
-                var position = Position;
-                windowPlacement.NormalPosition.left = position.X;
-                windowPlacement.NormalPosition.top = position.Y;
-            }
 
             windowPlacement.NormalPosition.right = windowPlacement.NormalPosition.left + windowWidth;
             windowPlacement.NormalPosition.bottom = windowPlacement.NormalPosition.top + windowHeight;
