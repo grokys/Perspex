@@ -1,5 +1,6 @@
 using System;
 using Avalonia.Media;
+using Avalonia.Skia.Effects;
 using SkiaSharp;
 
 namespace Avalonia.Skia;
@@ -42,6 +43,12 @@ partial class DrawingContextImpl
             var color = new SKColor(drop.Color.R, drop.Color.G, drop.Color.B, (byte)Math.Max(0, Math.Min(255, alpha)));
 
             return SKImageFilter.CreateDropShadow((float)drop.OffsetX, (float)drop.OffsetY, sigma, sigma, color);
+        }
+
+        if (effect is ISKSLEffect skslEffect)
+        {
+            var builder = skslEffect.ShaderBuilder;
+            return SKImageFilter.CreateRuntimeShader(builder, skslEffect.MaxSampleRadius, skslEffect.ChildShaderNames, skslEffect.Inputs);
         }
 
         return null;

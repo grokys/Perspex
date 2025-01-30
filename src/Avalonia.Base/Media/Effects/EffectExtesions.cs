@@ -26,6 +26,11 @@ public static class EffectExtensions
             return new Thickness(Math.Max(0, 0 - rc.X),
                 Math.Max(0, 0 - rc.Y), Math.Max(0, rc.Right), Math.Max(0, rc.Bottom));
         }
+        if (effect is IShaderEffect)
+        {
+            // Shader effect should not have padding.
+            return default;
+        }
 
         throw new ArgumentException("Unknown effect type: " + effect.GetType());
     }

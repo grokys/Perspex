@@ -4,6 +4,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <IncludeAvaloniaGenerators>true</IncludeAvaloniaGenerators>
+    <AvsIncludeSkiaSharp3>true</AvsIncludeSkiaSharp3>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
