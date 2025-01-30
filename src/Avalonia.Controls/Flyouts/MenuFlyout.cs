@@ -11,7 +11,7 @@ namespace Avalonia.Controls
     {
         public MenuFlyout()
         {
-            Items = new ItemCollection();
+            Items = new ItemCollection(this);
         }
 
         /// <summary>

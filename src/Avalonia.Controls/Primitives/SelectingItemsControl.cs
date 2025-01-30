@@ -152,7 +152,7 @@ namespace Avalonia.Controls.Primitives
 
         public SelectingItemsControl()
         {
-            ((ItemCollection)ItemsView).SourceChanged += OnItemsViewSourceChanged;
+            ItemsView.PropertyChanged += OnItemsViewPropertyChanged;
         }
 
         /// <summary>
@@ -594,7 +594,7 @@ namespace Avalonia.Controls.Primitives
 
             if (_selection is object)
             {
-                _selection.Source = ItemsView.Source;
+                _selection.Source = ItemsView;
             }
         }
 
@@ -918,10 +918,10 @@ namespace Avalonia.Controls.Primitives
             return _selection;
         }
 
-        private void OnItemsViewSourceChanged(object? sender, EventArgs e)
+        private void OnItemsViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (_selection is not null && _updateState is null)
-                _selection.Source = ItemsView.Source;
+            if (e.PropertyName == nameof(ItemsView.Source) && _selection is not null && _updateState is null)
+                _selection.Source = ItemsView;
         }
 
         /// <summary>
@@ -1223,7 +1223,7 @@ namespace Avalonia.Controls.Primitives
         {
             if (_updateState is null)
             {
-                model.Source = ItemsView.Source;
+                model.Source = ItemsView;
             }
 
             model.PropertyChanged += OnSelectionModelPropertyChanged;
@@ -1287,7 +1287,7 @@ namespace Avalonia.Controls.Primitives
 
                 if (_selection is InternalSelectionModel s)
                 {
-                    s.Update(ItemsView.Source, state.SelectedItems);
+                    s.Update(ItemsView, state.SelectedItems);
                 }
                 else
                 {
@@ -1296,7 +1296,7 @@ namespace Avalonia.Controls.Primitives
                         SelectedItems = state.SelectedItems.Value;
                     }
 
-                    Selection.Source = ItemsView.Source;
+                    Selection.Source = ItemsView;
                 }
 
                 if (state.SelectedValue.HasValue)
