@@ -106,6 +106,8 @@ namespace Avalonia.Controls
             set => SetValue(VerticalContentAlignmentProperty, value);
         }
 
+        internal virtual bool AddContentToLogicalTree => true; 
+
         /// <inheritdoc/>
         IAvaloniaList<ILogical> IContentPresenterHost.LogicalChildren => LogicalChildren;
 
@@ -142,6 +144,11 @@ namespace Avalonia.Controls
 
         private void ContentChanged(AvaloniaPropertyChangedEventArgs e)
         {
+            if (!AddContentToLogicalTree)
+            {
+                return;
+            }
+            
             if (e.OldValue is ILogical oldChild)
             {
                 LogicalChildren.Remove(oldChild);
