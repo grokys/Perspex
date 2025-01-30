@@ -13,13 +13,13 @@ namespace Avalonia.Controls.Primitives
     /// <remarks>
     /// TODO: Need to track position of adorned elements and move the adorner if they move.
     /// </remarks>
-    public class AdornerLayer : Canvas
+    public class AdornerLayer : Canvas, IAdornerLayer
     {
         /// <summary>
         /// Allows for getting and setting of the adorned element.
         /// </summary>
         public static readonly AttachedProperty<Visual?> AdornedElementProperty =
-            AvaloniaProperty.RegisterAttached<AdornerLayer, Visual, Visual?>("AdornedElement");
+            AdornerLayerBase.AdornedElementProperty.AddOwner<AdornerLayer>();
 
         /// <summary>
         /// Allows for controlling clipping of the adorner.
