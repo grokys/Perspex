@@ -667,6 +667,12 @@ enum AvnPlatformThemeVariant
     HighContrastDark,
 }
 
+enum AvnPointerDeviceType
+{
+    Mouse,
+    Pen,
+}
+
 [uuid(809c652e-7396-11d2-9771-00a0c9b4d50c)]
 interface IAvaloniaNativeFactory : IUnknown
 {
@@ -786,10 +792,15 @@ interface IAvnTopLevelEvents : IUnknown
     HRESULT Paint();
     void Resized([const] AvnSize& size, AvnPlatformResizeReason reason);
     void RawMouseEvent(AvnRawMouseEventType type,
+                                    AvnPointerDeviceType deviceType,
                                     u_int64_t timeStamp,
                                     AvnInputModifiers modifiers,
                                     AvnPoint point,
-                                    AvnVector delta);
+                                    AvnVector delta,
+                                    float pressure,
+                                    float xTilt,
+                                    float yTilt
+                                    );
     bool RawKeyEvent(AvnRawKeyEventType type, u_int64_t timeStamp, AvnInputModifiers modifiers,
                           AvnKey key, AvnPhysicalKey physicalKey, [const] char* keySymbol);
     bool RawTextInputEvent(u_int64_t timeStamp, [const] char* text);

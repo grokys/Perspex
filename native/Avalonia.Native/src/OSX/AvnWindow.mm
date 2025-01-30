@@ -492,7 +492,7 @@
                     auto point = [self translateLocalPoint:avnPoint];
                     AvnVector delta = { 0, 0 };
 
-                    parent->BaseEvents->RawMouseEvent(NonClientLeftButtonDown, static_cast<uint64>([event timestamp] * 1000), AvnInputModifiersNone, point, delta);
+                    parent->BaseEvents->RawMouseEvent(NonClientLeftButtonDown, AvnPointerDeviceType::Mouse, static_cast<uint64>([event timestamp] * 1000), AvnInputModifiersNone, point, delta, 1.0f, .0f, .0f);
                 }
                 
                 if(!_isTransitioningToFullScreen)

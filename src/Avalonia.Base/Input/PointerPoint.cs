@@ -157,6 +157,11 @@ namespace Avalonia.Input
                 IsXButton2Pressed = true;
             if (kind == PointerUpdateKind.XButton2Released)
                 IsXButton2Pressed = false;
+
+            if(IsLeftButtonPressed || IsMiddleButtonPressed || IsRightButtonPressed || IsXButton1Pressed || IsXButton2Pressed || IsBarrelButtonPressed)
+                Pressure = 1.0f;
+            else
+                Pressure = .0f;
         }
 
         public PointerPointProperties(RawInputModifiers modifiers, PointerUpdateKind kind,
