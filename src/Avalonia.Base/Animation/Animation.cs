@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Animation.Easings;
 using Avalonia.Data;
 using Avalonia.Metadata;
+using Avalonia.Threading;
 
 namespace Avalonia.Animation
 {
@@ -310,7 +311,7 @@ namespace Avalonia.Animation
                     Task.WhenAll(completionTasks!)
                         .ContinueWith((_, state) => ((Action)state!).Invoke()
                             , onComplete
-                            , TaskScheduler.FromCurrentSynchronizationContext()
+                            , DispatcherTaskScheduler.UIThread
                             );
                 }
             }

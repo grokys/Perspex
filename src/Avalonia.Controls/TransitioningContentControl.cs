@@ -5,6 +5,7 @@ using Avalonia.Animation;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace Avalonia.Controls;
 
@@ -103,7 +104,7 @@ public class TransitioningContentControl : ContentControl
                     {
                         HideOldPresenter();
                     }
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                }, DispatcherTaskScheduler.UIThread);
             }
 
             _shouldAnimate = false;

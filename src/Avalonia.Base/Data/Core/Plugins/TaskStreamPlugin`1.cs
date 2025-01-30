@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Avalonia.Reactive;
+using Avalonia.Threading;
 
 namespace Avalonia.Data.Core.Plugins;
 
@@ -27,7 +28,7 @@ internal class TaskStreamPlugin<T> : IStreamPlugin
                 var subject = new LightweightSubject<object?>();
                 task.ContinueWith(
                         _ => HandleCompleted(task).Subscribe(subject),
-                        TaskScheduler.FromCurrentSynchronizationContext())
+                        DispatcherTaskScheduler.UIThread)
                     .ConfigureAwait(false);
                 return subject;
         }

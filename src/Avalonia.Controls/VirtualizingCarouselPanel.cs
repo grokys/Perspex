@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Animation;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Threading;
 
 namespace Avalonia.Controls
 {
@@ -167,7 +168,7 @@ namespace Avalonia.Controls
                 }
 
                 transition.Start(_transitionFrom, to, forward, _transition.Token)
-                    .ContinueWith(TransitionFinished, TaskScheduler.FromCurrentSynchronizationContext());
+                    .ContinueWith(TransitionFinished, DispatcherTaskScheduler.UIThread);
             }
 
             return result;

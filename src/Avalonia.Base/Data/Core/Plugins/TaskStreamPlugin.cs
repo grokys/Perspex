@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia.Reactive;
+using Avalonia.Threading;
 
 namespace Avalonia.Data.Core.Plugins
 {
@@ -51,7 +52,7 @@ namespace Avalonia.Data.Core.Plugins
                             var subject = new LightweightSubject<object?>();
                             task.ContinueWith(
                                     x => HandleCompleted(task).Subscribe(subject),
-                                    TaskScheduler.FromCurrentSynchronizationContext())
+                                    DispatcherTaskScheduler.UIThread)
                                 .ConfigureAwait(false);
                             return subject;
                     }
