@@ -221,7 +221,7 @@ namespace Avalonia.Automation.Peers
                 IsOffscreenBehavior.FromClip => Owner.GetTransformedBounds() is not { } bounds ||
                     MathUtilities.IsZero(bounds.Clip.Width) ||
                     MathUtilities.IsZero(bounds.Clip.Height),
-                _ => !Owner.IsVisible,
+                _ => !Owner.IsEffectivelyVisible,
             };
         }
 
