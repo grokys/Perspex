@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Avalonia.Controls.Generators;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Utils;
 using Avalonia.Input;
@@ -190,6 +192,24 @@ namespace Avalonia.Controls
             }
 
             Children.RemoveRange(index, count);
+        }
+
+        /// <summary>
+        /// Gets the index of a content control item contained within this panel that matches the given text search
+        /// </summary>
+        /// <param name="textSearchTerm">The beginning of a string (case-insensitive) to search for in the panel</param>
+        /// <returns>The index of the first IContentControl item contained in the panel</returns>
+        protected internal int GetIndexFromTextSearch(string textSearchTerm)
+        {
+            var matchingControl = Items.FirstOrDefault(i => i is Control c && ItemsPresenter.ControlMatchesTextSearch(c, textSearchTerm));
+            if (matchingControl != null)
+            {
+                return Items.IndexOf(matchingControl);
+            }
+
+            var matchingObject = Items.FirstOrDefault(i =>
+                i?.ToString()?.StartsWith(textSearchTerm, StringComparison.OrdinalIgnoreCase) == true);
+            return matchingObject != null ? Items.IndexOf(matchingObject) : -1;
         }
 
         private protected override void InvalidateMeasureOnChildrenChanged()
