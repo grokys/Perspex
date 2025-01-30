@@ -1011,7 +1011,7 @@ namespace Avalonia.Collections
             {
                 if (IsCurrentInView)
                 {
-                    return GetItemAt(CurrentPosition).Equals(CurrentItem);
+                    return Object.ReferenceEquals(GetItemAt(CurrentPosition), CurrentItem);
                 }
                 else
                 {
@@ -1489,7 +1489,7 @@ namespace Avalonia.Collections
                 _internalList.Remove(editItem);
 
                 // check whether to restore currency to the item being edited
-                object restoreCurrencyTo = (editItem == CurrentItem) ? editItem : null;
+                object restoreCurrencyTo = Object.ReferenceEquals(editItem, CurrentItem) ? editItem : null;
 
                 if (removeIndex >= 0 && IsGrouping)
                 {
@@ -1883,7 +1883,7 @@ namespace Avalonia.Collections
 
             if (IsAddingNew)
             {
-                if (Object.Equals(item, CurrentAddItem))
+                if (Object.ReferenceEquals(item, CurrentAddItem))
                 {
                     // EditItem(newItem) is a no-op
                     return;
@@ -2004,7 +2004,7 @@ namespace Avalonia.Collections
             {
                 return RootGroup?.LeafIndexOf(item) ?? -1;
             }
-            if (IsAddingNew && Object.Equals(item, CurrentAddItem) && UsesLocalArray)
+            if (IsAddingNew && Object.ReferenceEquals(item, CurrentAddItem) && UsesLocalArray)
             {
                 return Count - 1;
             }
@@ -2039,7 +2039,7 @@ namespace Avalonia.Collections
             VerifyRefreshNotDeferred();
 
             // if already on item, don't do anything
-            if (Object.Equals(CurrentItem, item))
+            if (Object.ReferenceEquals(CurrentItem, item))
             {
                 // also check that we're not fooled by a false null currentItem
                 if (item != null || IsCurrentInView)
@@ -3127,7 +3127,7 @@ namespace Avalonia.Collections
                 for (int num = 0, count = _internalList.Count; num < count; ++num)
                 {
                     object item = _internalList[num];
-                    if (item != null && (!IsAddingNew || !object.Equals(CurrentAddItem, item)))
+                    if (item != null && (!IsAddingNew || !Object.ReferenceEquals(CurrentAddItem, item)))
                     {
                         _group.AddToSubgroups(item, loading: true);
                     }
@@ -3177,7 +3177,7 @@ namespace Avalonia.Collections
                 for (int num = 0, count = _internalList.Count; num < count; ++num)
                 {
                     object item = _internalList[num];
-                    if (item != null && (!IsAddingNew || !object.Equals(CurrentAddItem, item)))
+                    if (item != null && (!IsAddingNew || !Object.ReferenceEquals(CurrentAddItem, item)))
                     {
                         _temporaryGroup.AddToSubgroups(item, loading: true);
                     }
@@ -3218,7 +3218,7 @@ namespace Avalonia.Collections
                 for (int num = 0, count = Count; num < count; ++num)
                 {
                     object item = GetItemAt(num);
-                    if (item != null && (!IsAddingNew || !object.Equals(CurrentAddItem, item)))
+                    if (item != null && (!IsAddingNew || !Object.ReferenceEquals(CurrentAddItem, item)))
                     {
                         _group.AddToSubgroups(item, loading: true);
                     }
