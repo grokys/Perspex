@@ -279,7 +279,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tizen", "Tizen", "{D1300000
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.Tizen", "src\Tizen\Avalonia.Tizen\Avalonia.Tizen.csproj", "{DFFBDBF5-5DBE-47ED-9EAE-D40B75AC99E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlCatalog.Tizen", "samples\ControlCatalog.Tizen\ControlCatalog.Tizen.csproj", "{A0B29221-2B6F-4B29-A4D5-2227811B5915}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlCatalog.Tizen", "samples\ControlCatalog.Tizen\ControlCatalog.Tizen.csproj", "{A0B29221-2B6F-4B29-A4D5-2227811B5915}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.Metal", "src\Avalonia.Metal\Avalonia.Metal.csproj", "{60B4ED1F-ECFA-453B-8A70-1788261C8355}"
 EndProject

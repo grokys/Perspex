@@ -60,6 +60,9 @@
       <TabItem Header="ComboBox">
         <pages:ComboBoxPage />
       </TabItem>
+      <TabItem Header="Container Queries">
+        <pages:ContainerQueryPage />
+      </TabItem>
       <TabItem Header="ContextFlyout">
         <pages:ContextFlyoutPage />
       </TabItem>

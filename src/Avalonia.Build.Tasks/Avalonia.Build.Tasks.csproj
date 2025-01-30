@@ -42,6 +42,9 @@
       <Compile Include="../Markup/Avalonia.Markup\Markup\Parsers\SelectorGrammar.cs">
         <Link>Markup/%(RecursiveDir)%(FileName)%(Extension)</Link>
       </Compile>
+      <Compile Include="../Markup/Avalonia.Markup\Markup\Parsers\ContainerQueryGrammar.cs">
+        <Link>Markup/%(RecursiveDir)%(FileName)%(Extension)</Link>
+      </Compile>
       <Compile Include="../Markup/Avalonia.Markup\Markup\Parsers\PropertyPathGrammar.cs">
         <Link>Markup/%(RecursiveDir)%(FileName)%(Extension)</Link>
       </Compile>
@@ -80,6 +83,9 @@
         <Link>Markup/%(RecursiveDir)%(FileName)%(Extension)</Link>
       </Compile>
       <Compile Include="../Avalonia.Base/Thickness.cs">
+        <Link>Markup/%(RecursiveDir)%(FileName)%(Extension)</Link>
+      </Compile>
+      <Compile Include="../Avalonia.Base/Styling/QueryComparisonOperator.cs">
         <Link>Markup/%(RecursiveDir)%(FileName)%(Extension)</Link>
       </Compile>
       <Compile Include="../Avalonia.Base/Size.cs">

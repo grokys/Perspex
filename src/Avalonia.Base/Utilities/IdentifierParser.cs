@@ -45,5 +45,16 @@ namespace Avalonia.Utilities
                        cat == UnicodeCategory.DecimalDigitNumber;
             }
         }
+
+        internal static ReadOnlySpan<char> ParseNumber(this ref CharacterReader r)
+        {
+            return r.TakeWhile(c => IsValidNumberChar(c));
+        }
+
+        private static bool IsValidNumberChar(char c)
+        {
+            var cat = CharUnicodeInfo.GetUnicodeCategory(c);
+            return cat == UnicodeCategory.DecimalDigitNumber;
+        }
     }
 }

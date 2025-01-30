@@ -10,6 +10,8 @@ using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Metadata;
+using Avalonia.Platform;
+using Avalonia.Styling;
 using Avalonia.Utilities;
 
 namespace Avalonia.Controls.Presenters

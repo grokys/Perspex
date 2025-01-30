@@ -16,6 +16,15 @@
     <AvaloniaResource Include="Assets\Fonts\*" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\image1.jpg" />
+    <None Remove="Assets\image2.jpg" />
+    <None Remove="Assets\image3.jpg" />
+    <None Remove="Assets\image4.jpg" />
+    <None Remove="Assets\image5.jpg" />
+    <None Remove="Assets\image6.jpg" />
+    <None Remove="Assets\image7.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Assets\Fonts\SourceSansPro-Bold.ttf" />
     <EmbeddedResource Include="Assets\Fonts\SourceSansPro-BoldItalic.ttf" />
     <EmbeddedResource Include="Assets\Fonts\SourceSansPro-Italic.ttf" />
