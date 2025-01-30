@@ -201,7 +201,7 @@ namespace Avalonia.Controls.Presenters
         /// </summary>
         public SnapPointsAlignment VerticalSnapPointsAlignment
         {
-            get => GetValue(VerticalSnapPointsAlignmentProperty); 
+            get => GetValue(VerticalSnapPointsAlignmentProperty);
             set => SetValue(VerticalSnapPointsAlignmentProperty, value);
         }
 
@@ -514,7 +514,7 @@ namespace Avalonia.Controls.Presenters
                 Vector delta = default;
                 if (isLogical)
                     _activeLogicalGestureScrolls?.TryGetValue(e.Id, out delta);
-                delta += e.Delta;
+                delta += AdjustDeltaForFlowDirection(e.Delta, FlowDirection);
 
                 if (isLogical && scrollable is object)
                 {
@@ -673,7 +673,11 @@ namespace Avalonia.Controls.Presenters
                 {
                     delta = new Vector(delta.Y, delta.X);
                 }
-                
+                else
+                {
+                    delta = AdjustDeltaForFlowDirection(delta, FlowDirection);
+                }
+
                 if (Extent.Height > Viewport.Height)
                 {
                     double height = isLogical ? scrollable!.ScrollSize.Height : 50;
@@ -954,7 +958,7 @@ namespace Avalonia.Controls.Presenters
                     midPoint = (previousSnapPoint + nextSnapPoint) / 2;
                 }
 
-                var nearestSnapPoint = snapToNext ? (direction.Y > 0 ? previousSnapPoint : nextSnapPoint ) :
+                var nearestSnapPoint = snapToNext ? (direction.Y > 0 ? previousSnapPoint : nextSnapPoint) :
                     estimatedOffset.Y < midPoint ? previousSnapPoint : nextSnapPoint;
 
                 offset = new Vector(offset.X, nearestSnapPoint - diff.Y);
@@ -977,7 +981,7 @@ namespace Avalonia.Controls.Presenters
                     midPoint = (previousSnapPoint + nextSnapPoint) / 2;
                 }
 
-                var nearestSnapPoint = snapToNext ? (direction.X > 0 ? previousSnapPoint : nextSnapPoint) : 
+                var nearestSnapPoint = snapToNext ? (direction.X > 0 ? previousSnapPoint : nextSnapPoint) :
                     estimatedOffset.X < midPoint ? previousSnapPoint : nextSnapPoint;
 
                 offset = new Vector(nearestSnapPoint - diff.X, offset.Y);
@@ -1046,9 +1050,9 @@ namespace Avalonia.Controls.Presenters
 
             var snapPointsInfo = scrollable as IScrollSnapPointsInfo;
 
-            if(snapPointsInfo != _scrollSnapPointsInfo)
+            if (snapPointsInfo != _scrollSnapPointsInfo)
             {
-                if(_scrollSnapPointsInfo != null)
+                if (_scrollSnapPointsInfo != null)
                 {
                     _scrollSnapPointsInfo.VerticalSnapPointsChanged -= ScrollSnapPointsInfoSnapPointsChanged;
                     _scrollSnapPointsInfo.HorizontalSnapPointsChanged -= ScrollSnapPointsInfoSnapPointsChanged;
@@ -1056,7 +1060,7 @@ namespace Avalonia.Controls.Presenters
 
                 _scrollSnapPointsInfo = snapPointsInfo;
 
-                if(_scrollSnapPointsInfo != null)
+                if (_scrollSnapPointsInfo != null)
                 {
                     _scrollSnapPointsInfo.VerticalSnapPointsChanged += ScrollSnapPointsInfoSnapPointsChanged;
                     _scrollSnapPointsInfo.HorizontalSnapPointsChanged += ScrollSnapPointsInfoSnapPointsChanged;
@@ -1064,6 +1068,15 @@ namespace Avalonia.Controls.Presenters
             }
 
             return snapPointsInfo;
+        }
+
+        private static Vector AdjustDeltaForFlowDirection(Vector delta, Media.FlowDirection flowDirection)
+        {
+            if (flowDirection == Media.FlowDirection.RightToLeft)
+            {
+                return delta.WithX(-delta.X);
+            }
+            return delta;
         }
     }
 }
