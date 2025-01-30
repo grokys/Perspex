@@ -1419,6 +1419,44 @@ namespace Avalonia.Controls.UnitTests
             Assert.Equal(new Rect(0, 140, 100, 20), container.Bounds);
         }
 
+        [Fact]
+        public void Lays_Out_Children_Vertically_With_Spacing()
+        {
+            using var app = App();
+            var itemTemplate = new FuncDataTemplate<int>((x, _) => new Canvas { Width = 100, Height = x });
+            var (target, scroll, itemsControl) = CreateTarget([20, 30, 50], itemTemplate);
+
+            target.Spacing = 10;
+
+            // TODO for some reason Spacing setting doesn't trigger Measure and Arrange by itself even when AffectsMeasure/AffectsArrange is called in the static constructor of VirtualizingStackPanel
+            target.Measure(Size.Infinity);
+            target.Arrange(new Rect(target.DesiredSize));
+
+            Assert.Equal(new Size(100, 120), target.Bounds.Size);
+            Assert.Equal(new Rect(0, 0, 100, 20), target.Children[0].Bounds);
+            Assert.Equal(new Rect(0, 30, 100, 30), target.Children[1].Bounds);
+            Assert.Equal(new Rect(0, 70, 100, 50), target.Children[2].Bounds);
+        }
+
+        [Fact]
+        public void Lays_Out_Children_Horizontally_With_Spacing()
+        {
+            using var app = App();
+            var itemTemplate = new FuncDataTemplate<int>((x, _) => new Canvas { Width = x, Height = 100 });
+            var (target, scroll, itemsControl) = CreateTarget([20, 30, 50], itemTemplate, orientation: Orientation.Horizontal);
+
+            target.Orientation = Orientation.Horizontal;
+            target.Spacing = 10;
+
+            target.Measure(Size.Infinity);
+            target.Arrange(new Rect(target.DesiredSize));
+
+            Assert.Equal(new Size(120, 100), target.Bounds.Size);
+            Assert.Equal(new Rect(0, 0, 20, 100), target.Children[0].Bounds);
+            Assert.Equal(new Rect(30, 0, 30, 100), target.Children[1].Bounds);
+            Assert.Equal(new Rect(70, 0, 50, 100), target.Children[2].Bounds);
+        }
+
         private static IReadOnlyList<int> GetRealizedIndexes(VirtualizingStackPanel target, ItemsControl itemsControl)
         {
             return target.GetRealizedElements()

@@ -416,6 +416,7 @@ namespace Avalonia.Controls.Utils
             _sizes?.Clear();
         }
 
+        // TODO Spacing changes should also be checked?
         /// <summary>
         /// Validates that <see cref="StartU"/> is still valid.
         /// </summary>
