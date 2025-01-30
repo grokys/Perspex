@@ -1506,6 +1506,37 @@ namespace Avalonia.Controls.UnitTests
             }
         }
 
+        [Theory]
+        [InlineData(CharacterCasing.Lower, "LoWer", "lower")]
+        [InlineData(CharacterCasing.Upper, "uppEr", "UPPER")]
+        [InlineData(CharacterCasing.Normal, "NorMal", "NorMal")]
+        public void Should_Respect_Casing(CharacterCasing casing, string value, string expected)
+        {
+            var target = new TextBox
+            {
+                Template = CreateTemplate(),
+                CharacterCasing = casing,
+                Text = value
+            };
+
+            Assert.Equal(target.Text, expected);
+        }
+
+        [Fact]
+        public void Should_Update_Casing_After_First_Render()
+        {
+            var tb = new TextBox
+            {
+                Template = CreateTemplate(),
+                Text = "abc"
+            };
+
+            tb.Measure(Size.Infinity);
+            tb.CharacterCasing = CharacterCasing.Upper;
+            
+            Assert.Equal("ABC", tb.Text);
+        }
+
         [Fact]
         public void Should_Move_Caret_To_EndOfLine()
         {

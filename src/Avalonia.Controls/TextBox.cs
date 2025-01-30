@@ -158,6 +158,9 @@ namespace Avalonia.Controls
         public static readonly StyledProperty<TextAlignment> TextAlignmentProperty =
             TextBlock.TextAlignmentProperty.AddOwner<TextBox>();
 
+        public static readonly StyledProperty<CharacterCasing> CharacterCasingProperty =
+            AvaloniaProperty.Register<TextBox, CharacterCasing>(nameof(CharacterCasing), defaultValue: CharacterCasing.Normal);
+
         /// <summary>
         /// Defines the <see cref="HorizontalAlignment"/> property.
         /// </summary>
@@ -430,6 +433,14 @@ namespace Avalonia.Controls
             set => SetValue(CaretIndexProperty, value);
         }
 
+        private void OnCharacterCasingChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            var tb = (TextBox)e.Sender;
+            var newValue = AdjustCasing(tb.Text, e.GetNewValue<CharacterCasing>());
+
+            SetCurrentValue(TextProperty, newValue);
+        }
+
         private void OnCaretIndexChanged(AvaloniaPropertyChangedEventArgs e)
         {
             UndoRedoState state;
@@ -622,8 +633,8 @@ namespace Avalonia.Controls
             {
                 SnapshotUndoRedo();
             }
-
-            return value;
+            
+            return AdjustCasing(value, textBox.CharacterCasing);
         }
 
         /// <summary>
@@ -672,6 +683,15 @@ namespace Avalonia.Controls
         {
             get => GetValue(TextAlignmentProperty);
             set => SetValue(TextAlignmentProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="CharacterCasing"/> of the TextBox.
+        /// </summary>
+        public CharacterCasing CharacterCasing
+        {
+            get => GetValue(CharacterCasingProperty);
+            set => SetValue(CharacterCasingProperty, value);
         }
 
         /// <summary>
@@ -972,11 +992,14 @@ namespace Avalonia.Controls
                 CoerceValue(CaretIndexProperty);
                 CoerceValue(SelectionStartProperty);
                 CoerceValue(SelectionEndProperty);
-
                 RaiseTextChangeEvents();
 
                 UpdatePseudoclasses();
                 UpdateCommandStates();
+            }
+            else if (change.Property == CharacterCasingProperty)
+            {
+                OnCharacterCasingChanged(change);
             }
             else if (change.Property == CaretIndexProperty)
             {
@@ -1094,6 +1117,7 @@ namespace Avalonia.Controls
             }
 
             input = SanitizeInputText(input);
+            input = AdjustCasing(input, CharacterCasing);
 
             if (string.IsNullOrEmpty(input))
             {
@@ -2189,6 +2213,20 @@ namespace Avalonia.Controls
 
             return text.Substring(start, end - start);
         }
+
+        /// <summary>
+        /// Adjust the text casing.
+        /// </summary>
+        /// <param name="text">The text to adjust.</param>
+        /// <param name="characterCasing">The character casing we want.</param>
+        /// <returns></returns>
+        private static string? AdjustCasing(string? text, CharacterCasing characterCasing) => characterCasing switch
+        {
+            CharacterCasing.Lower => text?.ToLower(System.Globalization.CultureInfo.CurrentCulture),
+            CharacterCasing.Upper => text?.ToUpper(System.Globalization.CultureInfo.CurrentCulture),
+            CharacterCasing.Normal => text,
+            _ => text
+        };
 
         /// <summary>
         /// Returns the sum of any vertical whitespace added between the <see cref="ScrollViewer"/> and <see cref="TextPresenter"/> in the control template.
