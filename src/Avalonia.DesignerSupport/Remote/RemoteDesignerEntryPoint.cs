@@ -27,6 +27,7 @@ namespace Avalonia.DesignerSupport.Remote
             public Uri HtmlMethodListenUri { get; set; }
             public string Method { get; set; } = Methods.AvaloniaRemote;
             public string SessionId { get; set; } = Guid.NewGuid().ToString();
+            public bool Debug { get; set; }
         }
 
         internal static class Methods
@@ -92,6 +93,11 @@ namespace Avalonia.DesignerSupport.Remote
                         next = a => rv.HtmlMethodListenUri = new Uri(a, UriKind.Absolute);
                     else if (arg == "--session-id")
                         next = a => rv.SessionId = a;
+                    else if (arg == "--debug")
+                    {
+                        rv.Debug = true;
+                        next = null;
+                    }
                     else if (rv.AppPath == null)
                         rv.AppPath = arg;
                     else
@@ -169,6 +175,10 @@ namespace Avalonia.DesignerSupport.Remote
         public static void Main(string[] cmdline)
         {
             var args = ParseCommandLineArgs(cmdline);
+            if (args.Debug)
+            {
+                Avalonia.Utilities.DebuggerHelper.Launch(Log);
+            }
             var transport = CreateTransport(args);
             if (transport is ITransportWithEnforcedMethod enforcedMethod)
                 args.Method = enforcedMethod.PreviewerMethod;
@@ -178,15 +188,15 @@ namespace Avalonia.DesignerSupport.Remote
             Design.IsDesignMode = true;
             Log($"Obtaining AppBuilder instance from {entryPoint.DeclaringType!.FullName}");
             var appBuilder = AppBuilder.Configure(entryPoint.DeclaringType);
-            var initializer =(IAppInitializer)Activator.CreateInstance(typeof(AppInitializer));
+            var initializer = (IAppInitializer)Activator.CreateInstance(typeof(AppInitializer));
             transport = initializer.ConfigureApp(transport, args, appBuilder);
             s_transport = transport;
             transport.OnMessage += OnTransportMessage;
             transport.OnException += (t, e) => Die(e.ToString());
             transport.Start();
             Log("Sending StartDesignerSessionMessage");
-            transport.Send(new StartDesignerSessionMessage {SessionId = args.SessionId});
-            
+            transport.Send(new StartDesignerSessionMessage { SessionId = args.SessionId });
+
             Dispatcher.UIThread.MainLoop(CancellationToken.None);
         }
 
@@ -236,7 +246,7 @@ namespace Avalonia.DesignerSupport.Remote
                 try
                 {
                     s_currentWindow = DesignWindowLoader.LoadDesignerWindow(xaml.Xaml, xaml.AssemblyPath, xaml.XamlFileProjectPath, s_lastRenderScaling);
-                    s_transport.Send(new UpdateXamlResultMessage(){Handle = s_currentWindow.PlatformImpl?.Handle?.Handle.ToString()});
+                    s_transport.Send(new UpdateXamlResultMessage() { Handle = s_currentWindow.PlatformImpl?.Handle?.Handle.ToString() });
                 }
                 catch (Exception e)
                 {
