@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="IntegrationTestApp.Pages.PopupsPage">
+
+  <StackPanel Orientation="Vertical" Spacing="10">
+
+    <TextBlock Text="'Light Dismiss' Popup" />
+    <Button x:Name="ShowLightDismissPopup"
+            Content="Show Popup" Click="ButtonLightDismiss_OnClick" />
+    <Popup x:Name="LightDismissPopup"
+           PlacementTarget="ShowLightDismissPopup"
+           Placement="Bottom"
+           IsLightDismissEnabled="True">
+      <Panel Background="Gray"
+             Margin="10"
+             MinWidth="100"
+             MinHeight="30">
+        <TextBox Text="Popup Content"
+                 Name="LightDismissPopupContent" />
+      </Panel>
+    </Popup>
+
+    <TextBlock Text="Popup that stays open" />
+    <Button x:Name="ShowStaysOpenPopup"
+            Content="Show Popup" Click="ButtonPopupStaysOpen_OnClick" />
+    <Popup x:Name="StaysOpenPopup"
+           PlacementTarget="ShowStaysOpenPopup"
+           Placement="Bottom"
+           IsLightDismissEnabled="False">
+      <StackPanel Background="Gray"
+                  MinWidth="100"
+                  MinHeight="30"
+                  Spacing="20"
+                  Orientation="Vertical">
+        <TextBox Name="StaysOpenTextBox"
+                 Width="100"
+                 Text="Some text" />
+        <Button Name="StaysOpenPopupCloseButton"
+                Click="StaysOpenPopupCloseButton_OnClick"
+                Content="Click to Close" />
+      </StackPanel>
+    </Popup>
+
+    <TextBlock Text="TopMost popup that stays open" />
+    <Button x:Name="ShowTopMostPopup"
+            Content="Show Popup" Click="ButtonTopMostPopupStaysOpen" />
+    <Popup x:Name="TopMostPopup"
+           Placement="Top"
+           PlacementTarget="ShowTopMostPopup"
+           IsLightDismissEnabled="False"
+           Topmost="True">
+      <Panel MinWidth="100"
+             MinHeight="30">
+        <Button Name="TopMostPopupCloseButton"
+                Click="TopMostPopupCloseButton_OnClick"
+                Content="Click to Close" />
+      </Panel>
+    </Popup>
+
+    <Button x:Name="OpenNewWindowButton"
+            Content="Open Regular New Window"
+            Click="OpenRegularNewWindow_Click" />
+  </StackPanel>
+
+</UserControl>

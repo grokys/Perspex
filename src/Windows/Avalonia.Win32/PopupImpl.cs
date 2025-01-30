@@ -1,7 +1,10 @@
 using System;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
+using Avalonia.Input;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using Avalonia.Win32.Interop;
 
 namespace Avalonia.Win32
@@ -53,8 +56,7 @@ namespace Avalonia.Win32
                 UnmanagedMethods.WindowStyles.WS_CLIPCHILDREN;
 
             UnmanagedMethods.WindowStyles exStyle =
-                UnmanagedMethods.WindowStyles.WS_EX_TOOLWINDOW |
-                UnmanagedMethods.WindowStyles.WS_EX_TOPMOST;
+                UnmanagedMethods.WindowStyles.WS_EX_TOOLWINDOW;
 
             var result = UnmanagedMethods.CreateWindowEx(
                 (int)exStyle,
@@ -84,6 +86,10 @@ namespace Avalonia.Win32
                     _maxAutoSize = null;
                     goto default;
                 case UnmanagedMethods.WindowsMessage.WM_MOUSEACTIVATE:
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        _parent?.Activate();
+                    }, DispatcherPriority.Background);
                     return (IntPtr)UnmanagedMethods.MouseActivate.MA_NOACTIVATE;
                 default:
                     return base.WndProc(hWnd, msg, wParam, lParam);
