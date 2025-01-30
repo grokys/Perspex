@@ -58,6 +58,26 @@ namespace Avalonia.UnitTests
             });
         }
 
+        public IDisposable StartInstance()
+        {
+            var scope = AvaloniaLocator.EnterScope();
+            var oldContext = SynchronizationContext.Current;
+            Dispatcher.ResetForUnitTests();
+            return Disposable.Create(() =>
+            {
+                if (Dispatcher.UIThread.CheckAccess())
+                {
+                    Dispatcher.UIThread.RunJobs();
+                }
+
+                ((ToolTipService)AvaloniaLocator.Current.GetService<IToolTipService>())?.Dispose();
+
+                scope.Dispose();
+                Dispatcher.ResetForUnitTests();
+                SynchronizationContext.SetSynchronizationContext(oldContext);
+            });
+        }
+
         public override void RegisterServices()
         {
             AvaloniaLocator.CurrentMutable
