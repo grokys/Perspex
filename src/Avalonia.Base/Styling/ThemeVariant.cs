@@ -100,11 +100,11 @@ public sealed record ThemeVariant
         {
             PlatformThemeVariant.Light => Light,
             PlatformThemeVariant.Dark => Dark,
-            _ => throw new ArgumentOutOfRangeException(nameof(themeVariant), themeVariant, null)
+            _ => Default,
         };
     }
 
-    public static explicit operator PlatformThemeVariant?(ThemeVariant themeVariant)
+    public static explicit operator PlatformThemeVariant?(ThemeVariant? themeVariant)
     {
         if (themeVariant == Light)
         {
@@ -114,7 +114,7 @@ public sealed record ThemeVariant
         {
             return PlatformThemeVariant.Dark;
         }
-        else if (themeVariant.InheritVariant is { } inheritVariant)
+        else if (themeVariant?.InheritVariant is { } inheritVariant)
         {
             return (PlatformThemeVariant?)inheritVariant;
         }

@@ -77,7 +77,7 @@ using Avalonia.Rendering.Composition;
 
         public WindowTransparencyLevel TransparencyLevel => WindowTransparencyLevel.None;
 
-        public void SetFrameThemeVariant(PlatformThemeVariant themeVariant) { }
+        public void SetFrameThemeVariant(PlatformThemeVariant? themeVariant) { }
 
         public AcrylicPlatformCompensationLevels AcrylicCompensationLevels { get; } = new AcrylicPlatformCompensationLevels(1, 1, 1);
         public object? TryGetFeature(Type featureType) => null;

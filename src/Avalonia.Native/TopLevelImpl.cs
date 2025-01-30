@@ -147,7 +147,7 @@ internal class TopLevelImpl : ITopLevelImpl, IFramebufferPlatformSurface
     }
 
     public AcrylicPlatformCompensationLevels AcrylicCompensationLevels { get; } = new AcrylicPlatformCompensationLevels(1, 0, 0);
-    public virtual void SetFrameThemeVariant(PlatformThemeVariant themeVariant)
+    public virtual void SetFrameThemeVariant(PlatformThemeVariant? themeVariant)
     {
         //noop
     }

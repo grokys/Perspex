@@ -68,6 +68,11 @@ namespace Avalonia
         /// <inheritdoc/>
         public event EventHandler? ActualThemeVariantChanged;
 
+        static Application()
+        {
+            RequestedThemeVariantProperty.OverrideDefaultValue<Application>(ThemeVariant.Default);
+        }
+
         /// <summary>
         /// Creates an instance of the <see cref="Application"/> class.
         /// </summary>
@@ -364,20 +369,28 @@ namespace Avalonia
 
             if (change.Property == RequestedThemeVariantProperty)
             {
-                if (change.GetNewValue<ThemeVariant>() is {} themeVariant && themeVariant != ThemeVariant.Default)
-                    SetValue(ActualThemeVariantProperty, themeVariant);
-                else
-                    ClearValue(ActualThemeVariantProperty);
+                if (change.GetNewValue<ThemeVariant>() is { } themeVariant)
+                {
+                    if (themeVariant == ThemeVariant.Default && PlatformSettings?.GetColorValues() is { } currentColors)
+                    {
+                        SetValue(ActualThemeVariantProperty, (ThemeVariant)currentColors.ThemeVariant);
+                    }
+                    else
+                    {
+                        SetValue(ActualThemeVariantProperty, themeVariant);   
+                    }
+                }
             }
             else if (change.Property == ActualThemeVariantProperty)
             {
                 ActualThemeVariantChanged?.Invoke(this, EventArgs.Empty);
             }
         }
-        
+
         private void OnColorValuesChanged(object? sender, PlatformColorValues e)
         {
-            SetValue(ActualThemeVariantProperty, (ThemeVariant)e.ThemeVariant, BindingPriority.Template);
+            if ((RequestedThemeVariant ?? ThemeVariant.Default) == ThemeVariant.Default)
+                SetCurrentValue(ActualThemeVariantProperty, (ThemeVariant)e.ThemeVariant);
         }
     }
 }

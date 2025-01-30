@@ -211,7 +211,7 @@ public class CompositorTestServices : IDisposable
 
         public WindowTransparencyLevel TransparencyLevel => WindowTransparencyLevel.None;
 
-        public void SetFrameThemeVariant(PlatformThemeVariant themeVariant)
+        public void SetFrameThemeVariant(PlatformThemeVariant? themeVariant)
         {
         }
 
