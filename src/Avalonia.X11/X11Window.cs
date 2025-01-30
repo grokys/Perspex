@@ -752,6 +752,7 @@ namespace Avalonia.X11
                     ChangeWMAtoms(false, _x11.Atoms._NET_WM_STATE_FULLSCREEN);
                     ChangeWMAtoms(true, _x11.Atoms._NET_WM_STATE_MAXIMIZED_VERT,
                         _x11.Atoms._NET_WM_STATE_MAXIMIZED_HORZ);
+                    MapOrActiveWindow();
                 }
                 else if (value == WindowState.FullScreen)
                 {
@@ -759,6 +760,7 @@ namespace Avalonia.X11
                     ChangeWMAtoms(true, _x11.Atoms._NET_WM_STATE_FULLSCREEN);
                     ChangeWMAtoms(false, _x11.Atoms._NET_WM_STATE_MAXIMIZED_VERT,
                         _x11.Atoms._NET_WM_STATE_MAXIMIZED_HORZ);
+                    MapOrActiveWindow();
                 }
                 else
                 {
@@ -766,8 +768,7 @@ namespace Avalonia.X11
                     ChangeWMAtoms(false, _x11.Atoms._NET_WM_STATE_FULLSCREEN);
                     ChangeWMAtoms(false, _x11.Atoms._NET_WM_STATE_MAXIMIZED_VERT,
                         _x11.Atoms._NET_WM_STATE_MAXIMIZED_HORZ);
-                    SendNetWMMessage(_x11.Atoms._NET_ACTIVE_WINDOW, (IntPtr)1, _x11.LastActivityTimestamp,
-                        IntPtr.Zero);
+                    MapOrActiveWindow();
                 }
                 WindowStateChanged?.Invoke(value);
             }
@@ -1249,6 +1250,40 @@ namespace Avalonia.X11
             XSendEvent(_x11.Display, _x11.RootWindow, false,
                 new IntPtr((int)(EventMask.SubstructureRedirectMask | EventMask.SubstructureNotifyMask)), ref xev);
 
+        }
+
+        private void MapOrActiveWindow()
+        {
+            if (_wasMappedAtLeastOnce)
+            {
+                // If the window has been mapped at least once, we should use XMapRequestEvent instead of XMapWindow or SendNetWMMessage.
+                // See details at https://github.com/AvaloniaUI/Avalonia/pull/16922
+                var e = new XEvent
+                {
+                    MapRequestEvent = new XMapRequestEvent
+                    {
+                        type = XEventName.MapRequest,
+                        serial = new IntPtr(0),
+                        display = _x11.Display,
+                        send_event = 1,
+                        parent = _x11.RootWindow,
+                        window = _handle,
+                    },
+                };
+                XSendEvent(
+                    _x11.Display,
+                    _x11.RootWindow,
+                    false,
+                    new IntPtr((int)EventMask.SubstructureRedirectMask),
+                    ref e);
+            }
+            else
+            {
+                // If the window has never been mapped, we should send _NET_ACTIVE_WINDOW message.
+                // Otherwise, the window will show too early so that content that not been layouted or rendered will be shown.
+                SendNetWMMessage(_x11.Atoms._NET_ACTIVE_WINDOW, (IntPtr)1, _x11.LastActivityTimestamp,
+                    IntPtr.Zero);
+            }
         }
 
         private void BeginMoveResize(NetWmMoveResize side, PointerPressedEventArgs e)
