@@ -2,4 +2,8 @@
   <Import Project="$(MSBuildThisFileDirectory)\AvaloniaBuildTasks.targets"/>
   <Import Project="$(MSBuildThisFileDirectory)\AvaloniaPrivateApis.targets" />
   <Import Project="$(MSBuildThisFileDirectory)\AvaloniaSingleProject.targets" Condition="'$(AvaloniaSingleProject)' == 'true'"/>
+  <UsingTask TaskName="GenerateAvaloniaResourcesTask"
+             AssemblyFile="$(MSBuildThisFileDirectory)\..\tools\netstandard2.0\Avalonia.Build.Tasks.dll" />
+  <UsingTask TaskName="CompileAvaloniaXamlTask"
+             AssemblyFile="$(MSBuildThisFileDirectory)\..\tools\netstandard2.0\Avalonia.Build.Tasks.dll" />
 </Project>
