@@ -54,6 +54,7 @@ namespace Avalonia.IntegrationTests.Appium
             options.AddAdditionalCapability(MobileCapabilityType.PlatformName, MobilePlatform.MacOS);
             options.AddAdditionalCapability(MobileCapabilityType.AutomationName, "mac2");
             options.AddAdditionalCapability("appium:showServerLogs", true);
+            options.AddAdditionalCapability("appium:newCommandTimeout", 60 * 60 * 4);
         }
 
         public AppiumDriver Session { get; }
