@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="using:ControlCatalog.ViewModels"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=netstandard"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
@@ -11,12 +12,27 @@
   <DockPanel HorizontalAlignment="Stretch"
              Height="600"
              VerticalAlignment="Top">
-    <Label DockPanel.Dock="Top">A control that supports pull to refresh</Label>
+    <StackPanel DockPanel.Dock="Top">
+      <Label>A control that supports pull to refresh on touch inputs</Label>
+      <StackPanel Orientation="Horizontal" Margin="3" Spacing="5">
+        <TextBlock VerticalAlignment="Center">Used pull direction:</TextBlock>
+        <ComboBox x:Name="PullDirections" SelectedIndex="0">
+          <ComboBox.ItemsSource>
+            <generic:List x:TypeArguments="PullDirection">
+              <PullDirection>TopToBottom</PullDirection>
+              <PullDirection>LeftToRight</PullDirection>
+              <PullDirection>RightToLeft</PullDirection>
+              <PullDirection>BottomToTop</PullDirection>
+            </generic:List>
+          </ComboBox.ItemsSource>
+        </ComboBox>
+      </StackPanel>
+    </StackPanel>
     <RefreshContainer Name="Refresh"
                       DockPanel.Dock="Bottom"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
-                      PullDirection="TopToBottom"
+                      PullDirection="{Binding #PullDirections.SelectedItem}"
                       RefreshRequested="RefreshContainerPage_RefreshRequested"
                       Margin="5">
       <ListBox HorizontalAlignment="Stretch"
