@@ -39,7 +39,6 @@ public interface IPlatformRenderInterfaceImportedObject : IDisposable
 public interface IPlatformRenderInterfaceImportedImage : IPlatformRenderInterfaceImportedObject
 {
     IBitmapImpl SnapshotWithKeyedMutex(uint acquireIndex, uint releaseIndex);
-
     IBitmapImpl SnapshotWithSemaphores(IPlatformRenderInterfaceImportedSemaphore waitForSemaphore,
         IPlatformRenderInterfaceImportedSemaphore signalSemaphore);
 

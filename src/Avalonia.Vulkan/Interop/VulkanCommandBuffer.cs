@@ -64,12 +64,20 @@ internal class VulkanCommandBuffer : IDisposable
     {
         Submit(null, null, null);
     }
-    
+
+    public class KeyedMutexSubmitInfo
+    {
+        public ulong? AcquireKey { get; set; }
+        public ulong? ReleaseKey { get; set; }
+        public VkDeviceMemory DeviceMemory { get; set; }
+    }
+
     public unsafe void Submit(
         ReadOnlySpan<VulkanSemaphore> waitSemaphores,
         ReadOnlySpan<VkPipelineStageFlags> waitDstStageMask,
         ReadOnlySpan<VulkanSemaphore> signalSemaphores,
-        VulkanFence? fence = null)
+        VulkanFence? fence = null,
+        KeyedMutexSubmitInfo? keyedMutex = null)
     {
         
         EndRecording();
@@ -85,12 +93,30 @@ internal class VulkanCommandBuffer : IDisposable
         for (var c = 0; c < signalSemaphores.Length; c++)
             pSignalSemaphores[c] = signalSemaphores[c].Handle;
 
+        ulong acquireKey = keyedMutex?.AcquireKey ?? 0, releaseKey = keyedMutex?.ReleaseKey ?? 0;
+        VkDeviceMemory devMem = keyedMutex?.DeviceMemory ?? default;
+        uint timeout = uint.MaxValue;
+        VkWin32KeyedMutexAcquireReleaseInfoKHR mutex = default;
+        if (keyedMutex != null)
+            mutex = new VkWin32KeyedMutexAcquireReleaseInfoKHR
+            {
+                sType = VkStructureType.VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_KHR,
+                acquireCount = keyedMutex.AcquireKey.HasValue ? 1u : 0u,
+                releaseCount = keyedMutex.ReleaseKey.HasValue ? 1u : 0u,
+                pAcquireKeys = &acquireKey,
+                pReleaseKeys = &releaseKey,
+                pAcquireSyncs = &devMem,
+                pReleaseSyncs = &devMem,
+                pAcquireTimeouts = &timeout
+            };
+
         VkCommandBuffer commandBuffer = _handle;
         fixed (VkPipelineStageFlags* flags = waitDstStageMask)
         {
             var submitInfo = new VkSubmitInfo
             {
                 sType = VkStructureType.VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                pNext = keyedMutex != null ? &mutex : null,
                 waitSemaphoreCount = (uint)waitSemaphores.Length,
                 pWaitSemaphores = pWaitSempaphores,
                 signalSemaphoreCount = (uint)signalSemaphores.Length,

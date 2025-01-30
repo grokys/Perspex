@@ -101,15 +101,12 @@ class VulkanSwapchainImage : ISwapchainImage
                     PipelineStageFlags.AllGraphicsBit
                 });
     }
-
-    
     
     public void Present()
     {
         var buffer = _vk.Pool.CreateCommandBuffer();
         buffer.BeginRecording();
         _image.TransitionLayout(buffer.InternalHandle, ImageLayout.TransferSrcOptimal, AccessFlags.TransferWriteBit);
-
         
         if (_image.IsDirectXBacked)
         {

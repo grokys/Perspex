@@ -45,9 +45,9 @@ internal class VulkanSkiaExternalObjectsFeature : IExternalObjectsRenderInterfac
 
         public IVulkanExternalSemaphore Inner =>
             _inner ?? throw new ObjectDisposedException(nameof(IVulkanExternalSemaphore));
-        
+
     }
-    
+
     class Image : IPlatformRenderInterfaceImportedImage
     {
         private readonly VulkanSkiaGpu _gpu;
@@ -67,13 +67,46 @@ internal class VulkanSkiaExternalObjectsFeature : IExternalObjectsRenderInterfac
             _inner = null;
         }
 
-        public IBitmapImpl SnapshotWithKeyedMutex(uint acquireIndex, uint releaseIndex) => throw new NotSupportedException();
-
-        public IBitmapImpl SnapshotWithSemaphores(IPlatformRenderInterfaceImportedSemaphore waitForSemaphore,
-            IPlatformRenderInterfaceImportedSemaphore signalSemaphore)
+        public IBitmapImpl SnapshotWithKeyedMutex(uint acquireIndex, uint releaseIndex)
         {
             var info = _inner!.Info;
-            
+            _gpu.GrContext.ResetContext();
+
+            var imageInfo = new GRVkImageInfo
+            {
+                CurrentQueueFamily = _gpu.Vulkan.Device.GraphicsQueueFamilyIndex,
+                Format = info.Format,
+                Image = (ulong)info.Handle,
+                ImageLayout = info.Layout,
+                ImageTiling = info.Tiling,
+                ImageUsageFlags = info.UsageFlags,
+                LevelCount = info.LevelCount,
+                SampleCount = info.SampleCount,
+                Protected = info.IsProtected,
+                Alloc = new GRVkAlloc
+                {
+                    Memory = (ulong)info.MemoryHandle,
+                    Size = info.MemorySize
+                }
+            };
+            using var renderTarget = new GRBackendRenderTarget(_properties.Width, _properties.Height, 1, imageInfo);
+            using var surface = SKSurface.Create(_gpu.GrContext, renderTarget,
+                _properties.TopLeftOrigin ? GRSurfaceOrigin.TopLeft : GRSurfaceOrigin.BottomLeft,
+                _properties.Format == PlatformGraphicsExternalImageFormat.R8G8B8A8UNorm
+                    ? SKColorType.Rgba8888
+                    : SKColorType.Bgra8888, SKColorSpace.CreateSrgb());
+            var image = surface.Snapshot();
+            _gpu.GrContext.Flush();
+            //surface.Canvas.Flush();
+            _inner.SubmitKeyedMutex(acquireIndex, releaseIndex);
+
+            return new ImmutableBitmap(image);
+        }
+
+        public IBitmapImpl SnapshotWithSemaphores(IPlatformRenderInterfaceImportedSemaphore waitForSemaphore, IPlatformRenderInterfaceImportedSemaphore signalSemaphore)
+        {
+            var info = _inner!.Info;
+
             _gpu.GrContext.ResetContext();
             ((Semaphore)waitForSemaphore).Inner.SubmitWaitSemaphore();
             var imageInfo = new GRVkImageInfo
@@ -102,9 +135,9 @@ internal class VulkanSkiaExternalObjectsFeature : IExternalObjectsRenderInterfac
             var image = surface.Snapshot();
             _gpu.GrContext.Flush();
             //surface.Canvas.Flush();
-            
+
             ((Semaphore)signalSemaphore).Inner.SubmitSignalSemaphore();
-            
+
             return new ImmutableBitmap(image);
         }
 
@@ -118,7 +151,7 @@ internal class VulkanSkiaExternalObjectsFeature : IExternalObjectsRenderInterfac
 
     public byte[]? DeviceUuid => _feature.DeviceUuid;
     public byte[]? DeviceLuid => _feature.DeviceLuid;
-    
+
     public IReadOnlyList<string> SupportedImageHandleTypes => _feature.SupportedImageHandleTypes;
     public IReadOnlyList<string> SupportedSemaphoreTypes => _feature.SupportedSemaphoreTypes;
 }

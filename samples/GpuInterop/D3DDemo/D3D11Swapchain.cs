@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Platform;
@@ -6,9 +7,9 @@ using Avalonia.Rendering;
 using Avalonia.Rendering.Composition;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using DxgiFactory1 = SharpDX.DXGI.Factory1;
 using D3DDevice = SharpDX.Direct3D11.Device;
 using DxgiResource = SharpDX.DXGI.Resource;
+using DxgiResource1 = SharpDX.DXGI.Resource1;
 
 namespace GpuInterop.D3DDemo;
 
@@ -44,11 +45,17 @@ public class D3D11SwapchainImage : ISwapchainImage
     private ICompositionImportedGpuImage? _imported;
     public Task? LastPresent { get; private set; }
     public RenderTargetView RenderTargetView { get; }
+    public bool IsVulkanBacked { get; }
 
     public D3D11SwapchainImage(D3DDevice device, PixelSize size,
         ICompositionGpuInterop interop,
         CompositionDrawingSurface target)
     {
+        if (!interop.SupportedImageHandleTypes.Contains(KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle))
+        {
+            IsVulkanBacked = true;
+        }
+
         Size = size;
         _interop = interop;
         _target = target;
@@ -62,15 +69,26 @@ public class D3D11SwapchainImage : ISwapchainImage
                 MipLevels = 1,
                 SampleDescription = new SampleDescription { Count = 1, Quality = 0 },
                 CpuAccessFlags = default,
-                OptionFlags = ResourceOptionFlags.SharedKeyedmutex,
+                OptionFlags = IsVulkanBacked ? ResourceOptionFlags.SharedNthandle | ResourceOptionFlags.SharedKeyedmutex : ResourceOptionFlags.SharedKeyedmutex,
                 BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource
             });
         _mutex = _texture.QueryInterface<KeyedMutex>();
-        using (var res = _texture.QueryInterface<DxgiResource>())
-            _handle = res.SharedHandle;
+        if (IsVulkanBacked)
+        {
+            using (var res = _texture.QueryInterface<DxgiResource1>())
+                _handle = res.CreateSharedHandle(null, SharedResourceFlags.Read | SharedResourceFlags.Write);
+        }
+        else
+        {
+            using (var res = _texture.QueryInterface<DxgiResource>())
+                _handle = res.SharedHandle;
+        }
+
         _properties = new PlatformGraphicsExternalImageProperties
         {
-            Width = size.Width, Height = size.Height, Format = PlatformGraphicsExternalImageFormat.B8G8R8A8UNorm
+            Width = size.Width,
+            Height = size.Height,
+            Format = PlatformGraphicsExternalImageFormat.B8G8R8A8UNorm
         };
 
         RenderTargetView = new RenderTargetView(device, _texture);
@@ -85,11 +103,12 @@ public class D3D11SwapchainImage : ISwapchainImage
     {
         _mutex.Release(1);
         _imported ??= _interop.ImportImage(
-            new PlatformHandle(_handle, KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle),
+            new PlatformHandle(_handle, 
+                IsVulkanBacked ? KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle: KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle),
             _properties);
+
         LastPresent = _target.UpdateWithKeyedMutexAsync(_imported, 1, 0);
     }
-
 
     public async ValueTask DisposeAsync()
     {
@@ -104,7 +123,7 @@ public class D3D11SwapchainImage : ISwapchainImage
             }
 
         RenderTargetView.Dispose();
-        _mutex.Dispose();
+        //_mutex.Dispose();
         _texture.Dispose();
     }
 }

@@ -32,14 +32,23 @@ public class D3D11DemoControl : DrawingSurfaceDemoBase
     private readonly Stopwatch _st = Stopwatch.StartNew();
 
     protected override (bool success, string info) InitializeGraphicsResources(Compositor compositor,
-        CompositionDrawingSurface surface, ICompositionGpuInterop interop)
+        CompositionDrawingSurface surface, ICompositionGpuInterop gpuInterop)
     {
-        if (interop.SupportedImageHandleTypes.Contains(KnownPlatformGraphicsExternalImageHandleTypes
-                .D3D11TextureGlobalSharedHandle) != true)
+        if (gpuInterop.SupportedImageHandleTypes.Contains(KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle) != true
+            && gpuInterop.SupportedImageHandleTypes.Contains(KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle) != true)
             return (false, "DXGI shared handle import is not supported by the current graphics backend");
-        
+
         var factory = new DxgiFactory1();
         using var adapter = factory.GetAdapter1(0);
+        if(gpuInterop.DeviceLuid != null)
+        {
+            var bytes= BitConverter.GetBytes(adapter.Description1.Luid);
+            if (!bytes.SequenceEqual(gpuInterop.DeviceLuid))
+            {
+
+            }
+        }
+
         _device = new D3DDevice(adapter, DeviceCreationFlags.None, new[]
         {
             FeatureLevel.Level_12_1,
@@ -51,7 +60,7 @@ public class D3D11DemoControl : DrawingSurfaceDemoBase
             FeatureLevel.Level_9_2,
             FeatureLevel.Level_9_1,
         });
-        _swapchain = new D3D11Swapchain(_device, interop, surface);
+        _swapchain = new D3D11Swapchain(_device, gpuInterop, surface);
         _context = _device.ImmediateContext;
         _constantBuffer = D3DContent.CreateMesh(_device);
         _view = Matrix.LookAtLH(new Vector3(0, 0, -5), new Vector3(0, 0, 0), Vector3.UnitY);
