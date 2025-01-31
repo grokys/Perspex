@@ -118,7 +118,7 @@
 
           <Popup Name="PART_Popup"
                  PlacementTarget="{TemplateBinding}"
-                 IsLightDismissEnabled="False">
+                 IsLightDismissEnabled="True">
             <Calendar Name="PART_Calendar"
                       DisplayDate="{TemplateBinding DisplayDate}"
                       DisplayDateEnd="{TemplateBinding DisplayDateEnd}"
