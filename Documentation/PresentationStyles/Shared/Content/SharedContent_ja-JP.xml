@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+
+	<!-- Header and footer text -->
+  <item id="tocTitle">{0}</item>
+	<item id="documentationTitle">{@HtmlEncHelpTitle}</item>
+	<item id="headerText">{@HeaderText}</item>
+	<item id="feedback_body">ドキュメント開発チームはドキュメントの品質向上にあなたのフィードバックを使用いたします。送信いただいたメールアドレスは他の用途に使用いたしません。問題が解決した後送信されたメールアドレスを破棄いたします。送信いただいた問題の処理において，詳細をお伺いする場合や問題の切り分けのためにコンタクトをとらせていただく場合がございます。</item>
+	<item id="footer_content">{@FooterText}{@Copyright}{@Comments}</item>
+	<!-- This should remain empty unless overridden by the website content file -->
+	<item id="websiteAdContent"></item>
+
+	<item id="comments"><div class="feedbackLink">このトピックに対してコメントを送信
+        <a id="HT_MailLink" href="mailto:{@UrlEncFeedbackEMailAddress}?Subject={@UrlEncHelpTitle}">{@HtmlEncFeedbackEMailAddress}</a></div>
+        <script type="text/javascript">
+        var HT_mailLink = document.getElementById("HT_MailLink");
+        HT_mailLink.href += ": " + document.title + "\u0026body=" + encodeURIComponent("<include item='feedback_body' />");
+        </script></item>
+
+	<!-- Code/syntax section -->
+	<item id="copyCode">コピー</item>
+	<item id="sourceCodeLinkText">View Source</item>
+	<item id="sourceCodeLinkTitle">View the source code</item>
+	<item id="requestExampleLinkText">Request Example</item>
+	<item id="requestExampleLinkTitle">Request an example for this topic</item>
+	<item id="requestExampleScript">
+		$(".requestExampleLink").each(function ()
+		{{
+			if(this.href.substring(0, 4).toLowerCase() === "http")
+				this.href += "?title=";
+			else
+				this.href += "?subject={@UrlEncHelpTitle}: ";
+
+			this.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+				encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+				"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		}});
+	</item>
+	
+	<!-- VS2013 presentation style items -->
+	<item id="requestExample"><a id="HT_RequestExampleLink" href="{0}" target="_blank" rel="noopener noreferrer" class="{1}"
+		title="Request an example for this topic">Request Example</a>
+		<script type="text/javascript">
+		var HT_requestExampleLink = document.getElementById("HT_RequestExampleLink");
+				
+		if(HT_requestExampleLink.href.substring(0, 4).toLowerCase() == "http")
+			HT_requestExampleLink.href += "?title=";
+		else
+			HT_requestExampleLink.href += "?subject={@UrlEncHelpTitle}: ";
+
+		HT_requestExampleLink.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+			encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+			"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		</script></item>
+	<item id="resizeToolTip">リサイズはクリックかドラッグ</item>
+
+	<!-- Section titles -->
+	<item id="bibliographyTitle">参考文献</item>
+  <item id="title_appliesTo">適用対象</item>
+	<item id="title_attributes">属性</item>
+  <item id="title_attributesAndElements">属性と要素</item>
+  <item id="title_background">背景</item>
+	<item id="title_buildInstructions">コードのコンパイル</item>
+	<item id="title_changeHistory">変更履歴</item>
+	<item id="title_childElement">子要素</item>
+	<item id="title_conclusion">結論</item>
+  <item id="title_definition">Definition</item>
+	<item id="title_delegateValue">戻り値</item>
+	<item id="title_demonstrates">デモ</item>
+  <item id="title_dotNetFrameworkEquivalent">.NET Framework と等価</item>
+	<item id="title_elementInformation">要素情報</item>
+  <item id="title_errorMessage">エラーメッセージ</item>
+	<item id="title_events">イベント</item>
+  <item id="title_example">例</item>
+	<item id="title_examples">例</item>
+	<item id="title_exceptions">例外</item>
+	<item id="title_extensionUsage">使用上の注意</item>
+	<item id="title_externalResources">外部リソース</item>
+	<item id="title_family">継承階層</item>
+	<item id="title_fieldValue">フィールド値</item>
+	<item id="title_implements">実装</item>
+	<item id="title_inThisSection">セクションの内容</item>
+  <item id="title_languageReferenceRemarks">解説</item>
+	<item id="title_methodValue">戻り値</item>
+	<item id="title_namespaces">名前空間</item>
+	<item id="title_nextSteps">次の手順</item>
+	<item id="title_parameters">パラメーター</item>
+	<item id="title_parentElement">親要素</item>
+	<item id="title_permissions">.NET Framework セキュリティ</item>
+	<item id="title_platforms">プラットフォーム</item>
+  <item id="title_prerequisites">前提条件</item>
+	<item id="title_propertyValue">プロパティ値</item>
+  <item id="title_reference">参照</item>
+	<item id="title_relatedSections">関連するセクション</item>
+	<item id="title_relatedTopics">関連項目</item>
+	<item id="title_remarks">解説</item>
+	<item id="title_requirements">必須</item>
+	<item id="title_returns">戻り値</item>
+	<item id="title_returnValue">戻り値</item>
+	<item id="title_revisionHistory">バージョン履歴</item>
+  <item id="title_robustProgramming">ロバストなプログラミング</item>
+	<item id="title_security">セキュリティ</item>
+	<item id="title_seeAlso_concepts">コンセプト</item>
+	<item id="title_seeAlso_otherResources">その他のリソース</item>
+	<item id="title_seeAlso_reference">参照</item>
+	<item id="title_seeAlso_tasks">タスク</item>
+	<item id="title_syntax">構文</item>
+	<item id="title_templates">型パラメーター</item>
+  <item id="title_textValue">テキスト値</item>
+	<item id="title_threadSafety">スレッドセーフ</item>
+	<item id="title_value">値</item>
+	<item id="title_versions">バージョン情報</item>
+	<item id="title_whatsNew">新着情報</item>
+	
+  <!-- Topic titles -->
+	<item id="topicTitle_root">{@RootNamespaceTitle}</item>
+	<!-- This is used when a title is not specified in the project -->
+  <item id="rootTopicTitleLocalized">名前空間</item>
+	<item id="topicTitle_attachedEvent">{0} 添付イベント</item>
+ 	<item id="topicTitle_attachedEvents">{0} 添付イベント</item>
+	<item id="topicTitle_attachedProperties">{0} 添付プロパティ</item>
+	<item id="topicTitle_attachedProperty">{0} 添付プロパティ</item>
+	<item id="topicTitle_class">{0} クラス</item>
+	<item id="topicTitle_constructor">{0}{1} コンストラクター</item>
+	<item id="topicTitle_constructors">{0} コンストラクター</item>
+	<item id="topicTitle_delegate">{0} デリゲート</item>
+	<item id="topicTitle_enumeration">{0} 列挙体</item>
+	<item id="topicTitle_enumMembers">メンバー</item>
+	<item id="topicTitle_event">{0} イベント</item>
+	<item id="topicTitle_events">{0} イベント</item>
+	<item id="topicTitle_field">{0} フィールド</item>
+	<item id="topicTitle_fields">{0} フィールド</item>
+	<item id="topicTitle_interface">{0} インターフェイス</item>
+	<item id="topicTitle_method">{0}{1} メソッド</item>
+	<item id="topicTitle_methods">{0} メソッド</item>
+	<item id="topicTitle_namespace">{0} 名前空間</item>
+	<item id="topicTitle_namespaceGroup">{0} 名前空間</item>
+	<item id="topicTitle_properties">{0} プロパティ</item>
+	<item id="topicTitle_property">{0}{1} プロパティ</item>
+	<item id="topicTitle_structure">{0} 構造体</item>
+  <!-- Title for operator members -->
+	<item id="topicTitle_operator">{0}{1} 演算子</item>
+  <!-- Title for op_explicit and op_implicit members -->
+  <item id="topicTitle_typeConversion">{0} 変換 {1}</item>
+  <!-- Title for overload op_explicit and op_implicit topics -->
+  <item id="topicTitle_conversionOperator">{0} 変換演算子</item>
+  <!-- Title for operator list topic that has [operators + no type conversions] -->
+  <item id="topicTitle_operators">{0} 演算子</item>
+  <!-- Title for operator list topic that has [operators + type conversions] -->
+  <item id="topicTitle_operatorsAndTypeConversions">{0} 演算子と型変換</item>
+  <!-- Title for operator list topic that has [no operators + type conversions] -->
+  <item id="topicTitle_typeConversions">{0} 型変換</item>
+
+	<!-- Table of contents simple titles -->
+ 	<item id="tocTitle_AttachedEvents">添付イベント</item>
+	<item id="tocTitle_AttachedProperties">添付プロパティ</item>
+	<item id="tocTitle_Constructor">コンストラクター</item>
+	<item id="tocTitle_Constructors">コンストラクター</item>
+	<item id="tocTitle_Events">イベント</item>
+	<item id="tocTitle_Fields">フィールド</item>
+	<item id="tocTitle_Methods">メソッド</item>
+	<item id="tocTitle_Operators">演算子</item>
+	<item id="tocTitle_Properties">プロパティ</item>
+
+  <!-- Member list table titles -->
+  <item id="tableTitle_attachedEvent">添付イベント</item>
+  <item id="tableTitle_attachedProperty">添付プロパティ</item>
+	<item id="tableTitle_class">クラス</item>
+  <item id="tableTitle_constructor">コンストラクター</item>
+	<item id="tableTitle_delegate">デリゲート</item>
+	<item id="tableTitle_enumeration">列挙体</item>
+  <item id="tableTitle_event">イベント</item>
+  <item id="tableTitle_explicitInterfaceImplementation">明示的なインターフェイスの実装</item>
+  <item id="tableTitle_extension">拡張メソッド</item>
+  <item id="tableTitle_field">フィールド</item>
+	<item id="tableTitle_interface">インターフェイス</item>
+  <item id="tableTitle_method">メソッド</item>
+  <item id="tableTitle_namespace">名前空間</item>
+  <item id="tableTitle_operator">演算子</item>
+	<item id="tableTitle_overload">オーバーロードの一覧</item>
+  <item id="tableTitle_property">プロパティ</item>
+	<item id="tableTitle_structure">構造体</item>
+
+	<!-- Table column headers -->
+  <item id="header_className">クラス</item>
+  <item id="header_delegateName">デリゲート</item>
+  <item id="header_enumerationName">列挙体</item>
+	<item id="header_eventReason">原因</item>
+	<item id="header_eventType">イベント型</item>
+	<item id="header_exceptionCondition">条件</item>
+	<item id="header_exceptionName">例外</item>
+  <item id="header_interfaceName">インターフェイス</item>
+	<item id="header_memberDescription">説明</item>
+	<item id="header_memberName">メンバー</item>
+	<item id="header_memberValue">値</item>
+	<item id="header_namespaceDescription">説明</item>
+	<item id="header_namespaceName">名前空間</item>
+	<item id="header_permissionDescription">説明</item>
+	<item id="header_permissionName">パーミッション</item>
+	<item id="header_revHistoryDate">日付</item>
+	<item id="header_revHistoryDescription">説明</item>
+	<item id="header_revHistoryVersion">バージョン</item>
+  <item id="header_structureName">構造体</item>
+	<item id="header_typeDescription">説明</item>
+	<item id="header_typeName">名前</item>
+	
+	<!-- Miscellaneous page text -->
+  <item id="defaultNamespace">(既定の名前空間)</item>
+  <item id="definedBy">({0}により定義)</item>
+	<item id="exposedMembersTableText">{0} 型は下記のメンバーを公開します。</item>	
+	<item id="inheritedFrom">({0}から継承)</item>
+	<item id="noCodeExample">現在有効なコード例がないか、この言語ではサポートされていません。</item>
+	<item id="overridesMember">({0}をオーバーライド)</item>
+	<item id="preliminaryDocs">[これは仮のドキュメントであり、予告なく変更されます。</item>
+  <item id="preliminaryApi">このAPIは暫定的なものであり、変更される可能性があります。</item>
+	<item id="preliminaryShort">Preliminary</item>
+	<item id="text_extensionUsage">Visual Basic と C#では、{0}型のオブジェクトのインスタンスメソッドのようにこのメソッドを呼び出せます。このメソッドを呼び出すためにインスタンスメソッド構文を使う場合、最初のパラメーターを省略します。詳細は、<a href="https://docs.microsoft.com/dotnet/visual-basic/programming-guide/language-features/procedures/extension-methods" target="_blank" rel="noopener noreferrer">拡張メソッド(Visual Basic)</a>または<a href="https://docs.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/extension-methods" target="_blank" rel="noopener noreferrer">拡張メソッド(C# プログラミング ガイド)</a>を参照してください。</item>
+	<item id="text_inheritance">Inheritance</item>
+	<item id="text_derived">Derived</item>
+	<item id="text_implements">Implements</item>
+	<item id="text_moreInheritance">More</item>
+	<item id="text_lessInheritance">Less</item>
+  <item id="text_relatedEntries">参照:</item>
+	<item id="top">トップ</item>
+	<item id="optionalText">(Optional)</item>
+	<item id="inThisArticle">In This Article</item>
+	<item id="showHideTOC">Show/Hide TOC</item>
+	<item id="searchPlaceHolder">Search</item>
+
+	<!-- Requirements section info -->
+	<item id="assemblyNameAndModule">{0} (in {1}.{2}) バージョン: {3}</item>
+  <item id="boilerplate_requirementsAssemblies">アセンブリ:</item>
+  <item id="boilerplate_requirementsAssemblyLabel">アセンブリ:</item>
+  <item id="boilerplate_requirementsNamespace">名前空間:</item>
+  <item id="boilerplate_unmappedXamlXmlns">xmlnsにマップされていません。</item>
+  <item id="boilerplate_xamlXmlnsRequirements">XAML用XMLNS:</item>
+
+  <!-- Auto-outline text -->
+  <item id="boilerplate_autoOutlineTopLevelIntro">このトピックは下記のセクションを含みます:</item>
+	<item id="boilerplate_autoOutlineSubsectionIntro">このトピックは下記のサブセクションを含みます:</item>
+
+	<!-- Copyright notice. {0} = Copyright text, {1} = Year(s), {2} = Holder(s) -->
+  <item id="boilerplate_copyrightNotice">{0} ©{1}{2}. All rights reserved.</item>
+	
+	<!-- To format the copyright HREF and/or copyright text into a message of your choosing, you can specify
+			 @HtmlEncCopyrightHref and/or @HtmlEncCopyrightText in braces -->
+	<item id="copyright">{@HtmlEncCopyrightInfo}</item>
+	
+	<!-- Obsolete API text -->
+  <item id="boilerplate_obsoleteShort">廃止予定。</item>
+  <item id="boilerplate_obsoleteLong">注意: このAPIは廃止予定です。</item>
+
+	<!-- See Also section text-->
+  <item id="boilerplate_seeAlsoNamespaceLink">{0} 名前空間</item>
+  <item id="boilerplate_seeAlsoOverloadLink">{0} オーバーロード</item>
+  <item id="boilerplate_seeAlsoTypeLink">{0} <include item="text_{1}Upper" /></item>
+  <item id="text_classUpper">クラス</item>
+  <item id="text_structureUpper">構造体</item>
+  <item id="text_interfaceUpper">インターフェイス</item>
+  <item id="text_delegateUpper">デリゲート</item>
+  <item id="text_enumerationUpper">列挙体</item>
+
+  <!-- Thread safety section text -->
+  <item id="boilerplate_threadSafety">この型の公開<include item="devlang_staticKeyword" />メンバーはすべてスレッドセーフです。インスタンスメンバーはスレッドセーフである保証はありません。</item>
+  <item id="text_staticThreadSafe">この型のstaticメンバーはスレッドセーフです。</item>
+  <item id="text_staticNotThreadSafe">この型のstaticメンバーはスレッドセーフではありません。</item>
+  <item id="text_instanceThreadSafe">この型のインスタンスメンバーはスレッドセーフです。</item>
+  <item id="text_instanceNotThreadSafe">この型のインスタンスメンバーはスレッドセーフではありません。</item>
+
+	<!-- Development language and code snippet titles for languages without a syntax generator -->
+	<item id="devlang_batch">Batch Script</item>
+	<item id="devlang_HTML">HTML</item>
+	<item id="devlang_PShell">PowerShell</item>
+	<item id="devlang_Python">Python</item>
+	<item id="devlang_SQL">SQL</item>
+	<item id="devlang_VBScript">Visual Basic Script</item>
+	<item id="devlang_VisualBasicAndCSharp">Visual Basic と C#</item>
+	<item id="devlang_XML">XML</item>
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">null参照(Visual Basicでは<span class="keyword">Nothing</span>)</item>
+	<item id="devlang_staticKeyword"><span class="keyword">static</span> (Visual Basicでは<span class="keyword">Shared</span>)</item>
+	<item id="devlang_virtualKeyword"><span class="keyword">virtual</span> (Visual Basicでは<span class="keyword">Overridable</span>)</item>
+	<item id="devlang_trueKeyword"><span class="keyword">true</span> (Visual Basicでは<span class="keyword">True</span>)</item>
+	<item id="devlang_falseKeyword"><span class="keyword">false</span> (Visual Basicでは<span class="keyword">False</span>)</item>
+	<item id="devlang_abstractKeyword"><span class="keyword">abstract</span> (Visual Basicでは<span class="keyword">MustInherit</span>)</item>
+	<item id="devlang_sealedKeyword"><span class="keyword">sealed</span> (Visual Basicでは<span class="keyword">NotInheritable</span>)</item>
+	<item id="devlang_asyncKeyword"><span class="keyword">async</span> (Visual Basicでは<span class="keyword">Async</span>)</item>
+	<item id="devlang_awaitKeyword"><span class="keyword">await</span> (Visual Basicでは<span class="keyword">Await</span>)</item>
+	<item id="devlang_asyncAwaitKeyword"><span class="keyword">async</span>/<span class="keyword">await</span> (Visual Basicでは<span class="keyword">Async</span>/<span class="keyword">Await</span>)</item>
+
+	<!-- Development language metadata values for languages without a syntax generator -->
+	<item id="metaLang_batch">Batch Script</item>
+	<item id="metaLang_HTML">HTML</item>
+	<item id="metaLang_PShell">PowerShell</item>
+	<item id="metaLang_Python">Python</item>
+	<item id="metaLang_SQL">SQL</item>
+	<item id="metaLang_VBScript">VBScript</item>
+	<item id="metaLang_VisualBasicAndCSharp">VB と C#</item>
+	<item id="metaLang_XML">XML</item>
+	
+	<!-- Alt text for images -->
+  <item id="altText_CodeExample">Code example</item>
+  <item id="altText_ExplicitInterface">明示的なインターフェイスの実装</item>
+	<item id="altText_privAttachedEvent">Private 添付イベント</item>
+	<item id="altText_privClass">Private クラス</item>
+	<item id="altText_privConstructor">Private コンストラクター</item>
+	<item id="altText_privDelegate">Private デリゲート</item>
+	<item id="altText_privEnumeration">Private 列挙体</item>
+	<item id="altText_privEvent">Private イベント</item>
+	<item id="altText_privExtension">Private 拡張メソッド</item>
+	<item id="altText_privField">Private フィールド</item>
+	<item id="altText_privInterface">Private インターフェイス</item>
+	<item id="altText_privMethod">Private メソッド</item>
+	<item id="altText_privOperator">Private 演算子</item>
+	<item id="altText_privProperty">Private プロパティ</item>
+	<item id="altText_privStructure">Private 構造体</item>
+	<item id="altText_privAttachedProperty">Private 添付プロパティ</item>
+	<item id="altText_protAttachedEvent">Protected 添付イベント</item>
+	<item id="altText_protAttachedProperty">Protected 添付プロパティ</item>
+	<item id="altText_protClass">Protected クラス</item>
+	<item id="altText_protConstructor">Protected コンストラクター</item>
+	<item id="altText_protDelegate">Protected デリゲート</item>
+	<item id="altText_protEnumeration">Protected 列挙体</item>
+	<item id="altText_protEvent">Protected イベント</item>
+	<item id="altText_protExtension">Protected 拡張メソッド</item>
+	<item id="altText_protField">Protected フィールド</item>
+	<item id="altText_protInterface">Protected インターフェイス</item>
+	<item id="altText_protMethod">Protected メソッド</item>
+	<item id="altText_protOperator">Protected 演算子</item>
+	<item id="altText_protProperty">Protected プロパティ</item>
+	<item id="altText_protStructure">Protected 構造体</item>
+	<item id="altText_pubAttachedEvent">Public 添付イベント</item>
+	<item id="altText_pubAttachedProperty">Public 添付プロパティ</item>
+	<item id="altText_pubClass">Public クラス</item>
+	<item id="altText_pubConstructor">Public コンストラクター</item>
+	<item id="altText_pubDelegate">Public デリゲート</item>
+	<item id="altText_pubEnumeration">Public 列挙体</item>
+	<item id="altText_pubEvent">Public イベント</item>
+	<item id="altText_pubExtension">Public 拡張メソッド</item>
+	<item id="altText_pubField">Public フィールド</item>
+	<item id="altText_pubInterface">Public インターフェイス</item>
+	<item id="altText_pubMethod">Public メソッド</item>
+	<item id="altText_pubOperator">Public 演算子</item>
+	<item id="altText_pubProperty">Public プロパティ</item>
+	<item id="altText_pubStructure">Public 構造体</item>
+	<item id="altText_Static">静的メンバー</item>
+	
+	<!-- Alert titles -->
+	<item id="alert_title_tip">ヒント</item>
+	<item id="alert_title_caution">注意</item>
+	<item id="alert_title_security">セキュリティ メモ</item>
+	<item id="alert_title_note">メモ</item>
+	<item id="alert_title_important">重要</item>
+	<item id="alert_title_visualBasic">Visual Basic メモ</item>
+	<item id="alert_title_visualC#">C# メモ</item>
+	<item id="alert_title_visualC++">C++ メモ</item>
+	<item id="alert_title_visualJ#">J# メモ</item>
+	<item id="alert_title_todo">To Do</item>
+	<item id="text_NotesForImplementers">実装時の注意</item>
+	<item id="text_NotesForCallers">利用時の注意</item>
+	<item id="text_NotesForInheritors">継承する場合の注意</item>
+
+	<!-- Alert alt text -->
+	<item id="alert_altText_tip">ヒント</item>
+	<item id="alert_altText_caution">注意 メモ</item>
+	<item id="alert_altText_security">セキュリティ メモ</item>
+	<item id="alert_altText_note">メモ</item>
+	<item id="alert_altText_important">重要 メモ</item>
+	<item id="alert_altText_visualBasic">Visual Basic メモ</item>
+	<item id="alert_altText_visualC#">C# メモ</item>
+	<item id="alert_altText_visualC++">C++ メモ</item>
+	<item id="alert_altText_visualJ#">J# メモ</item>	
+	<item id="alert_altText_todo">To Do</item>
+
+	<!-- Index metadata entries -->
+	<item id="indexEntry_root">名前空間</item>
+  <item id="indexEntry_namespace">{0} 名前空間</item>
+  <item id="indexEntry_class">{0} クラス</item>
+	<item id="indexEntry_structure">{0} 構造体</item>
+	<item id="indexEntry_interface">{0} インターフェイス</item>
+	<item id="indexEntry_delegate">{0} デリゲート</item>
+	<item id="indexEntry_enumeration">{0} 列挙体</item>
+  <item id="indexEntry_enumerationMember">{0} 列挙体メンバー</item>
+  <item id="indexEntry_members">{0}、すべてのメンバー</item>
+  <item id="indexEntry_methods">{0}、メソッド</item>
+  <!-- Index entry for operator list topic that has [operators + no type conversions] -->
+  <item id="indexEntry_operators">{0}、演算子</item>
+  <!-- Index entry for operator list topic that has [operators + type conversions] -->
+  <item id="indexEntry_operatorsAndTypeConversions">{0}、演算子と型変換</item>
+  <!-- Index entry for operator list topic that has [no operators + type conversions] -->
+  <item id="indexEntry_typeConversions">{0}、型変換</item>
+  <!-- Index entries for op_explicit and op_implicit members -->
+  <item id="indexEntry_conversionOperator">{0} 変換</item>
+  <item id="indexEntry_properties">{0}、プロパティ</item>
+  <item id="indexEntry_fields">{0}、フィールド</item>
+  <item id="indexEntry_events">{0}、イベント</item>
+  <item id="indexEntry_attachedProperties">{0}、添付プロパティ</item>
+  <item id="indexEntry_attachedEvents">{0}、添付イベント</item>
+	<item id="indexEntry_constructors">{0}、コンストラクター</item>
+	<item id="indexEntry_constructor">{0}、コンストラクター</item>
+	<item id="indexEntry_constructorType">{0} コンストラクター</item>
+  <item id="indexEntry_method">{0} メソッド</item>
+	<item id="indexEntry_property">{0} プロパティ</item>
+	<item id="indexEntry_event">{0} イベント</item>
+	<item id="indexEntry_field">{0} フィールド</item>
+	<item id="indexEntry_operator">{0} 演算子</item>
+	<item id="indexEntry_attachedProperty">{0} 添付プロパティ</item>
+	<item id="indexEntry_attachedEvent">{0} 添付イベント</item>
+	<item id="indexEntry_methodExplicit">{0} 明示的に実装されたメソッド</item>
+	<item id="indexEntry_propertyExplicit">{0} 明示的に実装されたプロパティ</item>
+	<item id="indexEntry_eventExplicit">{0} 明示的に実装されたイベント</item>
+	<item id="indexEntry_fieldExplicit">{0} 明示的に実装されたフィールド</item>
+
+  <!-- Versions section (version builder plug-in) -->
+  <item id="supportedIn_1">サポートされるバージョン: {0}</item>
+  <item id="supportedIn_2">サポートされるバージョン: {0}, {1}</item>
+  <item id="supportedIn_3">サポートされるバージョン: {0}, {1}, {2}</item>
+  <item id="supportedIn_4">サポートされるバージョン: {0}, {1}, {2}, {3}</item>
+  <item id="supportedIn_5">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}</item>
+  <item id="supportedIn_6">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}</item>
+  <item id="supportedIn_7">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}</item>
+  <item id="supportedIn_8">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}</item>
+  <item id="supportedIn_9">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}</item>
+  <item id="supportedIn_10">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}</item>
+  <item id="supportedIn_11">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}</item>
+  <item id="supportedIn_12">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}</item>
+  <item id="supportedIn_13">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}</item>
+  <item id="supportedIn_14">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}</item>
+  <item id="supportedIn_15">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}</item>
+  <item id="supportedIn_16">サポートされるバージョン: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}</item>
+  <item id="obsoleteWarning">廃止予定になった (コンパイル時警告) バージョン: {0}</item>
+  <item id="obsoleteError">廃止された (コンパイル不可) バージョン: {0}</item>
+	
+  <!-- Show Missing Component messages -->
+  <item id="SMCAutoDocConstructor"><referenceLink target="T:{0}" />クラスの新しいインスタンスを初期化します</item>
+  <item id="SMCAutoDocStaticConstructor"><referenceLink target="T:{0}" />クラスの静的フィールドを初期化します</item>
+  <item id="SMCAutoDocDispose"><referenceLink target="T:{0}" />によって使われているすべてのリソースを解放します</item>
+  <item id="SMCAutoDocDisposeBool"><referenceLink target="T:{0}" />によって使われているアンマネージリソースを解放し、オプションでマネージリソースも解放します。</item>
+  <item id="SMCAutoDocDisposeParam">マネージリソースとアンマネージリソースの両方を解放する場合はtrue、アンマネージリソースのみを解放する場合はfalse</item>
+  <item id="SMCMissingTag"><p class="missing">["{1}"に対する&lt;{0}&gt;がありません]</p></item>
+  <item id="SMCMissingParamTag"><p class="missing">["{2}"に対する&lt;{0} name="{1}"/&gt;がありません</p></item>
+  <item id="SMCMissingIncludeTarget"><p class="missing">['{0}'で使われている&lt;include&gt;ターゲットドキュメントがありません。File: '{1}' Path: '{2}']</p></item>
+</content>

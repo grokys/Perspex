@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword"><span class="CodeInline">null</span> (在 Visual Basic 中为 <span class="CodeInline">Nothing</span>)</item>
+	<item id="devlang_staticKeyword"><span class="CodeInline">static</span> (在 Visual Basic 中为 <span class="CodeInline">Shared</span>)</item>
+	<item id="devlang_virtualKeyword"><span class="CodeInline">virtual</span> (在 Visual Basic 中为 <span class="CodeInline">Overridable</span>)</item>
+	<item id="devlang_trueKeyword"><span class="CodeInline">true</span> (在 Visual Basic 中为 <span class="CodeInline">True</span>)</item>
+	<item id="devlang_falseKeyword"><span class="CodeInline">false</span> (在 Visual Basic 中为 <span class="CodeInline">False</span>)</item>
+	<item id="devlang_abstractKeyword"><span class="CodeInline">abstract</span> (在 Visual Basic 中为 <span class="CodeInline">MustInherit</span>)</item>
+	<item id="devlang_sealedKeyword"><span class="CodeInline">sealed</span> (在 Visual Basic 中为 <span class="CodeInline">NotInheritable</span>)</item>
+	<item id="devlang_asyncKeyword"><span class="CodeInline">async</span> (在 Visual Basic 中为 <span class="CodeInline">Async</span>)</item>
+	<item id="devlang_awaitKeyword"><span class="CodeInline">await</span> (在 Visual Basic 中为 <span class="CodeInline">Await</span>)</item>
+	<item id="devlang_asyncAwaitKeyword"><span class="CodeInline">async</span>/<span class="CodeInline">await</span> (在 Visual Basic 中为 <span class="CodeInline">Async</span>/<span class="CodeInline">Await</span>)</item>
+
+	<!-- Show Missing Component messages -->
+  <item id="SMCMissingTag"><span class="MissingComment">[缺少 "{1}" 的 &lt;{0}&gt; 文档]</span></item>
+  <item id="SMCMissingParamTag"><span class="MissingComment">[缺少 "{2}" 的 &lt;{0} name="{1}"/&gt; 文档]</span></item>
+  <item id="SMCMissingIncludeTarget"><span class="MissingComment">[在 “{0}” 中缺少 &lt;include&gt; 目标文档。文件：“{1}” 路径：“{2}”]</span></item>
+
+</content>

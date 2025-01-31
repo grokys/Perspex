@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">null参照(Visual Basicでは`Nothing`)</item>
+	<item id="devlang_staticKeyword">`static` (Visual Basicでは`Shared`)</item>
+	<item id="devlang_virtualKeyword">`virtual` (Visual Basicでは`Overridable`)</item>
+	<item id="devlang_trueKeyword">`true` (Visual Basicでは`True`)</item>
+	<item id="devlang_falseKeyword">`false` (Visual Basicでは`False`)</item>
+	<item id="devlang_abstractKeyword">`abstract` (Visual Basicでは`MustInherit`)</item>
+	<item id="devlang_sealedKeyword">`sealed` (Visual Basicでは`NotInheritable`)</item>
+	<item id="devlang_asyncKeyword">`async` (Visual Basicでは`Async`)</item>
+	<item id="devlang_awaitKeyword">`await` (Visual Basicでは`Await`)</item>
+	<item id="devlang_asyncAwaitKeyword">`async`/`await` (Visual Basicでは`Async`/`Await`)</item>
+
+  <!-- Show Missing Component messages -->
+  <item id="SMCMissingTag">\["{1}"に対する&lt;{0}&gt;がありません\]</item>
+  <item id="SMCMissingParamTag">\["{2}"に対する&lt;{0} name="{1}"/&gt;がありません\]</item>
+  <item id="SMCMissingIncludeTarget">\['{0}'で使われている&lt;include&gt;ターゲットドキュメントがありません。File: '{1}' Path: '{2}'\]</item>
+
+</content>

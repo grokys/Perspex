@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">una referencia null (<span class="CodeInline">Nothing</span> en Visual Basic)</item>
+	<item id="devlang_staticKeyword"><span class="CodeInline">static</span> (<span class="CodeInline">Shared</span> en Visual Basic)</item>
+	<item id="devlang_virtualKeyword"><span class="CodeInline">virtual</span> (<span class="CodeInline">Overridable</span> en Visual Basic)</item>
+	<item id="devlang_trueKeyword"><span class="CodeInline">true</span> (<span class="CodeInline">True</span> en Visual Basic)</item>
+	<item id="devlang_falseKeyword"><span class="CodeInline">false</span> (<span class="CodeInline">False</span> en Visual Basic)</item>
+	<item id="devlang_abstractKeyword"><span class="CodeInline">abstract</span> (<span class="CodeInline">MustInherit</span> en Visual Basic)</item>
+  <item id="devlang_sealedKeyword"><span class="CodeInline">sealed</span> (<span class="CodeInline">NotInheritable</span> en Visual Basic)</item>
+	<item id="devlang_asyncKeyword"><span class="CodeInline">async</span> (<span class="CodeInline">Async</span> en Visual Basic)</item>
+	<item id="devlang_awaitKeyword"><span class="CodeInline">await</span> (<span class="CodeInline">Await</span> en Visual Basic)</item>
+	<item id="devlang_asyncAwaitKeyword"><span class="CodeInline">async</span>/<span class="CodeInline">await</span> (<span class="CodeInline">Async</span>/<span class="CodeInline">Await</span> en Visual Basic)</item>
+
+	<!-- Show Missing Component messages -->
+  <item id="SMCMissingTag"><span class="MissingComment">[Falta documentaci&#243;n &lt;{0}&gt; para "{1}"]</span></item>
+  <item id="SMCMissingParamTag"><span class="MissingComment">[Falta documentaci&#243;n &lt;{0} name="{1}"/&gt; para "{2}"]</span></item>
+  <item id="SMCMissingIncludeTarget"><span class="MissingComment">[Falta documentaci&#243;n objetivo &lt;include&gt; en '{0}'.  Archivo: '{1}' Ruta: '{2}']</span></item>
+</content>

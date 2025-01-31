@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+
+	<!-- Header and footer text -->
+  <item id="tocTitle">{0}</item>
+	<item id="documentationTitle">{@HtmlEncHelpTitle}</item>
+	<item id="headerText">{@HeaderText}</item>
+	<item id="feedback_body">Your feedback is used to improve the documentation and the product. Your e-mail address will not be used for any other purpose and is disposed of after the issue you report is resolved. While working to resolve the issue that you report, you may be contacted via e-mail to get further details or clarification on the feedback you sent. After the issue you report has been addressed, you may receive an e-mail to let you know that your feedback has been addressed.</item>
+	<item id="footer_content">{@FooterText}{@Copyright}{@Comments}</item>
+	<!-- This should remain empty unless overridden by the website content file -->
+	<item id="websiteAdContent"></item>
+
+	<item id="comments"><div class="feedbackLink">如果您对本产品的帮助或其他功能有任何建议或需要报告 Bug，请发送邮件到
+        <a id="HT_MailLink" href="mailto:{@UrlEncFeedbackEMailAddress}?Subject={@UrlEncHelpTitle}">{@HtmlEncFeedbackEMailAddress}</a></div>
+        <script type="text/javascript">
+        var HT_mailLink = document.getElementById("HT_MailLink");
+        HT_mailLink.href += ": " + document.title + "\u0026body=" + encodeURIComponent("<include item='feedback_body' />");
+        </script></item>
+
+	<!-- Code/syntax section -->
+	<item id="copyCode">复制</item>
+  <item id="sourceCodeLinkText">查看代码</item>
+  <item id="sourceCodeLinkTitle">查看源代码</item>
+	<item id="requestExampleLinkText">Request Example</item>
+	<item id="requestExampleLinkTitle">Request an example for this topic</item>
+	<item id="requestExampleScript">
+		$(".requestExampleLink").each(function ()
+		{{
+			if(this.href.substring(0, 4).toLowerCase() === "http")
+				this.href += "?title=";
+			else
+				this.href += "?subject={@UrlEncHelpTitle}: ";
+
+			this.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+				encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+				"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		}});
+	</item>
+	
+	<!-- VS2013 presentation style items -->
+	<item id="requestExample"><a id="HT_RequestExampleLink" href="{0}" target="_blank" rel="noopener noreferrer" class="{1}"
+		title="Request an example for this topic">Request Example</a>
+		<script type="text/javascript">
+		var HT_requestExampleLink = document.getElementById("HT_RequestExampleLink");
+				
+		if(HT_requestExampleLink.href.substring(0, 4).toLowerCase() == "http")
+			HT_requestExampleLink.href += "?title=";
+		else
+			HT_requestExampleLink.href += "?subject={@UrlEncHelpTitle}: ";
+
+		HT_requestExampleLink.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
+			encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
+			"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
+		</script></item>
+	<item id="resizeToolTip">点击或拖拽改变大小</item>
+
+	<!-- Section titles -->
+	<item id="bibliographyTitle">参考书目</item>
+  <item id="title_appliesTo">应用到</item>
+  <item id="title_attributes">特性</item>
+  <item id="title_attributesAndElements">特性和元素</item>
+  <item id="title_background">背景资料</item>
+  <item id="title_buildInstructions">编译代码</item>
+	<item id="title_changeHistory">修订历史</item>
+  <item id="title_childElement">子元素</item>
+  <item id="title_conclusion">结论</item>
+  <item id="title_definition">Definition</item>
+  <item id="title_delegateValue">返回值</item>
+  <item id="title_demonstrates">演示</item>
+  <item id="title_dotNetFrameworkEquivalent">.NET 框架等价项</item>
+  <item id="title_elementInformation">元素信息</item>
+  <item id="title_errorMessage">错误消息</item>
+	<item id="title_events">事件</item>
+  <item id="title_example">示例</item>
+  <item id="title_examples">示例</item>
+	<item id="title_exceptions">异常</item>
+  <item id="title_extensionUsage">备注</item>
+  <item id="title_externalResources">外部资源</item>
+  <item id="title_family">继承层次</item>
+  <item id="title_fieldValue">字段值</item>
+  <item id="title_implements">实现</item>
+  <item id="title_inThisSection">此节中</item>
+  <item id="title_languageReferenceRemarks">Remarks</item>
+  <item id="title_methodValue">返回值</item>
+  <item id="title_namespaces">命名空间</item>
+  <item id="title_nextSteps">下一步</item>
+  <item id="title_parameters">参数</item>
+  <item id="title_parentElement">父元素</item>
+  <item id="title_permissions">权限</item>
+  <item id="title_platforms">平台</item>
+  <item id="title_prerequisites">必备条件</item>
+  <item id="title_propertyValue">属性值</item>
+  <item id="title_reference">参考</item>
+  <item id="title_relatedSections">相关内容</item>
+  <item id="title_relatedTopics">参见</item>
+	<item id="title_remarks">备注</item>
+  <item id="title_requirements">要求</item>
+  <item id="title_returns">返回值</item>
+  <item id="title_returnValue">返回值</item>
+	<item id="title_revisionHistory">版本历史</item>
+  <item id="title_robustProgramming">鲁棒编程</item>
+  <item id="title_security">安全性</item>
+	<item id="title_seeAlso_concepts">概念</item>
+	<item id="title_seeAlso_otherResources">其他资源</item>
+	<item id="title_seeAlso_reference">引用</item>
+	<item id="title_seeAlso_tasks">任务</item>
+  <item id="title_syntax">语法</item>
+  <item id="title_templates">类型参数</item>
+  <item id="title_textValue">文本值</item>
+  <item id="title_threadSafety">线程安全性</item>
+  <item id="title_value">值</item>
+  <item id="title_versions">版本信息</item>
+  <item id="title_whatsNew">新特性</item>
+	
+    <!-- Topic titles -->
+		<item id="topicTitle_root">{@RootNamespaceTitle}</item>
+		<!-- This is used when a title is not specified in the project -->
+    <item id="rootTopicTitleLocalized">命名空间</item>
+    <item id="topicTitle_attachedEvent">{0} 附加事件</item>
+    <item id="topicTitle_attachedEvents">{0} 附加事件</item>
+    <item id="topicTitle_attachedProperties">{0} 附加属性</item>
+    <item id="topicTitle_attachedProperty">{0} 附加属性</item>
+    <item id="topicTitle_class">{0} 类</item>
+    <item id="topicTitle_constructor">{0}{1} 构造函数</item>
+    <item id="topicTitle_constructors">{0} 构造函数</item>
+    <item id="topicTitle_delegate">{0} 委托</item>
+    <item id="topicTitle_enumeration">{0} 枚举</item>
+    <item id="topicTitle_enumMembers">成员</item>
+    <item id="topicTitle_event">{0} 事件</item>
+    <item id="topicTitle_events">{0} 事件</item>
+    <item id="topicTitle_field">{0} 字段</item>
+    <item id="topicTitle_fields">{0} 字段</item>
+    <item id="topicTitle_interface">{0} 接口</item>
+    <item id="topicTitle_method">{0}{1} 方法</item>
+    <item id="topicTitle_methods">{0} 方法</item>
+	  <item id="topicTitle_namespace">{0} 命名空间</item>
+    <item id="topicTitle_namespaceGroup">{0} 命名空间</item>
+    <item id="topicTitle_properties">{0} 属性</item>
+    <item id="topicTitle_property">{0}{1} 属性</item>
+    <item id="topicTitle_structure">{0} 结构</item>
+    <!-- Title for operator members -->
+    <item id="topicTitle_operator">{0}{1} 运算符</item>
+    <!-- Title for op_explicit and op_implicit members -->
+    <item id="topicTitle_typeConversion">{0} 转换 {1}</item>
+    <!-- Title for overload op_explicit and op_implicit topics -->
+    <item id="topicTitle_conversionOperator">{0} 转换运算符</item>
+    <!-- Title for operator list topic that has [operators + no type conversions] -->
+    <item id="topicTitle_operators">{0} 运算符</item>
+    <!-- Title for operator list topic that has [operators + type conversions] -->
+    <item id="topicTitle_operatorsAndTypeConversions">{0} 运算符与类型转换</item>
+    <!-- Title for operator list topic that has [no operators + type conversions] -->
+    <item id="topicTitle_typeConversions">{0} 类型转换</item>
+
+	<!-- Table of contents simple titles -->
+ 	<item id="tocTitle_AttachedEvents">附加事件</item>
+	<item id="tocTitle_AttachedProperties">附加属性</item>
+	<item id="tocTitle_Constructor">构造函数</item>
+	<item id="tocTitle_Constructors">构造函数</item>
+	<item id="tocTitle_Events">事件</item>
+	<item id="tocTitle_Fields">字段</item>
+	<item id="tocTitle_Methods">方法</item>
+	<item id="tocTitle_Operators">运算符</item>
+	<item id="tocTitle_Properties">属性</item>
+
+    <!-- Member list table titles -->
+    <item id="tableTitle_attachedEvent">附加事件</item>
+    <item id="tableTitle_attachedProperty">附加属性</item>
+    <item id="tableTitle_class">类</item>
+    <item id="tableTitle_constructor">构造函数</item>
+    <item id="tableTitle_delegate">委托</item>
+    <item id="tableTitle_enumeration">枚举</item>
+    <item id="tableTitle_event">事件</item>
+    <item id="tableTitle_explicitInterfaceImplementation">显式接口实现</item>
+    <item id="tableTitle_extension">扩展方法</item>
+    <item id="tableTitle_field">字段</item>
+    <item id="tableTitle_interface">接口</item>
+    <item id="tableTitle_method">方法</item>
+    <item id="tableTitle_namespace">命名空间</item>
+    <item id="tableTitle_operator">运算符</item>
+    <item id="tableTitle_overload">重载列表</item>
+    <item id="tableTitle_property">属性</item>
+    <item id="tableTitle_structure">结构</item>
+
+    <!-- Table column headers -->
+    <item id="header_className">类</item>
+    <item id="header_delegateName">委托</item>
+    <item id="header_enumerationName">枚举</item>
+    <item id="header_eventReason">原因</item>
+    <item id="header_eventType">事件类型</item>
+    <item id="header_exceptionCondition">条件</item>
+    <item id="header_exceptionName">异常</item>
+    <item id="header_interfaceName">接口</item>
+    <item id="header_memberDescription">说明</item>
+    <item id="header_memberName">成员名称</item>
+    <item id="header_memberValue">值</item>
+    <item id="header_namespaceDescription">说明</item>
+    <item id="header_namespaceName">命名空间</item>
+    <item id="header_permissionDescription">说明</item>
+    <item id="header_permissionName">权限</item>
+    <item id="header_revHistoryDate">日期</item>
+    <item id="header_revHistoryDescription">说明</item>
+    <item id="header_revHistoryVersion">版本</item>
+    <item id="header_structureName">结构</item>
+    <item id="header_typeDescription">说明</item>
+    <item id="header_typeName">名称</item>
+	
+	<!-- Miscellaneous page text -->
+  <item id="defaultNamespace">( 默认命名空间 )</item>
+  <item id="definedBy">(由 {0} 定义。)</item>
+  <item id="exposedMembersTableText">{0} 类型公开以下成员。</item>	
+  <item id="inheritedFrom">(继承自 {0}。)</item>
+	<item id="noCodeExample">当前没有可用的代码示例，或者可能不支持该语言。</item>
+  <item id="overridesMember">(重写 {0})</item>
+	<item id="preliminaryDocs">这是一个初步的说明文档有待于进一步改进。</item>
+  <item id="preliminaryApi">此 API 尚未最终确定，随时可能调整。</item>
+	<item id="preliminaryShort">Preliminary</item>
+  <item id="text_extensionUsage">在 Visual Basic 和 C# 中，这个方法可以当成为类型 {0} 的实例方法来调用。在采用实例方法语法调用这个方法时，请省略第一个参数。请参考 <a href="https://docs.microsoft.com/dotnet/visual-basic/programming-guide/language-features/procedures/extension-methods" target="_blank" rel="noopener noreferrer">扩展方法 (Visual Basic)</a> 或 <a href="https://docs.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/extension-methods" target="_blank" rel="noopener noreferrer">扩展方法 (C# 编程指南)</a> 获取更多信息。</item>
+	<item id="text_inheritance">Inheritance</item>
+	<item id="text_derived">Derived</item>
+	<item id="text_implements">Implements</item>
+  <item id="text_moreInheritance">更多</item>
+	<item id="text_lessInheritance">Less</item>
+  <item id="text_relatedEntries">参见：</item>
+	<item id="top">Top</item>
+	<item id="optionalText">(Optional)</item>
+	<item id="inThisArticle">In This Article</item>
+	<item id="showHideTOC">Show/Hide TOC</item>
+	<item id="searchPlaceHolder">Search</item>
+	
+	<!-- Requirements section info -->
+  <item id="assemblyNameAndModule">{0} (在 {1}.{2} 中) 版本：{3}</item>
+  <item id="boilerplate_requirementsAssemblies">程序集：</item>
+  <item id="boilerplate_requirementsAssemblyLabel">程序集：</item>
+  <item id="boilerplate_requirementsNamespace">命名空间：</item>
+  <item id="boilerplate_unmappedXamlXmlns">未映射到一个 xmlns.</item>
+  <item id="boilerplate_xamlXmlnsRequirements">XMLNS for XAML:</item>
+	
+    <!-- Auto-outline text -->
+    <item id="boilerplate_autoOutlineTopLevelIntro">本页包含以下内容：</item>
+    <item id="boilerplate_autoOutlineSubsectionIntro">本节包含以下子节内容：</item>
+
+    <!-- Copyright notice. {0} = Copyright text, {1} = Year(s), {2} = Holder(s) -->
+    <item id="boilerplate_copyrightNotice">{0} &#169;{1}{2}。保留所有权利</item>
+
+	<!-- To format the copyright HREF and/or copyright text into a message of your choosing, you can specify
+			 @HtmlEncCopyrightHref and/or @HtmlEncCopyrightText in braces -->
+	<item id="copyright">{@HtmlEncCopyrightInfo}</item>
+
+    <!-- Obsolete API text -->
+    <item id="boilerplate_obsoleteShort">已过时。</item>
+    <item id="boilerplate_obsoleteLong">注意：此 API 现在已过时。</item>
+
+		<!-- See Also section text-->
+    <item id="boilerplate_seeAlsoNamespaceLink">{0} 命名空间</item>
+    <item id="boilerplate_seeAlsoOverloadLink">{0} 重载</item>
+    <item id="boilerplate_seeAlsoTypeLink">{0} <include item="text_{1}Upper"/></item>
+    <item id="text_classUpper">类</item>
+    <item id="text_structureUpper">结构</item>
+    <item id="text_interfaceUpper">接口</item>
+    <item id="text_delegateUpper">委托</item>
+    <item id="text_enumerationUpper">枚举</item>
+	
+    <!-- Thread safety section text -->
+    <item id="boilerplate_threadSafety">这个类型的所有公开<include item="devlang_staticKeyword"/>成员都是线程安全的。实例的成员不保证线程安全。</item>
+    <item id="text_staticThreadSafe">这个类型的静态成员对多线程操作是安全的。</item>
+    <item id="text_staticNotThreadSafe">这个类型的静态成员对多线程操作是不安全的。</item>
+    <item id="text_instanceThreadSafe">这个类型的实例成员对多线程操作是安全的。</item>
+    <item id="text_instanceNotThreadSafe">这个类型的实例成员对多线程操作是不安全的。</item>
+	
+	<!-- Development language and code snippet titles for languages without a syntax generator -->
+	<item id="devlang_batch">Batch Script</item>
+	<item id="devlang_HTML">HTML</item>
+	<item id="devlang_PShell">PowerShell</item>
+	<item id="devlang_Python">Python</item>
+	<item id="devlang_SQL">SQL</item>
+	<item id="devlang_VBScript">Visual Basic Script</item>
+	<item id="devlang_VisualBasicAndCSharp">Visual Basic 和 C#</item>
+	<item id="devlang_XML">XML</item>
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword"><span class="keyword">null</span> (在 Visual Basic 中为 <span class="keyword">Nothing</span>)</item>
+	<item id="devlang_staticKeyword"><span class="keyword">static</span> (在 Visual Basic 中为 <span class="keyword">Shared</span>)</item>
+	<item id="devlang_virtualKeyword"><span class="keyword">virtual</span> (在 Visual Basic 中为 <span class="keyword">Overridable</span>)</item>
+	<item id="devlang_trueKeyword"><span class="keyword">true</span> (在 Visual Basic 中为 <span class="keyword">True</span>)</item>
+	<item id="devlang_falseKeyword"><span class="keyword">false</span> (在 Visual Basic 中为 <span class="keyword">False</span>)</item>
+	<item id="devlang_abstractKeyword"><span class="keyword">abstract</span> (在 Visual Basic 中为 <span class="keyword">MustInherit</span>)</item>
+	<item id="devlang_sealedKeyword"><span class="keyword">sealed</span> (在 Visual Basic 中为 <span class="keyword">NotInheritable</span>)</item>
+	<item id="devlang_asyncKeyword"><span class="keyword">async</span> (在 Visual Basic 中为 <span class="keyword">Async</span>)</item>
+	<item id="devlang_awaitKeyword"><span class="keyword">await</span> (在 Visual Basic 中为 <span class="keyword">Await</span>)</item>
+	<item id="devlang_asyncAwaitKeyword"><span class="keyword">async</span>/<span class="keyword">await</span> (在 Visual Basic 中为 <span class="keyword">Async</span>/<span class="keyword">Await</span>)</item>
+
+	<!-- Development language metadata values for languages without a syntax generator -->
+	<item id="metaLang_batch">Batch Script</item>
+	<item id="metaLang_HTML">HTML</item>
+	<item id="metaLang_PShell">PowerShell</item>
+	<item id="metaLang_Python">Python</item>
+	<item id="metaLang_SQL">SQL</item>
+	<item id="metaLang_VBScript">VBScript</item>
+	<item id="metaLang_VisualBasicAndCSharp">VB 和 C#</item>
+	<item id="metaLang_XML">XML</item>
+	
+    <!-- Alt text for images -->
+    <item id="altText_CodeExample">代码示例</item>
+    <item id="altText_ExplicitInterface">显式接口实现</item>
+    <item id="altText_privAttachedEvent">私有附加事件</item>
+    <item id="altText_privClass">私有类</item>
+    <item id="altText_privConstructor">私有构造函数</item>
+    <item id="altText_privDelegate">私有委托</item>
+    <item id="altText_privEnumeration">私有枚举</item>
+    <item id="altText_privEvent">私有事件</item>
+    <item id="altText_privExtension">私有扩展器方法</item>
+    <item id="altText_privField">私有字段</item>
+    <item id="altText_privInterface">私有接口</item>
+    <item id="altText_privMethod">私有方法</item>
+    <item id="altText_privOperator">私有运算符</item>
+    <item id="altText_privProperty">私有属性</item>
+    <item id="altText_privStructure">私有结构</item>
+    <item id="altText_privAttachedProperty">私有附加属性</item>
+    <item id="altText_protAttachedEvent">受保护的附加事件</item>
+    <item id="altText_protAttachedProperty">受保护的附加属性</item>
+    <item id="altText_protClass">受保护的类</item>
+    <item id="altText_protConstructor">受保护的构造函数</item>
+    <item id="altText_protDelegate">受保护的委托</item>
+    <item id="altText_protEnumeration">受保护的枚举</item>
+    <item id="altText_protEvent">受保护的事件</item>
+    <item id="altText_protExtension">受保护的扩展器方法</item>
+    <item id="altText_protField">受保护的字段</item>
+    <item id="altText_protInterface">受保护的接口</item>
+    <item id="altText_protMethod">受保护的方法</item>
+    <item id="altText_protOperator">受保护的运算符</item>
+    <item id="altText_protProperty">受保护的属性</item>
+    <item id="altText_protStructure">受保护的结构</item>
+    <item id="altText_pubAttachedEvent">公共的附加事件</item>
+    <item id="altText_pubAttachedProperty">公共的附加属性</item>
+    <item id="altText_pubClass">公共类</item>
+    <item id="altText_pubConstructor">公共构造函数</item>
+    <item id="altText_pubDelegate">公共委托</item>
+    <item id="altText_pubEnumeration">公共枚举</item>
+    <item id="altText_pubEvent">公共事件</item>
+    <item id="altText_pubExtension">公共扩展器方法</item>
+    <item id="altText_pubField">公共字段</item>
+    <item id="altText_pubInterface">公共接口</item>
+    <item id="altText_pubMethod">公共方法</item>
+    <item id="altText_pubOperator">公共运算符</item>
+    <item id="altText_pubProperty">公共属性</item>
+    <item id="altText_pubStructure">公共结构</item>
+    <item id="altText_Static">静态成员</item>
+
+	<!-- Alert titles -->
+	<item id="alert_title_tip"><b>提示：</b></item>
+	<item id="alert_title_caution"><b>警告：</b></item>
+	<item id="alert_title_security"><b>安全性事项：</b></item>
+	<item id="alert_title_note"><b>备注：</b></item>
+	<item id="alert_title_important"><b>重要事项</b></item>
+	<item id="alert_title_visualBasic"><b>Visual Basic备注：</b></item>
+	<item id="alert_title_visualC#"><b>C# 备注：</b></item>
+	<item id="alert_title_visualC++"><b>C++ 备注：</b></item>
+	<item id="alert_title_visualJ#"><b>J# 备注：</b></item>
+	<item id="alert_title_todo">To Do</item>
+	<item id="text_NotesForImplementers">实现时注意</item>
+	<item id="text_NotesForCallers">调用时注意</item>
+	<item id="text_NotesForInheritors">继承时注意</item>
+
+	<!-- Alert alt text -->
+	<item id="alert_altText_tip">提示</item>
+	<item id="alert_altText_caution">警告</item>
+	<item id="alert_altText_security">安全性事项</item>
+	<item id="alert_altText_note">备注</item>
+	<item id="alert_altText_important">重要事项</item>
+	<item id="alert_altText_visualBasic">Visual Basic备注</item>
+	<item id="alert_altText_visualC#">C#备注</item>
+	<item id="alert_altText_visualC++">C++备注</item>
+	<item id="alert_altText_visualJ#">J#备注</item>	
+	<item id="alert_altText_todo">To Do</item>
+
+		<!-- Index metadata entries -->
+    <item id="indexEntry_root">命名空间</item>
+    <item id="indexEntry_namespace">{0} 命名空间</item>
+    <item id="indexEntry_class">{0} 类</item>
+    <item id="indexEntry_structure">{0} 结构</item>
+    <item id="indexEntry_interface">{0} 接口</item>
+    <item id="indexEntry_delegate">{0} 委托</item>
+    <item id="indexEntry_enumeration">{0} 枚举</item>
+    <item id="indexEntry_enumerationMember">{0} 枚举成员</item>
+    <item id="indexEntry_members">{0}, 所有成员</item>
+    <item id="indexEntry_methods">{0}, 方法</item>
+    <!-- Index entry for operator list topic that has [operators + no type conversions] -->
+    <item id="indexEntry_operators">{0}, 运算符</item>
+    <!-- Index entry for operator list topic that has [operators + type conversions] -->
+    <item id="indexEntry_operatorsAndTypeConversions">{0}，运算符与类型转换</item>
+    <!-- Index entry for operator list topic that has [no operators + type conversions] -->
+    <item id="indexEntry_typeConversions">{0}，类型转换</item>
+    <!-- Index entries for op_explicit and op_implicit members -->
+    <item id="indexEntry_conversionOperator">{0} 转换</item>
+    <item id="indexEntry_properties">{0}, 属性</item>
+    <item id="indexEntry_fields">{0}, 字段</item>
+    <item id="indexEntry_events">{0}, 事件</item>
+    <item id="indexEntry_attachedProperties">{0}, 附加属性</item>
+    <item id="indexEntry_attachedEvents">{0}, 附加事件</item>
+    <item id="indexEntry_constructors">{0}, 构造函数</item>
+    <item id="indexEntry_constructor">{0}, 构造函数</item>
+    <item id="indexEntry_constructorType">{0} 构造函数</item>
+    <item id="indexEntry_method">{0} 方法</item>
+    <item id="indexEntry_property">{0} 属性</item>
+    <item id="indexEntry_event">{0} 事件</item>
+    <item id="indexEntry_field">{0} 字段</item>
+    <item id="indexEntry_operator">{0} 运算符</item>
+    <item id="indexEntry_attachedProperty">{0} 附加属性</item>
+    <item id="indexEntry_attachedEvent">{0} 附加事件</item>
+    <item id="indexEntry_methodExplicit">{0} 显式实现的方法</item>
+    <item id="indexEntry_propertyExplicit">{0} 显式实现的属性</item>
+    <item id="indexEntry_eventExplicit">{0} 显式实现的事件</item>
+    <item id="indexEntry_fieldExplicit">{0} 显式实现的字段</item>
+
+	  <!-- Versions section (version builder plug-in) -->
+    <item id="supportedIn_1">支持版本：{0}</item>
+    <item id="supportedIn_2">支持版本：{0}, {1}</item>
+    <item id="supportedIn_3">支持版本：{0}, {1}, {2}</item>
+    <item id="supportedIn_4">支持版本：{0}, {1}, {2}, {3}</item>
+    <item id="supportedIn_5">支持版本：{0}, {1}, {2}, {3}, {4}</item>
+    <item id="supportedIn_6">支持版本：{0}, {1}, {2}, {3}, {4}, {5}</item>
+    <item id="supportedIn_7">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}</item>
+    <item id="supportedIn_8">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}</item>
+    <item id="supportedIn_9">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}</item>
+    <item id="supportedIn_10">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}</item>
+    <item id="supportedIn_11">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}</item>
+    <item id="supportedIn_12">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}</item>
+    <item id="supportedIn_13">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}</item>
+    <item id="supportedIn_14">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}</item>
+    <item id="supportedIn_15">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}</item>
+    <item id="supportedIn_16">支持版本：{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}</item>
+    <item id="obsoleteWarning">已在 {0} 中已过时 (编译器警告)</item>
+    <item id="obsoleteError">已在 {0} 及后续版本中过时 (无法编译)</item>
+	
+		<!-- Show Missing Component messages -->
+    <item id="SMCAutoDocConstructor">初始化 <referenceLink target="T:{0}" /> 类的一个新实例</item>
+    <item id="SMCAutoDocStaticConstructor">初始化 <referenceLink target="T:{0}" /> 类的静态字段</item>
+    <item id="SMCAutoDocDispose">释放被 <referenceLink target="T:{0}" /> 使用的所有资源</item>
+    <item id="SMCAutoDocDisposeBool">释放被 <referenceLink target="T:{0}" /> 使用的非托管资源，并且是否托管资源（可选）</item>
+    <item id="SMCAutoDocDisposeParam">为 true 则同时释放托管资源和非托管资源；为 false 则只释放非托管资源</item>
+    <item id="SMCMissingTag"><p class="missing">[缺少 "{1}" 的 &lt;{0}&gt; 文档]</p></item>
+    <item id="SMCMissingParamTag"><p class="missing">[缺少 "{2}" 的 &lt;{0} name="{1}"/&gt; 文档]</p></item>
+    <item id="SMCMissingIncludeTarget"><p class="missing">[在 “{0}” 中缺少 &lt;include&gt; 目标文档。文件：“{1}” 路径：“{2}”]</p></item>
+</content>

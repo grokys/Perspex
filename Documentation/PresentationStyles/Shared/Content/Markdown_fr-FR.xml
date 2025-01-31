@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- French translations contributed by Stéphane Gagnon -->
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">une référence null (`Nothing` en Visual Basic)</item>
+	<item id="devlang_staticKeyword">`static` (`Shared` en Visual Basic)</item>
+	<item id="devlang_virtualKeyword">`virtual` (`Overridable` en Visual Basic)</item>
+	<item id="devlang_trueKeyword">`true` (`True` en Visual Basic)</item>
+	<item id="devlang_falseKeyword">`false` (`False` en Visual Basic)</item>
+	<item id="devlang_abstractKeyword">`abstract` (`MustInherit` en Visual Basic)</item>
+  <item id="devlang_sealedKeyword">`sealed` (`NotInheritable` en Visual Basic)</item>
+	<item id="devlang_asyncKeyword">`async` (`Async` en Visual Basic)</item>
+	<item id="devlang_awaitKeyword">`await` (`Await` en Visual Basic)</item>
+	<item id="devlang_asyncAwaitKeyword">`async`/`await` (`Async`/`Await` en Visual Basic)</item>
+
+  <!-- Show Missing Component messages -->
+  <item id="SMCMissingTag">\[Documentation manquante &lt;{0}&gt; pour "{1}"\]</item>
+  <item id="SMCMissingParamTag">\[Documentation manquante &lt;{0} name="{1}"/&gt; pour "{2}"\]</item>
+  <item id="SMCMissingIncludeTarget">\[Source de documentation manquante &lt;include&gt; dans '{0}'.  Fichier: '{1}' Chemin: '{2}'\]</item>
+
+</content>

@@ -1,0 +1,1616 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<highlight needs-build="yes" save-build="no">
+	<!-- Map language ID variations to language IDs in this file. "from" should be lowercase.
+			 "to" should match an ID on one of the language elements. -->
+	<map>
+		<language from="c#" to="cs"/>
+		<language from="csharp" to="cs"/>
+		<language from="c++" to="cpp"/>
+		<language from="cplusplus" to="cpp"/>
+		<language from="cpp#" to="cpp"/>
+		<language from="f#" to="fs"/>
+		<language from="fsharp" to="fs"/>
+		<language from="fsscript" to="fs"/>
+		<language from="j#" to="jsharp"/>
+		<language from="ecmascript" to="javascript"/>
+		<language from="js" to="javascript"/>
+		<language from="jscript" to="jscriptnet"/>
+		<language from="jscript#" to="jscriptnet"/>
+		<language from="jscript.net" to="jscriptnet"/>
+		<language from="vb" to="vbnet"/>
+		<language from="vb#" to="vbnet"/>
+		<language from="vb.net" to="vbnet"/>
+		<language from="vbs" to="vbscript"/>
+		<language from="htm" to="xml"/>
+		<language from="html" to="xml"/>
+		<language from="aspnet" to="xml"/>
+		<language from="asp.net" to="xml"/>
+		<language from="xsl" to="xml"/>
+		<language from="sql server" to="sql"/>
+		<language from="sqlserver" to="sql"/>
+		<language from="powershell" to="pshell"/>
+		<language from="ps1" to="pshell"/>
+		<language from="py" to="python" />
+		<language from="batch" to="bat" />
+	</map>
+	<!-- families of keywords -->
+	<keywordlists>
+		<!-- Common C-like language keywords (C, C++, C#) -->
+		<keywordlist id="kwclang-keywords">
+			<kw>break</kw>
+			<kw>case</kw>
+			<kw>char</kw>
+			<kw>const</kw>
+			<kw>continue</kw>
+			<kw>default</kw>
+			<kw>do</kw>
+			<kw>double</kw>
+			<kw>else</kw>
+			<kw>enum</kw>
+			<kw>extern</kw>
+			<kw>float</kw>
+			<kw>for</kw>
+			<kw>goto</kw>
+			<kw>if</kw>
+			<kw>int</kw>
+			<kw>long</kw>
+			<kw>return</kw>
+			<kw>short</kw>
+			<kw>sizeof</kw>
+			<kw>static</kw>
+			<kw>struct</kw>
+			<kw>switch</kw>
+			<kw>void</kw>
+			<kw>volatile</kw>
+			<kw>while</kw>
+		</keywordlist>
+		<!-- Common C++-like object oriented language keywords (C++, C#) -->
+		<keywordlist id="kwclangoo-keywords">
+			<kw>bool</kw>
+			<kw>catch</kw>
+			<kw>class</kw>
+			<kw>explicit</kw>
+			<kw>false</kw>
+			<kw>namespace</kw>
+			<kw>new</kw>
+			<kw>operator</kw>
+			<kw>private</kw>
+			<kw>protected</kw>
+			<kw>public</kw>
+			<kw>this</kw>
+			<kw>throw</kw>
+			<kw>true</kw>
+			<kw>try</kw>
+			<kw>using</kw>
+			<kw>virtual</kw>
+		</keywordlist>
+		<!-- C keywords -->
+		<keywordlist id="kwc-keywords">
+			<kw>auto</kw>
+			<kw>register</kw>
+			<kw>signed</kw>
+			<kw>typedef</kw>
+			<kw>union</kw>
+			<kw>unsigned</kw>
+		</keywordlist>
+		<!-- C++ keywords -->
+		<keywordlist id="kwcpp-keywords">
+			<kw>asm</kw>
+			<kw>const_cast</kw>
+			<kw>delete</kw>
+			<kw>dynamic_cast</kw>
+			<kw>friend</kw>
+			<kw>inline</kw>
+			<kw>mutable</kw>
+			<kw>reinterpret_cast</kw>
+			<kw>static_cast</kw>
+			<kw>template</kw>
+			<kw>typeid</kw>
+			<kw>typename</kw>
+			<kw>wchar_t</kw>
+		</keywordlist>
+		<!-- STL keywords -->
+		<keywordlist id="kwcpp-stl" pre="(std\s*::\s*){0,1}">
+			<kw>vector</kw>
+			<kw>set</kw>
+			<kw>map</kw>
+			<kw>list</kw>
+			<kw>stack</kw>
+			<kw>deque</kw>
+			<kw>multimap</kw>
+			<kw>multiset</kw>
+		</keywordlist>
+		<!-- Managed C++ keywords -->
+		<keywordlist id="kwcpp-managed">
+			<kw>abstract</kw>
+			<kw>array</kw>
+			<kw>delegate</kw>
+			<kw>each</kw>
+			<kw>event</kw>
+			<kw>finally</kw>
+			<kw>gcnew</kw>
+			<kw>generic</kw>
+			<kw>interface</kw>
+			<kw>interior_ptr</kw>
+			<kw>literal</kw>
+			<kw>nullptr</kw>
+			<kw>override</kw>
+			<kw>pin_ptr</kw>
+			<kw>property</kw>
+			<kw>ref</kw>
+			<kw>safe_cast</kw>
+			<kw>sealed</kw>
+			<kw>typeid</kw>
+			<kw>value</kw>
+			<kw>where</kw>
+		</keywordlist>
+		<!-- C# keywords -->
+		<keywordlist id="kwcs-keywords">
+			<kw>abstract</kw>
+			<kw>as</kw>
+			<kw>ascending</kw>
+			<kw>async</kw>
+			<kw>await</kw>
+			<kw>base</kw>
+			<kw>byte</kw>
+			<kw>checked</kw>
+			<kw>decimal</kw>
+			<kw>delegate</kw>
+			<kw>descending</kw>
+			<kw>dynamic</kw>
+			<kw>equals</kw>
+			<kw>event</kw>
+			<kw>finally</kw>
+			<kw>fixed</kw>
+			<kw>foreach</kw>
+			<kw>from</kw>
+			<kw>get</kw>
+			<kw>global</kw>
+			<kw>group</kw>
+			<kw>implicit</kw>
+			<kw>in</kw>
+			<kw>interface</kw>
+			<kw>internal</kw>
+			<kw>into</kw>
+			<kw>is</kw>
+			<kw>join</kw>
+			<kw>let</kw>
+			<kw>lock</kw>
+			<kw>null</kw>
+			<kw>object</kw>
+			<kw>on</kw>
+			<kw>orderby</kw>
+			<kw>out</kw>
+			<kw>override</kw>
+			<kw>params</kw>
+			<kw>partial</kw>
+			<kw>readonly</kw>
+			<kw>ref</kw>
+			<kw>sbyte</kw>
+			<kw>sealed</kw>
+			<kw>select</kw>
+			<kw>set</kw>
+			<kw>stackalloc</kw>
+			<kw>string</kw>
+			<kw>typeof</kw>
+			<kw>uint</kw>
+			<kw>ulong</kw>
+			<kw>unchecked</kw>
+			<kw>unsafe</kw>
+			<kw>ushort</kw>
+			<kw>value</kw>
+			<kw>var</kw>
+			<kw>where</kw>
+			<kw>yield</kw>
+		</keywordlist>
+		<!-- Common VB-like language keywords (VB.NET, VBScript) -->
+		<keywordlist id="kwvblang-keywords">
+			<kw>And</kw>
+			<kw>CBool</kw>
+			<kw>CByte</kw>
+			<kw>CDate</kw>
+			<kw>CDbl</kw>
+			<kw>CInt</kw>
+			<kw>CLng</kw>
+			<kw>CSng</kw>
+			<kw>CStr</kw>
+			<kw>Call</kw>
+			<kw>Case</kw>
+			<kw>Class</kw>
+			<kw>Const</kw>
+			<kw>Date</kw>
+			<kw>Dim</kw>
+			<kw>Do</kw>
+			<kw>Each</kw>
+			<kw>Else</kw>
+			<kw>End</kw>
+			<kw>Erase</kw>
+			<kw>Error</kw>
+			<kw>Exit</kw>
+			<kw>False</kw>
+			<kw>For</kw>
+			<kw>Function</kw>
+			<kw>Get</kw>
+			<kw>If</kw>
+			<kw>Is</kw>
+			<kw>Loop</kw>
+			<kw>Mod</kw>
+			<kw>Next</kw>
+			<kw>Not</kw>
+			<kw>Nothing</kw>
+			<kw>On</kw>
+			<kw>Option</kw>
+			<kw>Or</kw>
+			<kw>Private</kw>
+			<kw>Property</kw>
+			<kw>Public</kw>
+			<kw>ReDim</kw>
+			<kw>Resume</kw>
+			<kw>Select</kw>
+			<kw>Set</kw>
+			<kw>Step</kw>
+			<kw>Stop</kw>
+			<kw>String</kw>
+			<kw>Sub</kw>
+			<kw>Then</kw>
+			<kw>To</kw>
+			<kw>True</kw>
+			<kw>While</kw>
+			<kw>With</kw>
+			<kw>Xor</kw>
+		</keywordlist>
+		<!-- VB.NET language keywords -->
+		<keywordlist id="kwvbnet-keywords">
+			<kw>AddHandler</kw>
+			<kw>AddressOf</kw>
+			<kw>Alias</kw>
+			<kw>AndAlso</kw>
+			<kw>As</kw>
+			<kw>Async</kw>
+			<kw>Await</kw>
+			<kw>Boolean</kw>
+			<kw>ByRef</kw>
+			<kw>ByVal</kw>
+			<kw>Byte</kw>
+			<kw>CChar</kw>
+			<kw>CDec</kw>
+			<kw>CObj</kw>
+			<kw>CSByte</kw>
+			<kw>CShort</kw>
+			<kw>CType</kw>
+			<kw>CUInt</kw>
+			<kw>CULng</kw>
+			<kw>CUShort</kw>
+			<kw>Catch</kw>
+			<kw>Char</kw>
+			<kw>Continue</kw>
+			<kw>Decimal</kw>
+			<kw>Declare</kw>
+			<kw>Default</kw>
+			<kw>Delegate</kw>
+			<kw>DirectCast</kw>
+			<kw>Double</kw>
+			<kw>ElseIf</kw>
+			<kw>Enum</kw>
+			<kw>Event</kw>
+			<kw>Finally</kw>
+			<kw>Friend</kw>
+			<kw>GetType</kw>
+			<kw>Global</kw>
+			<kw>GoTo</kw>
+			<kw>Handles</kw>
+			<kw>Implements</kw>
+			<kw>Imports</kw>
+			<kw>In</kw>
+			<kw>Inherits</kw>
+			<kw>Integer</kw>
+			<kw>Interface</kw>
+			<kw>IsNot</kw>
+			<kw>Lib</kw>
+			<kw>Like</kw>
+			<kw>Long</kw>
+			<kw>Me</kw>
+			<kw>Module</kw>
+			<kw>MustInherit</kw>
+			<kw>MustOverride</kw>
+			<kw>MyBase</kw>
+			<kw>MyClass</kw>
+			<kw>Namespace</kw>
+			<kw>Narrowing</kw>
+			<kw>New</kw>
+			<kw>NotInheritable</kw>
+			<kw>NotOverridable</kw>
+			<kw>Object</kw>
+			<kw>Of</kw>
+			<kw>Operator</kw>
+			<kw>Optional</kw>
+			<kw>OrElse</kw>
+			<kw>Overloads</kw>
+			<kw>Overridable</kw>
+			<kw>Overrides</kw>
+			<kw>ParamArray</kw>
+			<kw>Partial</kw>
+			<kw>Protected</kw>
+			<kw>RaiseEvent</kw>
+			<kw>ReadOnly</kw>
+			<kw>RemoveHandler</kw>
+			<kw>Return</kw>
+			<kw>SByte</kw>
+			<kw>Shadows</kw>
+			<kw>Shared</kw>
+			<kw>Short</kw>
+			<kw>Single</kw>
+			<kw>Static</kw>
+			<kw>Structure</kw>
+			<kw>SyncLock</kw>
+			<kw>Throw</kw>
+			<kw>Try</kw>
+			<kw>TryCast</kw>
+			<kw>TypeOf</kw>
+			<kw>UInteger</kw>
+			<kw>ULong</kw>
+			<kw>UShort</kw>
+			<kw>Using</kw>
+			<kw>When</kw>
+			<kw>Widening</kw>
+			<kw>WithEvents</kw>
+			<kw>WriteOnly</kw>
+		</keywordlist>
+		<!-- VBScript keywords -->
+		<keywordlist id="kwvbscript-statements">
+			<kw>Abs</kw>
+			<kw>Array</kw>
+			<kw>Asc</kw>
+			<kw>Atn</kw>
+			<kw>CCur</kw>
+			<kw>Chr</kw>
+			<kw>Clear</kw>
+			<kw>Cos</kw>
+			<kw>CreateObject</kw>
+			<kw>DateAdd</kw>
+			<kw>DateDiff</kw>
+			<kw>DatePart</kw>
+			<kw>DateSerial</kw>
+			<kw>DateValue</kw>
+			<kw>Day</kw>
+			<kw>Derived</kw>
+			<kw>Empty</kw>
+			<kw>Escape</kw>
+			<kw>Eval</kw>
+			<kw>Execute</kw>
+			<kw>ExecuteGlobal</kw>
+			<kw>Exp</kw>
+			<kw>Explicit</kw>
+			<kw>Filter</kw>
+			<kw>Fix</kw>
+			<kw>FormatCurrency</kw>
+			<kw>FormatDateTime</kw>
+			<kw>FormatNumber</kw>
+			<kw>FormatPercent</kw>
+			<kw>GetLocale</kw>
+			<kw>GetObject</kw>
+			<kw>GetRef</kw>
+			<kw>Hex</kw>
+			<kw>Hour</kw>
+			<kw>InStr</kw>
+			<kw>InStrRev</kw>
+			<kw>InputBox</kw>
+			<kw>Int</kw>
+			<kw>IsArray</kw>
+			<kw>IsDate</kw>
+			<kw>IsEmpty</kw>
+			<kw>IsNull</kw>
+			<kw>IsNumeric</kw>
+			<kw>IsObject</kw>
+			<kw>Join</kw>
+			<kw>LBound</kw>
+			<kw>LCase</kw>
+			<kw>LTrim</kw>
+			<kw>Left</kw>
+			<kw>Len</kw>
+			<kw>Let</kw>
+			<kw>LoadPicture</kw>
+			<kw>Log</kw>
+			<kw>Math</kw>
+			<kw>Maths</kw>
+			<kw>Mid</kw>
+			<kw>Minute</kw>
+			<kw>Month</kw>
+			<kw>MonthName</kw>
+			<kw>MsgBox</kw>
+			<kw>Now</kw>
+			<kw>Null</kw>
+			<kw>Oct</kw>
+			<kw>RGB</kw>
+			<kw>RTrim</kw>
+			<kw>Raise</kw>
+			<kw>Randomize</kw>
+			<kw>Replace</kw>
+			<kw>Right</kw>
+			<kw>Rnd</kw>
+			<kw>Round</kw>
+			<kw>ScriptEngine</kw>
+			<kw>ScriptEngineBuildVersion</kw>
+			<kw>ScriptEngineMajorVersion</kw>
+			<kw>ScriptEngineMinorVersion</kw>
+			<kw>Second</kw>
+			<kw>SetLocale</kw>
+			<kw>Sgn</kw>
+			<kw>Sin</kw>
+			<kw>Space</kw>
+			<kw>Split</kw>
+			<kw>Sqr</kw>
+			<kw>StrComp</kw>
+			<kw>StrReverse</kw>
+			<kw>Tan</kw>
+			<kw>Test</kw>
+			<kw>Time</kw>
+			<kw>TimeSerial</kw>
+			<kw>TimeValue</kw>
+			<kw>Timer</kw>
+			<kw>Trim</kw>
+			<kw>TypeName</kw>
+			<kw>UBound</kw>
+			<kw>UCase</kw>
+			<kw>Unescape</kw>
+			<kw>VarType</kw>
+			<kw>Weekday</kw>
+			<kw>WeekdayName</kw>
+			<kw>Wend</kw>
+			<kw>Write</kw>
+			<kw>WriteLine</kw>
+			<kw>Year</kw>
+		</keywordlist>
+		<!-- JavaScript keywords -->
+		<keywordlist id="kwjavascript-statements">
+			<kw>break</kw>
+			<kw>case</kw>
+			<kw>catch</kw>
+			<kw>const</kw>
+			<kw>continue</kw>
+			<kw>debugger</kw>
+			<kw>default</kw>
+			<kw>delete</kw>
+			<kw>do</kw>
+			<kw>each</kw>
+			<kw>else</kw>
+			<kw>export</kw>
+			<kw>false</kw>
+			<kw>for</kw>
+			<kw>function</kw>
+			<kw>get</kw>
+			<kw>if</kw>
+			<kw>in</kw>
+			<kw>instanceof</kw>
+			<kw>let</kw>
+			<kw>new</kw>
+			<kw>null</kw>
+			<kw>return</kw>
+			<kw>set</kw>
+			<kw>switch</kw>
+			<kw>this</kw>
+			<kw>throw</kw>
+			<kw>true</kw>
+			<kw>try</kw>
+			<kw>typeof</kw>
+			<kw>var</kw>
+			<kw>void</kw>
+			<kw>while</kw>
+			<kw>with</kw>
+			<kw>yield</kw>
+		</keywordlist>
+		<!-- JavaScript function keywords -->
+		<keywordlist id="kwjavascript-functions">
+			<kw>arguments</kw>
+			<kw>decodeURI</kw>
+			<kw>decodeURIComponent</kw>
+			<kw>encodeURI</kw>
+			<kw>encodeURIComponent</kw>
+			<kw>eval</kw>
+			<kw>isFinite</kw>
+			<kw>isNaN</kw>
+			<kw>parseFloat</kw>
+			<kw>parseInt</kw>
+		</keywordlist>
+		<!-- JavaScript object keywords -->
+		<keywordlist id="kwjavascript-objects">
+			<kw>ActiveXObject</kw>
+			<kw>Array</kw>
+			<kw>Boolean</kw>
+			<kw>Date</kw>
+			<kw>Debug</kw>
+			<kw>Enumerator</kw>
+			<kw>Error</kw>
+			<kw>EvalError</kw>
+			<kw>Function</kw>
+			<kw>Global</kw>
+			<kw>Math</kw>
+			<kw>Number</kw>
+			<kw>Object</kw>
+			<kw>RangeError</kw>
+			<kw>ReferenceError</kw>
+			<kw>RegExp</kw>
+			<kw>String</kw>
+			<kw>SyntaxError</kw>
+			<kw>TypeError</kw>
+			<kw>URIError</kw>
+			<kw>VBArray</kw>
+		</keywordlist>
+		<!-- JScript.NET keywords -->
+		<keywordlist id="kwjscriptnet-statements">
+			<kw>abstract</kw>
+			<kw>boolean</kw>
+			<kw>byte</kw>
+			<kw>char</kw>
+			<kw>class</kw>
+			<kw>decimal</kw>
+			<kw>double</kw>
+			<kw>enum</kw>
+			<kw>extends</kw>
+			<kw>final</kw>
+			<kw>finally</kw>
+			<kw>float</kw>
+			<kw>implements</kw>
+			<kw>import</kw>
+			<kw>int</kw>
+			<kw>interface</kw>
+			<kw>internal</kw>
+			<kw>long</kw>
+			<kw>package</kw>
+			<kw>private</kw>
+			<kw>protected</kw>
+			<kw>protected</kw>
+			<kw>public</kw>
+			<kw>sbyte</kw>
+			<kw>short</kw>
+			<kw>static</kw>
+			<kw>super</kw>
+			<kw>uint</kw>
+			<kw>ulong</kw>
+			<kw>ushort</kw>
+		</keywordlist>
+		<!-- J# keywords -->
+		<keywordlist id="kwjsharp">
+			<kw>abstract</kw>
+			<kw>boolean</kw>
+			<kw>break</kw>
+			<kw>byte</kw>
+			<kw>case</kw>
+			<kw>catch</kw>
+			<kw>char</kw>
+			<kw>class</kw>
+			<kw>const</kw>
+			<kw>continue</kw>
+			<kw>default</kw>
+			<kw>delegate</kw>
+			<kw>do</kw>
+			<kw>double</kw>
+			<kw>else</kw>
+			<kw>enum</kw>
+			<kw>extends</kw>
+			<kw>false</kw>
+			<kw>final</kw>
+			<kw>finally</kw>
+			<kw>float</kw>
+			<kw>for</kw>
+			<kw>if</kw>
+			<kw>implements</kw>
+			<kw>import</kw>
+			<kw>instanceof</kw>
+			<kw>int</kw>
+			<kw>interface</kw>
+			<kw>long</kw>
+			<kw>multicast</kw>
+			<kw>native</kw>
+			<kw>new</kw>
+			<kw>null</kw>
+			<kw>package</kw>
+			<kw>private</kw>
+			<kw>protected</kw>
+			<kw>public</kw>
+			<kw>return</kw>
+			<kw>short</kw>
+			<kw>static</kw>
+			<kw>strictfp</kw>
+			<kw>super</kw>
+			<kw>switch</kw>
+			<kw>synchronized</kw>
+			<kw>this</kw>
+			<kw>throw</kw>
+			<kw>throws</kw>
+			<kw>transient</kw>
+			<kw>true</kw>
+			<kw>try</kw>
+			<kw>ubyte</kw>
+			<kw>void</kw>
+			<kw>volatile</kw>
+			<kw>while</kw>
+		</keywordlist>
+		<!-- SQL keywords -->
+		<keywordlist id="kwsql-keywords">
+			<kw>ADD</kw>
+			<kw>ALL</kw>
+			<kw>ALTER</kw>
+			<kw>AND</kw>
+			<kw>ANY</kw>
+			<kw>AS</kw>
+			<kw>ASC</kw>
+			<kw>AUTHORIZATION</kw>
+			<kw>BACKUP</kw>
+			<kw>BEGIN</kw>
+			<kw>BETWEEN</kw>
+			<kw>BREAK</kw>
+			<kw>BROWSE</kw>
+			<kw>BULK</kw>
+			<kw>BY</kw>
+			<kw>CASCADE</kw>
+			<kw>CASE</kw>
+			<kw>CHECK</kw>
+			<kw>CHECKPOINT</kw>
+			<kw>CLOSE</kw>
+			<kw>CLUSTERED</kw>
+			<kw>COALESCE</kw>
+			<kw>COLLATE</kw>
+			<kw>COLUMN</kw>
+			<kw>COMMIT</kw>
+			<kw>COMPUTE</kw>
+			<kw>CONSTRAINT</kw>
+			<kw>CONTAINS</kw>
+			<kw>CONTAINSTABLE</kw>
+			<kw>CONTINUE</kw>
+			<kw>CONVERT</kw>
+			<kw>CREATE</kw>
+			<kw>CROSS</kw>
+			<kw>CURRENT</kw>
+			<kw>CURRENT_DATE</kw>
+			<kw>CURRENT_TIME</kw>
+			<kw>CURRENT_TIMESTAMP</kw>
+			<kw>CURRENT_USER</kw>
+			<kw>CURSOR</kw>
+			<kw>DATABASE</kw>
+			<kw>DBCC</kw>
+			<kw>DEALLOCATE</kw>
+			<kw>DECLARE</kw>
+			<kw>DEFAULT</kw>
+			<kw>DELETE</kw>
+			<kw>DENY</kw>
+			<kw>DESC</kw>
+			<kw>DISK</kw>
+			<kw>DISTINCT</kw>
+			<kw>DISTRIBUTED</kw>
+			<kw>DOUBLE</kw>
+			<kw>DROP</kw>
+			<kw>DUMMY</kw>
+			<kw>DUMP</kw>
+			<kw>ELSE</kw>
+			<kw>END</kw>
+			<kw>ERRLVL</kw>
+			<kw>ESCAPE</kw>
+			<kw>EXCEPT</kw>
+			<kw>EXEC</kw>
+			<kw>EXECUTE</kw>
+			<kw>EXISTS</kw>
+			<kw>EXIT</kw>
+			<kw>FETCH</kw>
+			<kw>FILE</kw>
+			<kw>FILLFACTOR</kw>
+			<kw>FOR</kw>
+			<kw>FOREIGN</kw>
+			<kw>FREETEXT</kw>
+			<kw>FREETEXTTABLE</kw>
+			<kw>FROM</kw>
+			<kw>FULL</kw>
+			<kw>FUNCTION</kw>
+			<kw>GOTO</kw>
+			<kw>GRANT</kw>
+			<kw>GROUP</kw>
+			<kw>HAVING</kw>
+			<kw>HOLDLOCK</kw>
+			<kw>IDENTITY</kw>
+			<kw>IDENTITY_INSERT</kw>
+			<kw>IDENTITYCOL</kw>
+			<kw>IF</kw>
+			<kw>IN</kw>
+			<kw>INDEX</kw>
+			<kw>INNER</kw>
+			<kw>INSERT</kw>
+			<kw>INTERSECT</kw>
+			<kw>INTO</kw>
+			<kw>IS</kw>
+			<kw>JOIN</kw>
+			<kw>KEY</kw>
+			<kw>KILL</kw>
+			<kw>LEFT</kw>
+			<kw>LIKE</kw>
+			<kw>LINENO</kw>
+			<kw>LOAD</kw>
+			<kw>NATIONAL</kw>
+			<kw>NOCHECK</kw>
+			<kw>NONCLUSTERED</kw>
+			<kw>NOT</kw>
+			<kw>NULL</kw>
+			<kw>NULLIF</kw>
+			<kw>OF</kw>
+			<kw>OFF</kw>
+			<kw>OFFSETS</kw>
+			<kw>ON</kw>
+			<kw>OPEN</kw>
+			<kw>OPENDATASOURCE</kw>
+			<kw>OPENQUERY</kw>
+			<kw>OPENROWSET</kw>
+			<kw>OPENXML</kw>
+			<kw>OPTION</kw>
+			<kw>OR</kw>
+			<kw>ORDER</kw>
+			<kw>OUTER</kw>
+			<kw>OVER</kw>
+			<kw>PERCENT</kw>
+			<kw>PLAN</kw>
+			<kw>PRECISION</kw>
+			<kw>PRIMARY</kw>
+			<kw>PRINT</kw>
+			<kw>PROC</kw>
+			<kw>PROCEDURE</kw>
+			<kw>PUBLIC</kw>
+			<kw>RAISERROR</kw>
+			<kw>READ</kw>
+			<kw>READTEXT</kw>
+			<kw>RECONFIGURE</kw>
+			<kw>REFERENCES</kw>
+			<kw>REPLICATION</kw>
+			<kw>RESTORE</kw>
+			<kw>RESTRICT</kw>
+			<kw>RETURN</kw>
+			<kw>REVOKE</kw>
+			<kw>RIGHT</kw>
+			<kw>ROLLBACK</kw>
+			<kw>ROWCOUNT</kw>
+			<kw>ROWGUIDCOL</kw>
+			<kw>RULE</kw>
+			<kw>SAVE</kw>
+			<kw>SCHEMA</kw>
+			<kw>SELECT</kw>
+			<kw>SESSION_USER</kw>
+			<kw>SET</kw>
+			<kw>SETUSER</kw>
+			<kw>SHUTDOWN</kw>
+			<kw>SOME</kw>
+			<kw>STATISTICS</kw>
+			<kw>SYSTEM_USER</kw>
+			<kw>TABLE</kw>
+			<kw>TEXTSIZE</kw>
+			<kw>THEN</kw>
+			<kw>TO</kw>
+			<kw>TOP</kw>
+			<kw>TRAN</kw>
+			<kw>TRANSACTION</kw>
+			<kw>TRIGGER</kw>
+			<kw>TRUNCATE</kw>
+			<kw>TSEQUAL</kw>
+			<kw>UNION</kw>
+			<kw>UNIQUE</kw>
+			<kw>UPDATE</kw>
+			<kw>UPDATETEXT</kw>
+			<kw>USE</kw>
+			<kw>USER</kw>
+			<kw>VALUES</kw>
+			<kw>VARYING</kw>
+			<kw>VIEW</kw>
+			<kw>WAITFOR</kw>
+			<kw>WHEN</kw>
+			<kw>WHERE</kw>
+			<kw>WHILE</kw>
+			<kw>WITH</kw>
+			<kw>WRITETEXT</kw>
+		</keywordlist>
+		<!-- Common PowerShell language keywords -->
+		<keywordlist id="kwpshelllangoo-keywords" use-word-boundary="false">
+			<kw>$true</kw>
+			<kw>$false</kw>
+			<kw>$_</kw>
+			<kw>$foreach</kw>
+			<kw>$host</kw>
+			<kw>$input</kw>
+			<kw>$error</kw>
+			<kw>$null</kw>
+			<kw>$OFS</kw>
+			<kw>$PSHOME</kw>
+			<kw>$switch</kw>
+			<kw>$this</kw>
+		</keywordlist>
+		<!-- Python keywords -->
+		<keywordlist id="kwpython-keywords">
+			<kw>and</kw>
+			<kw>as</kw>
+			<kw>assert</kw>
+			<kw>break</kw>
+			<kw>class</kw>
+			<kw>continue</kw>
+			<kw>def</kw>
+			<kw>del</kw>
+			<kw>elif</kw>
+			<kw>else</kw>
+			<kw>except</kw>
+			<kw>exec</kw>
+			<kw>finally</kw>
+			<kw>for</kw>
+			<kw>from</kw>
+			<kw>global</kw>
+			<kw>if</kw>
+			<kw>import</kw>
+			<kw>in</kw>
+			<kw>is</kw>
+			<kw>lambda</kw>
+			<kw>not</kw>
+			<kw>or</kw>
+			<kw>pass</kw>
+			<kw>print</kw>
+			<kw>raise</kw>
+			<kw>return</kw>
+			<kw>try</kw>
+			<kw>while</kw>
+			<kw>with</kw>
+			<kw>yield</kw>
+		</keywordlist>
+		<!-- F# language keywords -->
+		<keywordlist id="kwfslang-keywords">
+			<kw>abstract</kw>
+			<kw>and</kw>
+			<kw>as</kw>
+			<kw>asr</kw>
+			<kw>assert</kw>
+			<kw>atomic</kw>
+			<kw>base</kw>
+			<kw>begin</kw>
+			<kw>break</kw>
+			<kw>checked</kw>
+			<kw>class</kw>
+			<kw>component</kw>
+			<kw>const</kw>
+			<kw>constraint</kw>
+			<kw>constructor</kw>
+			<kw>continue</kw>
+			<kw>default</kw>
+			<kw>delegate</kw>
+			<kw>do</kw>
+			<kw>done</kw>
+			<kw>downcast</kw>
+			<kw>downto</kw>
+			<kw>eager</kw>
+			<kw>elif</kw>
+			<kw>else</kw>
+			<kw>end</kw>
+			<kw>event</kw>
+			<kw>exception</kw>
+			<kw>extern</kw>
+			<kw>external</kw>
+			<kw>false</kw>
+			<kw>finally</kw>
+			<kw>fixed</kw>
+			<kw>for</kw>
+			<kw>fori</kw>
+			<kw>fun</kw>
+			<kw>function</kw>
+			<kw>functor</kw>
+			<kw>global</kw>
+			<kw>if</kw>
+			<kw>in</kw>
+			<kw>include</kw>
+			<kw>inherit</kw>
+			<kw>inline</kw>
+			<kw>interface</kw>
+			<kw>internal</kw>
+			<kw>land</kw>
+			<kw>lazy</kw>
+			<kw>let</kw>
+			<kw>lor</kw>
+			<kw>lsl</kw>
+			<kw>lsr</kw>
+			<kw>lxor</kw>
+			<kw>match</kw>
+			<kw>member</kw>
+			<kw>method</kw>
+			<kw>mixin</kw>
+			<kw>mod</kw>
+			<kw>module</kw>
+			<kw>mutable</kw>
+			<kw>namespace</kw>
+			<kw>new</kw>
+			<kw>null</kw>
+			<kw>object</kw>
+			<kw>of</kw>
+			<kw>open</kw>
+			<kw>or</kw>
+			<kw>override</kw>
+			<kw>parallel</kw>
+			<kw>params</kw>
+			<kw>private</kw>
+			<kw>process</kw>
+			<kw>protected</kw>
+			<kw>public</kw>
+			<kw>pure</kw>
+			<kw>rec</kw>
+			<kw>return</kw>
+			<kw>sealed</kw>
+			<kw>sig</kw>
+			<kw>static</kw>
+			<kw>struct</kw>
+			<kw>tailcall</kw>
+			<kw>then</kw>
+			<kw>to</kw>
+			<kw>trait</kw>
+			<kw>true</kw>
+			<kw>try</kw>
+			<kw>type</kw>
+			<kw>upcast</kw>
+			<kw>use</kw>
+			<kw>val</kw>
+			<kw>virtual</kw>
+			<kw>void</kw>
+			<kw>volatile</kw>
+			<kw>when</kw>
+			<kw>while</kw>
+			<kw>with</kw>
+			<kw>yield</kw>
+		</keywordlist>
+		<!-- MS-DOS batch file keywords -->
+		<keywordlist id="kwbatch-keywords">
+			<kw>ASSIGN</kw>
+			<kw>ATTRIB</kw>
+			<kw>CALL</kw>
+			<kw>CD</kw>
+			<kw>CHDIR</kw>
+			<kw>CHOICE</kw>
+			<kw>CLS</kw>
+			<kw>COM1</kw>
+			<kw>COMMAND</kw>
+			<kw>COMP</kw>
+			<kw>CON</kw>
+			<kw>COPY</kw>
+			<kw>DEL</kw>
+			<kw>DELTREE</kw>
+			<kw>DIR</kw>
+			<kw>DO</kw>
+			<kw>ENDLOCAL</kw>
+			<kw>ERASE</kw>
+			<kw>ERRORLEVEL</kw>
+			<kw>EXIST</kw>
+			<kw>EXIT</kw>
+			<kw>FC</kw>
+			<kw>FIND</kw>
+			<kw>FOR</kw>
+			<kw>GOTO</kw>
+			<kw>IF</kw>
+			<kw>IN</kw>
+			<kw>LPT1</kw>
+			<kw>MD</kw>
+			<kw>MKDIR</kw>
+			<kw>MORE</kw>
+			<kw>MOVE</kw>
+			<kw>NOT</kw>
+			<kw>NUL</kw>
+			<kw>OFF</kw>
+			<kw>PATH</kw>
+			<kw>PAUSE</kw>
+			<kw>PRN</kw>
+			<kw>RD</kw>
+			<kw>REN</kw>
+			<kw>RENAME</kw>
+			<kw>RMDIR</kw>
+			<kw>SGN</kw>
+			<kw>SHIFT</kw>
+			<kw>SORT</kw>
+			<kw>TIME</kw>
+			<kw>TYPE</kw>
+			<kw>XCOPY</kw>
+		</keywordlist>
+	</keywordlists>
+	<!-- Languages syntax specification -->
+	<languages>
+		<!-- C language specification -->
+		<language id="c" tabSize="4" name="C">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- /* block of comment */ -->
+					<detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- preprocessor (#XXXX) -->
+					<regexp id="preprocessor" attribute="preprocessor" context="code" expression="#\w+" />
+					<!-- <include.file> -->
+					<regexp id="include" attribute="literal" context="code" expression="&lt;\w+(\.\w*)*&gt;" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- keyword C-like -->
+					<keyword attribute="keyword" context="code" family="kwclang-keywords" />
+					<!-- keyword C -->
+					<keyword attribute="keyword" context="code" family="kwc-keywords" />
+				</context>
+				<!-- block comment /* ... */ -->
+				<context id="blockcomment" attribute="blockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1="/" />
+				</context>
+			</contexts>
+		</language>
+		<!-- C++ language specification -->
+		<language id="cpp" tabSize="4" name="C++">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- /* block of comment */ -->
+					<detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" />
+					<!-- // line of comment -->
+					<detect2chars attribute="hidden" context="linecomment" char="/" char1="/" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- preprocessor (#XXXX) -->
+					<regexp id="preprocessor" attribute="preprocessor" context="code" expression="#\w+" />
+					<!-- <include.file> -->
+					<regexp id="include" attribute="literal" context="code" expression="&lt;\w+(\.\w*)*&gt;(?![\%\^\*])" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- keyword C-like -->
+					<keyword attribute="keyword" context="code" family="kwclang-keywords" />
+					<!-- keyword C++-like -->
+					<keyword attribute="keyword" context="code" family="kwclangoo-keywords" />
+					<!-- keyword C -->
+					<keyword attribute="keyword" context="code" family="kwc-keywords" />
+					<!-- keyword C++ -->
+					<keyword attribute="keyword" context="code" family="kwcpp-keywords" />
+					<!-- keyword stl -->
+					<keyword attribute="keyword" context="code" family="kwcpp-stl" />
+					<!-- keyword Managed C++ -->
+					<keyword attribute="keyword" context="code" family="kwcpp-managed" />
+				</context>
+				<!-- block comment /* ... */ -->
+				<context id="blockcomment" attribute="blockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1="/" />
+				</context>
+				<!-- line comment // ... -->
+				<context id="linecomment" attribute="cpp-linecomment">
+					<!-- finish line of comment, start block -->
+					<!-- detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" / -->
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<!-- C# language specification -->
+		<language id="cs" tabSize="4" name="C#">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- /* block of comment */ -->
+					<detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" />
+					<!-- // line of comment -->
+					<detect2chars attribute="hidden" context="linecomment" char="/" char1="/" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(@&quot;(.|[\r\n])*?&quot;|&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- preprocessor (#XXXX) -->
+					<regexp id="preprocessor" attribute="preprocessor" context="code" expression="#\w+" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- keyword C-like -->
+					<keyword attribute="keyword" context="code" family="kwclang-keywords" />
+					<!-- keyword C++-like -->
+					<keyword attribute="keyword" context="code" family="kwclangoo-keywords" />
+					<!-- keyword C# -->
+					<keyword attribute="keyword" context="code" family="kwcs-keywords" />
+				</context>
+				<!-- block comment /* ... */ -->
+				<context id="blockcomment" attribute="blockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1="/" />
+				</context>
+				<!-- line comment // ... -->
+				<context id="linecomment" attribute="cpp-linecomment">
+					<!-- finish line of comment, start block -->
+					<!-- detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" / -->
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<!-- F# language specification -->
+		<language id="fs" tabSize="4" name="F#">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- (* block of comment *) -->
+					<detect2chars attribute="hidden" context="blockcomment" char="(" char1="*" />
+					<!-- // line of comment -->
+					<detect2chars attribute="hidden" context="linecomment" char="/" char1="/" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(@&quot;(.|[\r\n])*?&quot;|&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- preprocessor (#XXXX) -->
+					<regexp id="preprocessor" attribute="preprocessor" context="code" expression="#\w+" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- keyword F# -->
+					<keyword attribute="keyword" context="code" family="kwfslang-keywords" />
+				</context>
+				<!-- block comment (* ... *) -->
+				<context id="blockcomment" attribute="fsblockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1=")" />
+				</context>
+				<!-- line comment // ... -->
+				<context id="linecomment" attribute="cpp-linecomment">
+					<!-- finish line of comment, start block -->
+					<!-- detect2chars attribute="hidden" context="blockcomment" char="(" char1="*" / -->
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<!-- VB.NET -->
+		<language id="vbnet" not-case-sensitive="yes" tabSize="4" name="VB.NET">
+			<contexts default="code">
+				<!-- Code context -->
+				<context id="code" attribute="code">
+					<!-- Single line of comment -->
+					<regexp id="vb-comment" attribute="comment" context="code" expression="(?&lt;=\W|^)('.*?|Rem(\t| ).*?|Rem)([\r\n]{1,2}|$)" />
+					<!-- literal -->
+					<regexp id="literal" attribute="literal" context="code" expression="&quot;(.|&quot;&quot;)*?&quot;" />
+					<!-- preprocessor (#XXXX) -->
+					<regexp id="preprocessor" attribute="preprocessor" context="code" expression="#\w+(\s*(if|region))?" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="&amp;[h][0-9a-f]*&amp;?|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- Keywords -->
+					<keyword attribute="keyword" context="code" family="kwvblang-keywords" />
+					<!-- Keywords -->
+					<keyword attribute="keyword" context="code" family="kwvbnet-keywords" />
+				</context>
+			</contexts>
+		</language>
+		<!-- VB Script -->
+		<language id="vbscript" not-case-sensitive="yes" tabSize="4" name="VBScript">
+			<contexts default="code">
+				<!-- Code context -->
+				<context id="code" attribute="code">
+					<!-- Single line of comment -->
+					<regexp id="vb-comment" attribute="comment" context="code" expression="(?&lt;=\W|^)('.*?|Rem(\t| ).*?|Rem)([\r\n]{1,2}|$)" />
+					<!-- literal -->
+					<regexp id="literal" attribute="literal" context="code" expression="&quot;(.|&quot;&quot;)*?&quot;" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="&amp;[h][0-9a-f]*&amp;?|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- Keywords -->
+					<keyword attribute="keyword" context="code" family="kwvblang-keywords" />
+					<!-- Keywords -->
+					<keyword attribute="keyword" context="code" family="kwvbscript-statements" />
+				</context>
+			</contexts>
+		</language>
+		<!-- JavaScript-->
+		<language id="javascript" tabSize="4" name="JavaScript">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- /* block of comment */ -->
+					<detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" />
+					<!-- // line of comment -->
+					<detect2chars attribute="hidden" context="linecomment" char="/" char1="/" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- regex literal -->
+					<regexp id="reliteral" attribute="literal" context="code" expression="/(\\/|[^/\r\n])+/[gim]*" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- statements -->
+					<keyword attribute="keyword" context="code" family="kwjavascript-statements" />
+					<!-- functions -->
+					<keyword attribute="keyword" context="code" family="kwjavascript-functions" />
+					<!-- objects -->
+					<keyword attribute="keyword" context="code" family="kwjavascript-objects" />
+				</context>
+				<!-- block comment /* ... */ -->
+				<context id="blockcomment" attribute="blockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1="/" />
+				</context>
+				<!-- line comment // ... -->
+				<context id="linecomment" attribute="cpp-linecomment">
+					<!-- finish line of comment, start block -->
+					<!-- detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" / -->
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<language id="jscriptnet" tabSize="4" name="JScript.NET">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- /* block of comment */ -->
+					<detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" />
+					<!-- // line of comment -->
+					<detect2chars attribute="hidden" context="linecomment" char="/" char1="/" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- regex literal -->
+					<regexp id="reliteral" attribute="literal" context="code" expression="/(\\/|[^/\r\n])+/[gim]*" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- statements -->
+					<keyword attribute="keyword" context="code" family="kwjavascript-statements" />
+					<!-- functions -->
+					<keyword attribute="keyword" context="code" family="kwjavascript-functions" />
+					<!-- objects -->
+					<keyword attribute="keyword" context="code" family="kwjavascript-objects" />
+					<!-- JScript.NET statements -->
+					<keyword attribute="keyword" context="code" family="kwjscriptnet-statements" />
+				</context>
+				<!-- block comment /* ... */ -->
+				<context id="blockcomment" attribute="blockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1="/" />
+				</context>
+				<!-- line comment // ... -->
+				<context id="linecomment" attribute="cpp-linecomment">
+					<!-- finish line of comment, start block -->
+					<!-- detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" / -->
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<!-- J# language specification -->
+		<language id="jsharp" tabSize="4" name="J#">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- /* block of comment */ -->
+					<detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" />
+					<!-- // line of comment -->
+					<detect2chars attribute="hidden" context="linecomment" char="/" char1="/" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- preprocessor (#XXXX) -->
+					<regexp id="preprocessor" attribute="preprocessor" context="code" expression="#\w+" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- keyword J# -->
+					<keyword attribute="keyword" context="code" family="kwjsharp" />
+				</context>
+				<!-- block comment /* ... */ -->
+				<context id="blockcomment" attribute="blockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1="/" />
+				</context>
+				<!-- line comment // ... -->
+				<context id="linecomment" attribute="cpp-linecomment">
+					<!-- finish line of comment, start block -->
+					<!-- detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" / -->
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<!-- XML - Catch-all for any XML type -->
+		<language id="xml" tabSize="2" name="XML">
+			<contexts default="value">
+				<!-- Value context -->
+				<context id="value" attribute="xml-value">
+					<!-- Comment -->
+					<regexp id="rx-xml-comment" attribute="xml-comment" context="value" expression="&lt;!--(.|\n)*?--&gt;" />
+					<!-- cdata -->
+					<regexp id="rx-hidden" attribute="hidden" context="cdata" expression="&lt;!\[CDATA\[" />
+					<!-- A doctype of some sort-->
+					<regexp id="rx-doctype" attribute="xml-bracket" context="doctype" expression="&lt;!" />
+					<!-- Inline script opening element -->
+					<regexp id="rx-inline-open" attribute="xml-bracket-inline" context="value" expression="&lt;%" />
+					<!-- Inline script closing element -->
+					<regexp id="rx-inline-close" attribute="xml-bracket-inline" context="value" expression="%&gt;" />
+					<!-- closing element -->
+					<regexp id="rx-close-elem" attribute="xml-bracket" context="closing-element" expression="&lt;/" />
+					<!-- opening element -->
+					<regexp id="rx-open-elem" attribute="xml-bracket" context="opening-element" expression="&lt;\?{0,1}" />
+					<!-- Leftover end bracket from doctype -->
+					<regexp id="rx-end-bracket" attribute="xml-bracket" context="value" expression="&gt;" />
+				</context>
+				<!-- cdata tag -->
+				<context id="cdata" attribute="xml-cdata">
+					<regexp id="rx-hidden" attribute="hidden" context="value" expression="\]\]&gt;" />
+				</context>
+				<!-- A doctype of some sort -->
+				<context id="doctype" attribute="xml-code">
+					<regexp id="rx-doc-bracket" attribute="xml-bracket" context="value" expression="&gt;" />
+					<!-- Comment -->
+					<regexp id="rx-doc-comment" attribute="xml-comment" context="doctype" expression="&lt;!--(.|\n)*?--&gt;" />
+					<!-- A quoted string or attribute name -->
+					<regexp id="rx-doc-quote" attribute="xml-attribute-value" context="doctype" expression="(&quot;(.|[\r\n])*?&quot;|&apos;(.|[\r\n])*?&apos;|\b(\w|-|\.)+\b)" />
+					<!-- A doctype of some sort-->
+					<regexp id="rx-doc-nested" attribute="xml-bracket" context="doctype" expression="&lt;!" />
+				</context>
+				<!-- opening element context -->
+				<context id="opening-element" attribute="xml-code">
+					<!-- find tag... -->
+					<regexp id="rx-attr" attribute="xml-tag" context="element-attributes" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+				</context>
+				<!-- closing element -->
+				<context id="closing-element" attribute="xml-code">
+					<regexp id="rx-closing-elem" attribute="xml-tag" context="closing-element" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+					<regexp id="rx-value" attribute="xml-bracket" context="value" expression="(\?|/){0,1}&gt;" />
+				</context>
+				<!-- attributes group -->
+				<context id="element-attributes" attribute="xml-code">
+					<!-- Find end of element -->
+					<regexp id="rx-value" attribute="xml-bracket" context="value" expression="(\?|/){0,1}&gt;" />
+					<!-- Find attributes -->
+					<regexp id="rx-attr-name" attribute="xml-attribute-name" context="attribute-name" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+					<!-- This is here in case there's an attribute without a value followed by one with a value.  Things
+							 get a bit complicated and this attempts to keep the processing in sync. -->
+					<regexp id="rx-elem-equal" attribute="xml-attribute-equal" context="attribute-name" expression="=" />
+				</context>
+				<!-- attribute name -->
+				<context id="attribute-name" attribute="xml-code">
+					<regexp id="rx-elem-attrs" attribute="xml-attribute-value" context="element-attributes" expression="(&quot;(.|[\r\n])*?&quot;|&apos;(.|[\r\n])*?&apos;)" />
+					<!-- This could be an attribute value without quotes or it could be another attribute name if the last
+							 one had no value.  We'll color it as if it is an attribute name. -->
+					<regexp id="rx-elem-attr-name" attribute="xml-attribute-name" context="element-attributes" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+					<!-- This must come after the conditions above as an equal sign can appear in quoted strings -->
+					<regexp id="rx-elem-equal" attribute="xml-attribute-equal" context="attribute-name" expression="=" />
+					<!-- End of element.  This can happen if there's an attribute name with no value. -->
+					<regexp id="rx-value" attribute="xml-bracket" context="value" expression="(\?|/){0,1}&gt;" />
+				</context>
+			</contexts>
+		</language>
+		<!-- XAML - Extensible Application Markup Language (WPF and things like it) -->
+		<language id="xaml" tabSize="2" name="XAML">
+			<contexts default="value">
+				<!-- Value context -->
+				<context id="value" attribute="xml-value">
+					<!-- Comment -->
+					<regexp id="rx-xml-comment" attribute="xml-comment" context="value" expression="&lt;!--(.|\n)*?--&gt;" />
+					<!-- cdata -->
+					<regexp id="rx-hidden" attribute="hidden" context="cdata" expression="&lt;!\[CDATA\[" />
+					<!-- A doctype of some sort-->
+					<regexp id="rx-doctype" attribute="xml-bracket" context="doctype" expression="&lt;!" />
+					<!-- closing element -->
+					<regexp id="rx-close-elem" attribute="xml-bracket" context="closing-element" expression="&lt;/" />
+					<!-- opening element -->
+					<regexp id="rx-open-elem" attribute="xml-bracket" context="opening-element" expression="&lt;\?{0,1}" />
+					<!-- Leftover end bracket from doctype -->
+					<regexp id="rx-end-bracket" attribute="xml-bracket" context="value" expression="&gt;" />
+				</context>
+				<!-- cdata tag -->
+				<context id="cdata" attribute="xml-cdata">
+					<regexp id="rx-hidden" attribute="hidden" context="value" expression="\]\]&gt;" />
+				</context>
+				<!-- A doctype of some sort -->
+				<context id="doctype" attribute="xml-code">
+					<regexp id="rx-doc-bracket" attribute="xml-bracket" context="value" expression="&gt;" />
+					<!-- Comment -->
+					<regexp id="rx-doc-comment" attribute="xml-comment" context="doctype" expression="&lt;!--(.|\n)*?--&gt;" />
+					<!-- A quoted string or attribute name -->
+					<regexp id="rx-doc-quote" attribute="xml-attribute-value" context="doctype" expression="(&quot;(.|[\r\n])*?&quot;|&apos;(.|[\r\n])*?&apos;|\b(\w|-|\.)+\b)" />
+					<!-- A doctype of some sort-->
+					<regexp id="rx-doc-nested" attribute="xml-bracket" context="doctype" expression="&lt;!" />
+				</context>
+				<!-- opening element context -->
+				<context id="opening-element" attribute="xml-code">
+					<!-- find tag... -->
+					<regexp id="rx-attr" attribute="xml-tag" context="element-attributes" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+				</context>
+				<!-- closing element -->
+				<context id="closing-element" attribute="xml-code">
+					<regexp id="rx-closing-elem" attribute="xml-tag" context="closing-element" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+					<regexp id="rx-value" attribute="xml-bracket" context="value" expression="(\?|/){0,1}&gt;" />
+				</context>
+				<!-- attributes group -->
+				<context id="element-attributes" attribute="xml-code">
+					<!-- find end of element -->
+					<regexp id="rx-value" attribute="xml-bracket" context="value" expression="(\?|/){0,1}&gt;" />
+					<!-- find attributes... -->
+					<regexp id="rx-attr-name" attribute="xml-attribute-name" context="attribute-name" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+				</context>
+				<!-- attribute name -->
+				<context id="attribute-name" attribute="hidden">
+					<regexp id="rx-elem-attrs" attribute="xml-attribute-value" context="element-attributes" expression="(&quot;(.|[\r\n])*?&quot;|&apos;(.|[\r\n])*?&apos;|\b(\w|-|\.)+\b)" />
+					<!-- This must come last as equals can appear in quoted strings -->
+					<regexp id="rx-elem-equal" attribute="xml-attribute-equal" context="attribute-name" expression="=" />
+				</context>
+			</contexts>
+		</language>
+		<!-- AXML - Android Extensible Markup Language.  Like XAML but Android-specific and different enough it gets
+				 its own set of rules to allow for a different code block title. -->
+		<language id="axml" tabSize="2" name="AXML">
+			<contexts default="value">
+				<!-- Value context -->
+				<context id="value" attribute="xml-value">
+					<!-- Comment -->
+					<regexp id="rx-xml-comment" attribute="xml-comment" context="value" expression="&lt;!--(.|\n)*?--&gt;" />
+					<!-- cdata -->
+					<regexp id="rx-hidden" attribute="hidden" context="cdata" expression="&lt;!\[CDATA\[" />
+					<!-- A doctype of some sort-->
+					<regexp id="rx-doctype" attribute="xml-bracket" context="doctype" expression="&lt;!" />
+					<!-- closing element -->
+					<regexp id="rx-close-elem" attribute="xml-bracket" context="closing-element" expression="&lt;/" />
+					<!-- opening element -->
+					<regexp id="rx-open-elem" attribute="xml-bracket" context="opening-element" expression="&lt;\?{0,1}" />
+					<!-- Leftover end bracket from doctype -->
+					<regexp id="rx-end-bracket" attribute="xml-bracket" context="value" expression="&gt;" />
+				</context>
+				<!-- cdata tag -->
+				<context id="cdata" attribute="xml-cdata">
+					<regexp id="rx-hidden" attribute="hidden" context="value" expression="\]\]&gt;" />
+				</context>
+				<!-- A doctype of some sort -->
+				<context id="doctype" attribute="xml-code">
+					<regexp id="rx-doc-bracket" attribute="xml-bracket" context="value" expression="&gt;" />
+					<!-- Comment -->
+					<regexp id="rx-doc-comment" attribute="xml-comment" context="doctype" expression="&lt;!--(.|\n)*?--&gt;" />
+					<!-- A quoted string or attribute name -->
+					<regexp id="rx-doc-quote" attribute="xml-attribute-value" context="doctype" expression="(&quot;(.|[\r\n])*?&quot;|&apos;(.|[\r\n])*?&apos;|\b(\w|-|\.)+\b)" />
+					<!-- A doctype of some sort-->
+					<regexp id="rx-doc-nested" attribute="xml-bracket" context="doctype" expression="&lt;!" />
+				</context>
+				<!-- opening element context -->
+				<context id="opening-element" attribute="xml-code">
+					<!-- find tag... -->
+					<regexp id="rx-attr" attribute="xml-tag" context="element-attributes" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+				</context>
+				<!-- closing element -->
+				<context id="closing-element" attribute="xml-code">
+					<regexp id="rx-closing-elem" attribute="xml-tag" context="closing-element" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+					<regexp id="rx-value" attribute="xml-bracket" context="value" expression="(\?|/){0,1}&gt;" />
+				</context>
+				<!-- attributes group -->
+				<context id="element-attributes" attribute="xml-code">
+					<!-- find end of element -->
+					<regexp id="rx-value" attribute="xml-bracket" context="value" expression="(\?|/){0,1}&gt;" />
+					<!-- find attributes... -->
+					<regexp id="rx-attr-name" attribute="xml-attribute-name" context="attribute-name" expression="\b((\w|-|\.)+\:){0,1}(\w|-|\.)+\b" />
+				</context>
+				<!-- attribute name -->
+				<context id="attribute-name" attribute="hidden">
+					<regexp id="rx-elem-attrs" attribute="xml-attribute-value" context="element-attributes" expression="(&quot;(.|[\r\n])*?&quot;|&apos;(.|[\r\n])*?&apos;|\b(\w|-|\.)+\b)" />
+					<!-- This must come last as equals can appear in quoted strings -->
+					<regexp id="rx-elem-equal" attribute="xml-attribute-equal" context="attribute-name" expression="=" />
+				</context>
+			</contexts>
+		</language>
+		<!-- SQL language specification -->
+		<language id="sql" not-case-sensitive="yes" tabSize="8" name="SQL">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- /* block of comment */ -->
+					<detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" />
+					<!-- (two dashes) line of comment -->
+					<detect2chars attribute="hidden" context="linecomment" char="-" char1="-" />
+					<!-- ' ' literals -->
+					<regexp id="literal" attribute="literal" context="code" expression="'(.|\\'|\\\r\n)*?((\\\\)+'|[^\\]{1}')" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- keyword SQL -->
+					<keyword attribute="keyword" context="code" family="kwsql-keywords"/>
+				</context>
+				<!-- block comment /* ... */ -->
+				<context id="blockcomment" attribute="blockcomment">
+					<!-- finish line of comment, start block -->
+					<detect2chars attribute="hidden" context="code" char="*" char1="/" />
+				</context>
+				<!-- line comment (two dashes) ... -->
+				<context id="linecomment" attribute="sql-linecomment">
+					<!-- finish line of comment, start block -->
+					<!-- detect2chars attribute="hidden" context="blockcomment" char="/" char1="*" / -->
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<!-- PowerShell language specification -->
+		<language id="pshell" tabSize="4" name="PowerShell">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(@&quot;(.|[\r\n])*?&quot;|&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- line comment -->
+					<regexp id="pshellComment" attribute="comment" context="code" expression="#[^\r\n]*" />
+					<!-- namespace -->
+					<regexp id="namespace" attribute="namespace" context="code" expression="\[[^\r\n]+\]" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- pshell cmdlets -->
+					<regexp id="pshellCmdlet" attribute="pshell-cmdlet" context="code" expression="(\b\w+-\b\w+)" />
+					<!-- keyword PowerShell -->
+					<keyword attribute="keyword" context="code" family="kwpshelllangoo-keywords" />
+					<!-- keyword C-like -->
+					<keyword attribute="keyword" context="code" family="kwclang-keywords" />
+				</context>
+			</contexts>
+		</language>
+		<!-- Python language specification -->
+		<language id="python" tabSize="4" name="Python">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- basic source code context -->
+				<context id="code" attribute="code">
+					<!-- Single line of comment -->
+					<regexp id="python-comment" attribute="comment" context="code" expression="(?&lt;=\W|^)(#.*?)([\r\n]{1,2}|$)" />
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="(&quot;&quot;)|(@&quot;(.|[\r\n])*?&quot;|&quot;(.|\\&quot;|\\\r\n)*?((\\\\)+&quot;|[^\\]{1}&quot;))" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="(&apos;&apos;)|(&apos;(.|\\&apos;|\\\r\n)*?((\\\\)+&apos;|[^\\]{1}&apos;))" />
+					<!-- numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- keyword Python-like -->
+					<keyword attribute="keyword" context="code" family="kwpython-keywords" />
+				</context>
+				<!-- line comment // ... -->
+				<context id="linecomment" attribute="cpp-linecomment">
+					<!-- finish line of comment end of line -->
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+		<!-- MS-DOS batch script language specification -->
+		<language id="bat" not-case-sensitive="yes" tabSize="4" name="Batch Script">
+			<!-- Code contexts: default (most common) is code. -->
+			<contexts default="code">
+				<!-- Basic source code context -->
+				<context id="code" attribute="code">
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="code" expression="&quot;.*?&quot;" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="code" expression="&apos;.*?&apos;" />
+					<!-- Variable -->
+					<regexp id="variable" attribute="preprocessor" context="code" expression="%[A-Za-z0-9_(){}\[\]$*+\-#,;.@!?]+%|%%[A-Za-z0-9_(){}\[\]$*+\-#,;.@!?]+" />
+					<!-- Numbers -->
+					<regexp id="number" attribute="number" context="code" expression="0x[0-9a-fA-F]*|(((?&lt;=[^0-9])(\+|-))?)\b[0-9][0-9]*(\.[0-9]+)?" />
+					<!-- Whole line statements.  These look a bit odd if not handled as a whole line as it may colorize
+						   parts of the displayed text or the comment.  A similar thing can happen for SET as well. -->
+					<regexp id="comment-line" attribute="keyword" context="comment-line-statement" expression="REM|ECHO OFF|ECHO|::" />
+					<regexp id="kw-line" attribute="keyword" context="line-statement" expression="SETLOCAL|SET" />
+					<!-- Keyword batch script -->
+					<keyword attribute="keyword" context="code" family="kwbatch-keywords" />
+				</context>
+				<context id="comment-line-statement" attribute="comment">
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+				<!-- This isn't an XML attribute equal sign but it's got the appropriate color -->
+				<context id="line-statement" attribute="xml-attribute-equal">
+					<!-- " " literals -->
+					<regexp id="dqliteral" attribute="literal" context="line-statement" expression="&quot;.*?&quot;" />
+					<!-- ' ' literals -->
+					<regexp id="sqliteral" attribute="literal" context="line-statement" expression="&apos;.*?&apos;" />
+					<!-- Variable -->
+					<regexp id="variable" attribute="preprocessor" context="code" expression="%[A-Za-z0-9_(){}\[\]$*+\-#,;.@!?]+%|%%[A-Za-z0-9_(){}\[\]$*+\-#,;.@!?]+" />
+					<!-- End of line comment -->
+					<regexp id="endcomment" attribute="comment" context="code" expression="::.*$" />
+					<linecontinue attribute="hidden" context="code" />
+				</context>
+			</contexts>
+		</language>
+	</languages>
+</highlight>

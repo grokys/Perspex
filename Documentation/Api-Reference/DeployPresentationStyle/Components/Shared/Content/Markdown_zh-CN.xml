@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">`null` (在 Visual Basic 中为 `Nothing`)</item>
+	<item id="devlang_staticKeyword">`static` (在 Visual Basic 中为 `Shared`)</item>
+	<item id="devlang_virtualKeyword">`virtual` (在 Visual Basic 中为 `Overridable`)</item>
+	<item id="devlang_trueKeyword">`true` (在 Visual Basic 中为 `True`)</item>
+	<item id="devlang_falseKeyword">`false` (在 Visual Basic 中为 `False`)</item>
+	<item id="devlang_abstractKeyword">`abstract` (在 Visual Basic 中为 `MustInherit`)</item>
+	<item id="devlang_sealedKeyword">`sealed` (在 Visual Basic 中为 `NotInheritable`)</item>
+	<item id="devlang_asyncKeyword">`async` (在 Visual Basic 中为 `Async`)</item>
+	<item id="devlang_awaitKeyword">`await` (在 Visual Basic 中为 `Await`)</item>
+	<item id="devlang_asyncAwaitKeyword">`async`/`await` (在 Visual Basic 中为 `Async`/`Await`)</item>
+
+	<!-- Show Missing Component messages -->
+  <item id="SMCMissingTag">\[缺少 "{1}" 的 &lt;{0}&gt; 文档\]</item>
+  <item id="SMCMissingParamTag">\[缺少 "{2}" 的 &lt;{0} name="{1}"/&gt; 文档\]</item>
+  <item id="SMCMissingIncludeTarget">\[在 “{0}” 中缺少 &lt;include&gt; 目标文档。文件：“{1}” 路径：“{2}”]\</item>
+
+</content>

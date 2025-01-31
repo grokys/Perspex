@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">a null reference (`Nothing` in Visual Basic)</item>
+	<item id="devlang_staticKeyword">`static` (`Shared` in Visual Basic)</item>
+	<item id="devlang_virtualKeyword">`virtual` (`Overridable` in Visual Basic)</item>
+	<item id="devlang_trueKeyword">`true` (`True` in Visual Basic)</item>
+	<item id="devlang_falseKeyword">`false` (`False` in Visual Basic)</item>
+	<item id="devlang_abstractKeyword">`abstract` (`MustInherit` in Visual Basic)</item>
+	<item id="devlang_sealedKeyword">`sealed` (`NotInheritable` in Visual Basic)</item>
+	<item id="devlang_asyncKeyword">`async` (`Async` in Visual Basic)</item>
+	<item id="devlang_awaitKeyword">`await` (`Await` in Visual Basic)</item>
+	<item id="devlang_asyncAwaitKeyword">`async`/`await` (`Async`/`Await` in Visual Basic)</item>
+
+  <!-- Show Missing Component messages -->
+  <item id="SMCMissingTag">\[Falta &lt;{0}&gt; documentação para "{1}"\]</item>
+  <item id="SMCMissingParamTag">\[Falta  &lt;{0} name="{1}"/&gt; documentação para "{2}"\]</item>
+  <item id="SMCMissingIncludeTarget">\[Falta  &lt;include&gt; documentação de destino em '{0}'.  Arquivo: '{1}' Path: '{2}'\]</item>
+
+</content>

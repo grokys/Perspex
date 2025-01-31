@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Translations provided by Michael Buchner -->
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+	
+	<!-- Language keywords -->
+  <item id="devlang_nullKeyword">eine Null Referenz (<span class="CodeInline">Nothing</span> in Visual Basic)</item>
+  <item id="devlang_staticKeyword"><span class="CodeInline">static</span> (<span class="CodeInline">Shared</span> in Visual Basic)</item>
+  <item id="devlang_virtualKeyword"><span class="CodeInline">virtual</span> (<span class="CodeInline">Overridable</span> in Visual Basic)</item>
+  <item id="devlang_trueKeyword"><span class="CodeInline">true</span> (<span class="CodeInline">True</span> in Visual Basic)</item>
+  <item id="devlang_falseKeyword"><span class="CodeInline">false</span> (<span class="CodeInline">False</span> in Visual Basic)</item>
+  <item id="devlang_abstractKeyword"><span class="CodeInline">abstract</span> (<span class="CodeInline">MustInherit</span> in Visual Basic)</item>
+  <item id="devlang_sealedKeyword"><span class="CodeInline">sealed</span> (<span class="CodeInline">NotInheritable</span> in Visual Basic)</item>
+  <item id="devlang_asyncKeyword"><span class="CodeInline">async</span> (<span class="CodeInline">Async</span> in Visual Basic)</item>
+  <item id="devlang_awaitKeyword"><span class="CodeInline">await</span> (<span class="CodeInline">Await</span> in Visual Basic)</item>
+  <item id="devlang_asyncAwaitKeyword"><span class="CodeInline">async</span>/<span class="CodeInline">await</span> (<span class="CodeInline">Async</span>/<span class="CodeInline">Await</span> in Visual Basic)</item>
+
+  <!-- Show Missing Component messages -->
+  <item id="SMCMissingTag"><span class="MissingComment">[Missing &lt;{0}&gt; documentation for "{1}"]</span></item>
+  <item id="SMCMissingParamTag"><span class="MissingComment">[Missing &lt;{0} name="{1}"/&gt; documentation for "{2}"]</span></item>
+  <item id="SMCMissingIncludeTarget"><span class="MissingComment">[Missing &lt;include&gt; target documentation in '{0}'.  File: '{1}' Path: '{2}']</span></item>
+
+</content>

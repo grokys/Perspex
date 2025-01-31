@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<content xml:space="preserve">
+	<!--	This file is specific to website output.
+
+				NOTE: This file must appear LAST in the list of content files so that these items override the matching
+						 items in the files before it! -->
+	
+		<item id="websiteAdContent">{@WebsiteAdContent}</item>
+</content>

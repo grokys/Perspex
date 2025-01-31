@@ -1,0 +1,21 @@
+<content xml:space="preserve">
+	<!-- Open XML overrides for the default shared content items -->
+
+	<!-- Language keywords -->
+	<item id="devlang_nullKeyword">a null reference (`Nothing` in Visual Basic)</item>
+	<item id="devlang_staticKeyword">`static` (`Shared` in Visual Basic)</item>
+	<item id="devlang_virtualKeyword">`virtual` (`Overridable` in Visual Basic)</item>
+	<item id="devlang_trueKeyword">`true` (`True` in Visual Basic)</item>
+	<item id="devlang_falseKeyword">`false` (`False` in Visual Basic)</item>
+	<item id="devlang_abstractKeyword">`abstract` (`MustInherit` in Visual Basic)</item>
+	<item id="devlang_sealedKeyword">`sealed` (`NotInheritable` in Visual Basic)</item>
+	<item id="devlang_asyncKeyword">`async` (`Async` in Visual Basic)</item>
+	<item id="devlang_awaitKeyword">`await` (`Await` in Visual Basic)</item>
+	<item id="devlang_asyncAwaitKeyword">`async`/`await` (`Async`/`Await` in Visual Basic)</item>
+
+  <!-- Show Missing Component messages -->
+  <item id="SMCMissingTag">\[Manca la documentazione &lt;{0}&gt; per "{1}"\]</item>
+  <item id="SMCMissingParamTag">\[Manca &lt;{0} nome="{1}"/&gt; documentazione per "{2}"\]</item>
+  <item id="SMCMissingIncludeTarget">\[Manca la documentazione di &lt;include&gt; in '{0}'.  File: '{1}' Percorso: '{2}'\]</item>
+
+</content>

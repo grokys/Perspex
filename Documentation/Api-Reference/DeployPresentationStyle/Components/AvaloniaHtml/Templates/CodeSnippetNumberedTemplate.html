@@ -1,0 +1,26 @@
+<div class="codeSnippet">
+	<!-- IMPORTANT: The ID names must remain the same as must the class name on the root element and the copyCode
+			 class on the Copy Code button.  IDs are only used to locate content and will be removed when rendered. -->
+	<div class="codeHeader">
+		<span id="Title" class="codeHeaderTitle"></span>
+		<button class="button is-small is-light copyCode">
+			<includeAttribute name="title" item="copyCode" />
+			<span class="icon is-small">
+				<i class="fa fa-copy"></i>
+			</span>
+			<span><include item="copyCode" /></span>
+		</button>
+	</div>
+	<div class="codeWithNumbers">
+		<div class="lineNumbers">
+			<!-- Whitespace must be preserved or it can get lost when the topic is saved.  It's XML at this point, not HTML. -->
+			<pre id="LineNumbers" xml:space="preserve">
+			</pre>
+		</div>
+		<div class="codePanel hljs numbered">
+			<!-- Whitespace must be preserved or it can get lost when the topic is saved.  It's XML at this point, not HTML. -->
+			<pre id="CodeBlock" xml:space="preserve">
+			</pre>
+		</div>
+	</div>
+</div>

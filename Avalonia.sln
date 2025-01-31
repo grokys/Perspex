@@ -302,7 +302,17 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.RenderTests.WpfCompare", "tests\Avalonia.RenderTests.WpfCompare\Avalonia.RenderTests.WpfCompare.csproj", "{9AE1B827-21AC-4063-AB22-C8804B7F931E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Win32.Automation", "src\Windows\Avalonia.Win32.Automation\Avalonia.Win32.Automation.csproj", "{0097673D-DBCE-476E-82FE-E78A56E58AA2}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XEmbedSample", "samples\XEmbedSample\XEmbedSample.csproj", "{255614F5-CB64-4ECA-A026-E0B1AF6A2EF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{92E28C9F-BA80-42D0-90E2-1EEBA9A398B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api-Reference", "Api-Reference", "{8580EDB7-58BE-4DCB-B84C-8B9A271969A4}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Api-Reference\icons\avalonia_logo_box_white.png = Documentation\Api-Reference\icons\avalonia_logo_box_white.png
+		Documentation\Api-Reference\css\presentationStyle.css = Documentation\Api-Reference\css\presentationStyle.css
+		Documentation\Api-Reference\.gitignore = Documentation\Api-Reference\.gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -801,6 +811,7 @@ Global
 		{9AE1B827-21AC-4063-AB22-C8804B7F931E} = {C5A00AC3-B34C-4564-9BDD-2DA473EF4D8B}
 		{0097673D-DBCE-476E-82FE-E78A56E58AA2} = {B39A8919-9F95-48FE-AD7B-76E08B509888}
 		{255614F5-CB64-4ECA-A026-E0B1AF6A2EF4} = {9B9E3891-2366-4253-A952-D08BCEB71098}
+		{8580EDB7-58BE-4DCB-B84C-8B9A271969A4} = {92E28C9F-BA80-42D0-90E2-1EEBA9A398B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {87366D66-1391-4D90-8999-95A620AD786A}

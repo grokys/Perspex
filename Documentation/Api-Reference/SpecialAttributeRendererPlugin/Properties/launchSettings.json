@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SpecialAttributeRendererPlugin": {
+      "commandName": "Executable",
+      "executablePath": "$(SHFBROOT)\\Tools\\SandcastleBuilderGUI.exe"
+    }
+  }
+}
