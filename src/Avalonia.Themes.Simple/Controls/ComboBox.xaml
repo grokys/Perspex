@@ -27,15 +27,37 @@
                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                        Foreground="{TemplateBinding PlaceholderForeground}"
-                       IsVisible="{TemplateBinding SelectionBoxItem,
-                                                   Converter={x:Static ObjectConverters.IsNull}}"
-                       Text="{TemplateBinding PlaceholderText}" />
+                       Text="{TemplateBinding PlaceholderText}">
+              <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                  <Binding Path="SelectionBoxItem" RelativeSource="{RelativeSource TemplatedParent}" Converter="{x:Static ObjectConverters.IsNull}" />
+                  <Binding Path="!IsEditable" RelativeSource="{RelativeSource TemplatedParent}" />
+                </MultiBinding>
+              </TextBlock.IsVisible>
+            </TextBlock>
             <ContentControl Margin="{TemplateBinding Padding}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                             Content="{TemplateBinding SelectionBoxItem}"
-                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}">
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            IsVisible="{TemplateBinding IsEditable, Converter={x:Static BoolConverters.Not}}">
             </ContentControl>
+            <TextBox Name="PART_InputText"
+                     Grid.Column="0"
+                     Padding="{TemplateBinding Padding}"
+                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                     Foreground="{TemplateBinding Foreground}"
+                     Background="Transparent"
+                     Text="{TemplateBinding Text, Mode=TwoWay}"
+                     BorderThickness="0"
+                     IsVisible="{TemplateBinding IsEditable}">
+              <TextBox.Resources>
+                <SolidColorBrush x:Key="TextControlBackgroundFocused">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="TextControlBackgroundPointerOver">Transparent</SolidColorBrush>
+                <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+              </TextBox.Resources>
+            </TextBox>
             <ToggleButton Name="toggle"
                           Grid.Column="1"
                           Background="Transparent"

@@ -135,6 +135,16 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+
+              <StackPanel Spacing="10">
+                <ComboBox WrapSelection="{Binding WrapSelection}" PlaceholderText="Editable" 
+                          ItemsSource="{Binding Values}" DisplayMemberBinding="{Binding Name}"
+                          IsEditable="True" Text="{Binding TextValue}" ItemTextBinding="{Binding Name}"
+                          SelectedItem="{Binding SelectedItem}" />
+
+                <TextBlock Text="{Binding TextValue, StringFormat=Text Value: {0}}" />
+                <TextBlock Text="{Binding SelectedItem.Name, StringFormat=Selected Item: {0}}" />
+              </StackPanel>
             </WrapPanel>
         </StackPanel>
     </StackPanel>
