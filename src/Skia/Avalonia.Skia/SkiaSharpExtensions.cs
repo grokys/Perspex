@@ -29,36 +29,38 @@ namespace Avalonia.Skia
 
         public static SKBlendMode ToSKBlendMode(this BitmapBlendingMode blendingMode)
         {
-            switch (blendingMode)
+            return blendingMode switch
             {
-                case BitmapBlendingMode.Unspecified:
-                case BitmapBlendingMode.SourceOver:
-                    return SKBlendMode.SrcOver;
-                case BitmapBlendingMode.Source:
-                    return SKBlendMode.Src;
-                case BitmapBlendingMode.SourceIn:
-                    return SKBlendMode.SrcIn;
-                case BitmapBlendingMode.SourceOut:
-                    return SKBlendMode.SrcOut;
-                case BitmapBlendingMode.SourceAtop:
-                    return SKBlendMode.SrcATop;
-                case BitmapBlendingMode.Destination:
-                    return SKBlendMode.Dst;
-                case BitmapBlendingMode.DestinationIn:
-                    return SKBlendMode.DstIn;
-                case BitmapBlendingMode.DestinationOut:
-                    return SKBlendMode.DstOut;
-                case BitmapBlendingMode.DestinationOver:
-                    return SKBlendMode.DstOver;
-                case BitmapBlendingMode.DestinationAtop:
-                    return SKBlendMode.DstATop;
-                case BitmapBlendingMode.Xor:
-                    return SKBlendMode.Xor;
-                case BitmapBlendingMode.Plus:
-                    return SKBlendMode.Plus;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(blendingMode), blendingMode, null);
-            }
+                BitmapBlendingMode.Unspecified => SKBlendMode.SrcOver,
+                BitmapBlendingMode.SourceOver => SKBlendMode.SrcOver,
+                BitmapBlendingMode.Source => SKBlendMode.Src,
+                BitmapBlendingMode.SourceIn => SKBlendMode.SrcIn,
+                BitmapBlendingMode.SourceOut => SKBlendMode.SrcOut,
+                BitmapBlendingMode.SourceAtop => SKBlendMode.SrcATop,
+                BitmapBlendingMode.Destination => SKBlendMode.Dst,
+                BitmapBlendingMode.DestinationIn => SKBlendMode.DstIn,
+                BitmapBlendingMode.DestinationOut => SKBlendMode.DstOut,
+                BitmapBlendingMode.DestinationOver => SKBlendMode.DstOver,
+                BitmapBlendingMode.DestinationAtop => SKBlendMode.DstATop,
+                BitmapBlendingMode.Xor => SKBlendMode.Xor,
+                BitmapBlendingMode.Plus => SKBlendMode.Plus,
+                BitmapBlendingMode.Screen => SKBlendMode.Screen,
+                BitmapBlendingMode.Overlay => SKBlendMode.Overlay,
+                BitmapBlendingMode.Darken => SKBlendMode.Darken,
+                BitmapBlendingMode.Lighten => SKBlendMode.Lighten,
+                BitmapBlendingMode.ColorDodge => SKBlendMode.ColorDodge,
+                BitmapBlendingMode.ColorBurn => SKBlendMode.ColorBurn,
+                BitmapBlendingMode.HardLight => SKBlendMode.HardLight,
+                BitmapBlendingMode.SoftLight => SKBlendMode.SoftLight,
+                BitmapBlendingMode.Difference => SKBlendMode.Difference,
+                BitmapBlendingMode.Exclusion => SKBlendMode.Exclusion,
+                BitmapBlendingMode.Multiply => SKBlendMode.Multiply,
+                BitmapBlendingMode.Hue => SKBlendMode.Hue,
+                BitmapBlendingMode.Saturation => SKBlendMode.Saturation,
+                BitmapBlendingMode.Color => SKBlendMode.Color,
+                BitmapBlendingMode.Luminosity => SKBlendMode.Luminosity,
+                _ => throw new ArgumentOutOfRangeException(nameof(blendingMode), blendingMode, null)
+            };
         }
 
         public static SKPoint ToSKPoint(this Point p)

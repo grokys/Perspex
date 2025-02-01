@@ -17,6 +17,12 @@ namespace Avalonia.Controls
         /// </summary>
         public static readonly StyledProperty<IImage?> SourceProperty =
             AvaloniaProperty.Register<Image, IImage?>(nameof(Source));
+        
+        /// <summary>
+        /// Defines the <see cref="BlendMode"/> property.
+        /// </summary>
+        public static readonly StyledProperty<BitmapBlendingMode> BlendModeProperty =
+            AvaloniaProperty.Register<Image, BitmapBlendingMode>(nameof(BlendMode));
 
         /// <summary>
         /// Defines the <see cref="Stretch"/> property.
@@ -34,7 +40,7 @@ namespace Avalonia.Controls
 
         static Image()
         {
-            AffectsRender<Image>(SourceProperty, StretchProperty, StretchDirectionProperty);
+            AffectsRender<Image>(SourceProperty, StretchProperty, StretchDirectionProperty, BlendModeProperty);
             AffectsMeasure<Image>(SourceProperty, StretchProperty, StretchDirectionProperty);
             AutomationProperties.ControlTypeOverrideProperty.OverrideDefaultValue<Image>(AutomationControlType.Image);
         }
@@ -47,6 +53,15 @@ namespace Avalonia.Controls
         {
             get => GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the blend mode for the image.
+        /// </summary>
+        public BitmapBlendingMode BlendMode
+        {
+            get => GetValue(BlendModeProperty);
+            set => SetValue(BlendModeProperty, value);
         }
 
         /// <summary>
@@ -91,7 +106,10 @@ namespace Avalonia.Controls
                 Rect sourceRect = new Rect(sourceSize)
                     .CenterRect(new Rect(destRect.Size / scale));
 
-                context.DrawImage(source, sourceRect, destRect);
+                using (context.PushRenderOptions(RenderOptions with { BitmapBlendingMode = BlendMode }))
+                {
+                    context.DrawImage(source, sourceRect, destRect);
+                }
             }
         }
 
